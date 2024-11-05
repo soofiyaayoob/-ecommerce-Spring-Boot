@@ -5,8 +5,13 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,25 +19,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
+import com.example.demo.CustomHandler.SucessHandler;
 import com.example.demo.Service.UserService;
 import com.example.demo.model.UserEntity;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 @RestController
 public class Homecontroller {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Homecontroller.class);
 	
 	@Autowired
 	OtpService otpService;
 	
 	@Autowired
 	EmailService emailService;
+	
+	 @Autowired
+	    private AuthenticationManager authenticationManager; // Make sure to configure this bean
+
+	 
 	
 	
 	
@@ -50,81 +70,108 @@ public class Homecontroller {
 //	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<Map<String, Object>> registerUser(@RequestBody UserEntity userDto,HttpSession session) {
-	    Map<String, Object> response = new HashMap<>();
-	    try {
-	        // Print received user entity for debugging
-	        System.out.println("Received UserEntity: " + userDto);
+	public ResponseEntity<Map<String, Object>> registerUser(@RequestBody UserEntity userDto,HttpServletResponse response,HttpServletRequest request) {
+		 Map<String, Object> responses = new HashMap<>();
+		 
+		 
+		 
 
-	        // Extract username and email from userDto
-	        String username = userDto.getUsername(); // Assuming UserEntity has a getUsername method
-	        String email = userDto.getEmail(); // Assuming UserEntity has a getEmail method
+		    HttpSession session = request.getSession(); // Creates a session if it doesn't exist
+		    session.setAttribute("user", userDto);
+		    session.setAttribute("initialized", true);
 
-	        // Generate OTP
-	        String otp = otpService.generateOtp(username);
-System.out.println("geneated");
-	        // Send OTP via email
-	     //   emailService.sendOtpEmail(email, otp);
-	        System.out.println("failed not from here");
+		    System.out.println("Session ID (for cookie): " + session.getId());
 
-	        session.setAttribute("tempUserData", userDto);
-	        System.out.println("data added to session");
+		  
 
-	        response.put("success", true);
-	        response.put("message", "OTP sent to your email. Please verify to complete registration.");
-	    } catch (Exception e) {
-	        System.out.println("Exception occurred: " + e.getMessage());
-	        response.put("success", false);
-	        response.put("message", "Registration failed: " + e.getMessage());
-	    }
-	    return ResponseEntity.ok(response);
-	}
-
-
-	@GetMapping("/login")
-	public String apiEndpoint() {
-	    String email = "soofiyaayoob786@gmail.com";
-	    emailService.sendOtpEmail(email);
-	    return "API is accessible";
-	}
-	
-	@GetMapping("/test")
-	public String getMethodName() {
-		 String email = "soofiyaayoob786@gmail.com";
 		    try {
-		        emailService.sendOtpEmail(email);
+		        System.out.println("Received UserEntity: " + userDto);
+		        String username = userDto.getUsername(); 
+		        String email = userDto.getEmail(); 
+
+		        // Generate OTP
+		        String otp = otpService.generateOtp(username);
+		        System.out.println("Generated OTP: " + otp);
+
+		        // Send OTP via email
+		        emailService.sendOtpEmail(email, otp);
+
+		        responses.put("success", true);
+		        responses.put("message", "OTP sent to your email. Please verify to complete registration.");
 		    } catch (Exception e) {
-		        e.printStackTrace(); // Log the exception
-		        return "Error: " + e.getMessage();
+		        System.out.println("Exception occurred: " + e.getMessage());
+		        responses.put("success", false);
+		        responses.put("message", "Registration failed: " + e.getMessage());
 		    }
-		    return "hello";
-	}
+		    return ResponseEntity.ok(responses);
+		}
+	
+	
 	
 
-	    
-	    
-	    
+	@PostMapping("/verification")
+	public ResponseEntity<Map<String, Object>> postMethodName(@RequestBody Map<String, String> requestBody, HttpServletRequest request,HttpServletResponse response) {
+		  String code = requestBody.get("code");
+		    System.out.println("Received code: " + code);
+
+		    Map<String, Object> responseMap = new HashMap<>();
+		    
+		    Cookie[] cookies = request.getCookies();
+		    if (cookies != null) {
+		        for (Cookie cookie : cookies) {
+		            System.out.println("Cookie: " + cookie.getName() + " = " + cookie.getValue());
+		        }
+		    }else {
+		    	System.out.println("cooie is null");
+		    }
+
+
+		    // Retrieve the session
+		    HttpSession session = request.getSession(false);
+		    
+
+		
+		    UserEntity userDto = (UserEntity) session.getAttribute("user"); // Retrieve user data
+
+		    if (userDto == null) {
+		        responseMap.put("success", false);
+		        responseMap.put("message", "No user data found in session.");
+		        return ResponseEntity.badRequest().body(responseMap);
+		    }
+		    
+		    String originalPassword = userDto.getPassword();
+
+		    String username = userDto.getUsername();
+		    System.out.println(username);
+
+		    //boolean isValid = otpService.validateOtp(username, code);
+		   // if (isValid) {
+		        userService.registerUserEntity(userDto);
+		        System.out.println("User registered successfully.");
+		       // }
+		    userDto.setPassword(originalPassword);
+		   System.out.println(userDto.getPassword());
+
+		    return userService.authenticateAndRespond(userDto, request, response);
+
+		   
+		}
+	
+	
+
+
+	  @PostMapping("/perform_login")
+	    public ResponseEntity<Map<String, Object>> registerUser(@RequestBody UserEntity userDto,
+	                                                            HttpServletRequest request,
+	                                                            HttpServletResponse response) {
+		  
+		   // Authentication authentication = userService.verify(userDto);
+		    
+		    return userService.authenticateAndRespond(userDto, request, response);
+		    
+	  }
 	}
 
-//
-//@GetMapping("/verify")
-//public ResponseEntity<Map<String, Object>> verifyOtp(HttpSession session) {
-//    Map<String, Object> response = new HashMap<>();
-//    
-//    // Retrieve user data from session
-//    UserEntity userDto = (UserEntity) session.getAttribute("tempUserData");
-//    
-//    if (userDto != null) {
-//        // Proceed with OTP verification logic
-//        response.put("success", true);
-//        response.put("message", "User data retrieved successfully.");
-//    } else {
-//        response.put("success", false);
-//        response.put("message", "No user data found in session.");
-//    }
-//    
-//    return ResponseEntity.ok(response);
-//}
 
 	
 	

@@ -25,6 +25,7 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
+		System.out.println("perform login here customise authentication ");
 		
 		  String jwt = jwtServiceTaamsmaak.generateToken(authentication.getName());
 	        System.out.println("Generated JWT Token: " + jwt);
@@ -37,15 +38,22 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	                .secure(true)
 	                .build();
 	        response.addHeader("Set-Cookie", cookie.toString());
+	       
+	        
+	        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+	        System.out.println("User Roles: " + authorities);
+
 
 	        // Determine redirect URL based on roles
 	        String redirectUrl;
-	        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-	        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+	       
+	        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
+	        	
 	            redirectUrl = "/adminpanel";
-	        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+	        } else if (authorities.contains(new SimpleGrantedAuthority("USER"))) {
 	            redirectUrl = "/home";
 	        } else {
+	        	System.out.println("no user role");
 	            redirectUrl = "/login?error=true"; // fallback in case no role is found
 	        }
 
