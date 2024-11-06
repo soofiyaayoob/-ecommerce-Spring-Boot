@@ -62,7 +62,7 @@ public class confi {
 	        .csrf(csrf -> csrf.disable()); 
 		  httpSecurity
 	         .authorizeHttpRequests(req -> req
-	             .requestMatchers("/register", "/login", "/css/**","/test","/verification","login","/profile","/perform_login").permitAll() 
+	             .requestMatchers("/register", "/login", "/css/**","/test","/verification","login","/profile","/perform_login","/**").permitAll() 
 	         
 	             .anyRequest().authenticated()
 	         );

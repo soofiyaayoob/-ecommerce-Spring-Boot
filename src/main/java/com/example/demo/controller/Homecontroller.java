@@ -116,46 +116,72 @@ public class Homecontroller {
 
 		    Map<String, Object> responseMap = new HashMap<>();
 		    
-		    Cookie[] cookies = request.getCookies();
-		    if (cookies != null) {
-		        for (Cookie cookie : cookies) {
-		            System.out.println("Cookie: " + cookie.getName() + " = " + cookie.getValue());
+
+		    try {
+		       
+		       
+
+		        // Retrieve cookies for debugging purposes
+		        Cookie[] cookies = request.getCookies();
+		        if (cookies != null) {
+		            for (Cookie cookie : cookies) {
+		                System.out.println("Cookie: " + cookie.getName() + " = " + cookie.getValue());
+		            }
+		        } else {
+		            System.out.println("Cookie is null");
 		        }
-		    }else {
-		    	System.out.println("cooie is null");
-		    }
 
+		        // Retrieve the session and user data from it
+		        HttpSession session = request.getSession(false);
+		        if (session == null) {
+		            responseMap.put("success", false);
+		            responseMap.put("message", "Session not found.");
+		            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMap);
+		        }
 
-		    // Retrieve the session
-		    HttpSession session = request.getSession(false);
-		    
+		        UserEntity userDto = (UserEntity) session.getAttribute("user"); // Retrieve user data from session
 
-		
-		    UserEntity userDto = (UserEntity) session.getAttribute("user"); // Retrieve user data
+		        if (userDto == null) {
+		            responseMap.put("success", false);
+		            responseMap.put("message", "No user data found in session.");
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+		        }
 
-		    if (userDto == null) {
+		        // Validate OTP
+		        String username = userDto.getUsername();
+		        boolean isValid = otpService.validateOtp(username, code);
+
+		        if (isValid) {
+		            // Register the user
+		            userService.registerUserEntity(userDto);
+		            System.out.println("User registered successfully.");
+
+		            responseMap.put("success", true);
+		            responseMap.put("message", "User registered successfully.");
+		            return ResponseEntity.ok(responseMap);
+		        } else {
+		            // Return an error if OTP is invalid
+		            responseMap.put("success", false);
+		            responseMap.put("message", "Invalid OTP code.");
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+		        }
+
+		    } catch (Exception e) {
+		        // Handle any exceptions and return an error response
 		        responseMap.put("success", false);
-		        responseMap.put("message", "No user data found in session.");
-		        return ResponseEntity.badRequest().body(responseMap);
+		        responseMap.put("message", "An error occurred during registration.");
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseMap);
 		    }
-		    
-		    String originalPassword = userDto.getPassword();
-
-		    String username = userDto.getUsername();
-		    System.out.println(username);
-
-		    //boolean isValid = otpService.validateOtp(username, code);
-		   // if (isValid) {
-		        userService.registerUserEntity(userDto);
-		        System.out.println("User registered successfully.");
+		} 	
+	    
+		        
 		       // }
-		    userDto.setPassword(originalPassword);
-		   System.out.println(userDto.getPassword());
+		   // userDto.setPassword(originalPassword);
+		   //System.out.println(userDto.getPassword());
 
-		    return userService.authenticateAndRespond(userDto, request, response);
+		    //return userService.authenticateAndRespond(userDto, request, response);
 
 		   
-		}
 	
 	
 
