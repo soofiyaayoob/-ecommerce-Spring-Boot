@@ -119,7 +119,7 @@ public class confi {
 	            public void addCorsMappings(CorsRegistry registry) {
 	                registry.addMapping("/**") // Allow all endpoints
 	                        .allowedOrigins("http://127.0.0.1:5500") // Your front-end URL
-	                        .allowedMethods("*") // Allowed HTTP methods
+	                        .allowedMethods("GET", "POST", "PUT", "DELETE")
 	                        .allowedHeaders("*") // Allow all headers
 	                        .allowCredentials(true); // Allow credentials if needed
 	            }

@@ -1,14 +1,20 @@
 package com.example.demo.Service;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.CategoryEntity;
+import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.UserEntity.Role;
 import com.example.demo.repositry.CategoryRepo;
 import com.example.demo.repositry.UserRepo;
+import com.example.demo.repositry.productRepo;
 
 @Service
 public class AdminServices {
@@ -20,9 +26,13 @@ public class AdminServices {
 	UserRepo userRepo;
 	
 	@Autowired
+	productRepo productRepo;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	public void AddCategory(CategoryEntity category) {
+		System.out.println("Category name before save: " + category.getName());
 		categoryRepo.save(category);
 		
 		
@@ -42,6 +52,17 @@ public class AdminServices {
 		userEntity.setRole(Role.ADMIN);
 		userRepo.save(userEntity);
 		
+	}
+
+	public List<CategoryEntity> getCategories() {
+		// TODO Auto-generated method stub
+		return categoryRepo.findAll();
+	}
+
+	public void addProduct(ProductEntity productEntity, MultipartFile imageFile) throws IOException {
+		productEntity.setImageName(imageFile.getOriginalFilename());
+		productEntity.setImageDate(imageFile.getBytes());
+		productRepo.save(productEntity);
 	}
 	
 	
