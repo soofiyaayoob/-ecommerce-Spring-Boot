@@ -54,10 +54,10 @@ public class UserService{
 	    user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 	    // Set user reference in each address if addresses exist
-	    if (user.getAddresses() != null) {
-	        user.getAddresses().forEach(address -> address.setUser(user));
-	    }
-	    
+//	    if (user.getAddresses() != null) {
+//	        user.getAddresses().forEach(address -> address.setUser(user));
+//	    }
+//	    
 	    System.out.println("saving...");
 
 	    // Save and return the user entity

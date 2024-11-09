@@ -1,0 +1,335 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 2rem; /* Make the brand name larger */
+    font-weight: bold; /* Optional: make it bold */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+}
+.nav-item {
+    margin-left: 20px; /* Adjust space between items */
+}
+
+.nav-link {
+    color: white; /* Change color to fit your navbar */
+    text-decoration: none; /* Remove underline */
+}
+
+.nav-link:hover {
+    text-decoration: underline; /* Optional: Add hover effect */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.search-container {
+    flex-grow: 1;
+    margin: 0 1rem;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+}
+
+
+/* Main container with sidebar and content */
+.main-container {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column; /* Changed to column */
+    margin-top: 20px; /* Move the main content down */
+    font-size: 1.5rem;
+    
+}
+
+/* Ensure both sidebar and main-content have the same height */
+.main-container > .sidebar, 
+.main-container > .main-content {
+    height: 100%;
+}
+
+/* Welcome Note */
+.welcome-note {
+    margin-bottom: 3rem; /* Increased space */
+    text-align: center;
+}
+/* Options Container */
+
+.options-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 900px; /* Adjusted max-width to fit five boxes per row */
+    margin: 100px auto;
+}
+    
+    .option-box {
+        display: flex; /* Align icon and text */
+        flex-direction: column; /* Stack icon and text */
+        align-items: center; /* Center icon and text */
+        padding: 1rem;
+        border: 1px solid #ccc; /* Optional: Add border for visibility */
+        border-radius: 8px; /* Optional: Rounded corners */
+        width: 170px; /* Optional: Fixed width for boxes */
+        transition: box-shadow 0.3s; /* Optional: Smooth shadow transition */
+    }
+    
+    .option-box:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Shadow on hover */
+    }
+
+/* Option Icon */
+.option-icon {
+    width: 50px; /* Adjust the icon size */
+    height: 50px;
+    margin-right: 1rem; /* Space between icon and text */
+}
+
+/* Ensure two rows of four boxes */
+.options-container .option-box {
+    flex: 1 1 calc(20% - 2rem); /* Five boxes per row */
+    max-width: 150px; /* Fixed width for boxes */
+}
+.product-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 600px;
+ 
+    height: auto; /* Set to auto for dynamic height or specify a fixed height like 400px */
+ 
+}
+
+.product-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.product-form label {
+    display: block;
+    margin-top: 1rem;
+}
+
+.product-form input, .product-form textarea, .product-form select, .product-form button {
+    width: 100%;
+    margin-top: 0.5rem;
+  
+}
+
+.product-form button {
+    margin-top: 1rem;
+}
+.product-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.product-form input, 
+.product-form textarea, 
+.product-form select, 
+.product-form button {
+    width: 100%;
+    margin-top: 0.5rem; /* Adds space above each element */
+    height: 40px;
+    
+
+    
+}
+.add-product-button {
+    background-color: black;  /* Set button background color to black */
+    color: white;             /* Set text color to white */
+    border: none;             /* Remove default border */
+    padding: 0.5rem;          /* Add padding for better spacing */
+    cursor: pointer;          /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.add-product-button:hover {
+    background-color: #444;   /* Slightly lighter on hover */
+}
+.admin-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 600px;  /* Increased width */
+}
+
+.admin-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.admin-form label {
+    display: block;
+    margin-top: 1rem;
+}
+
+.admin-form input, .admin-form select, .admin-form button {
+    width: 100%;
+    margin-top: 0.5rem;
+    height: 35px; /* Reduced input height */
+}
+
+.add-admin-button {
+    background-color: black;  /* Set button background color to black */
+    color: white;             /* Set text color to white */
+    border: none;             /* Remove default border */
+    padding: 0.5rem;          /* Add padding for better spacing */
+    cursor: pointer;          /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.add-admin-button:hover {
+    background-color: #444;   /* Slightly lighter on hover */
+}
+
+.admin-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.product-form div {
+    display: flex; /* Use flexbox for horizontal alignment */
+    align-items: center; /* Center align the items vertically */
+    margin-bottom: 5px; /* Adjust this value for spacing */
+}
+
+
+.product-form input[type="checkbox"] {
+    width: 15px; /* Desired width */
+    height: 15px; /* Desired height */
+    transform: scale(0.8); /* Scale down the checkbox */
+    margin-right: 5px; /* Space between checkbox and label */
+    cursor: pointer; /* Change cursor to pointer */
+}
+.add-category-button {
+    background-color: black;  /* Set button background color to black */
+    color: white;             /* Set text color to white */
+    border: none;             /* Remove default border */
+    padding: 0.5rem;          /* Add padding for better spacing */
+    cursor: pointer;          /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.add-category-button:hover {
+    background-color: #444;   /* Slightly lighter on hover */
+}
+.category-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.category-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 600px;  /* Increased width */
+}
+.offer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.offer-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    width: 600px;  /* Increased width */
+}
+

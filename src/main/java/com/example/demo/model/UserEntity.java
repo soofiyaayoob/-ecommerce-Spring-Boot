@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,7 +50,9 @@ public class UserEntity {
 	        SUPERADMIN  // Highest role for users with all permissions
 	    }
 	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<AddressEntity> addresses;
+	    private List<AddressEntity> addresses=new ArrayList<>();
+	    
+	    
 		public Long getId() {
 			return id;
 		}

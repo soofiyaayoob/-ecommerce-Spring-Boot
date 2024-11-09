@@ -25,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
@@ -52,7 +53,8 @@ public class confi {
 	}
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		return new SucessHandler();
+		//return new SucessHandler();
+		return new SimpleUrlAuthenticationSuccessHandler("/"); 
 	}
 	
 	
@@ -62,18 +64,19 @@ public class confi {
 	        .csrf(csrf -> csrf.disable()); 
 		  httpSecurity
 	         .authorizeHttpRequests(req -> req
-	             .requestMatchers("/register", "/login", "/css/**","/test","/verification","login","/profile","/perform_login","/**").permitAll() 
+	             .requestMatchers("/", "/public/**", "/error","/**", "/favicon.ico","/css/**", "/js/**", "/img/**","/login","/perform","/admin","/dash","/admin/dash").permitAll() 
 	         
 	             .anyRequest().authenticated()
 	         );
 	     
-	       httpSecurity .formLogin(form -> form
+	       httpSecurity .formLogin()
 	            .loginPage("/login")
-	            .loginProcessingUrl("/perform_login")
+	            .loginProcessingUrl("/perform")
+	            .successHandler(authenticationSuccessHandler())
 	           
 	            .failureUrl("/login?error=true")
-	            .permitAll())
-	        .logout(logout -> logout
+	            .permitAll();
+	       httpSecurity .logout(logout -> logout
 	            .logoutUrl("/logout")
 	            .invalidateHttpSession(true)
 	            .clearAuthentication(true)
@@ -81,10 +84,10 @@ public class confi {
 	            .logoutSuccessUrl("/login?logout")
 	            .permitAll());
 	
-		  httpSecurity.httpBasic(Customizer.withDefaults());
-	
-	        httpSecurity.formLogin().disable();
-	        httpSecurity.httpBasic().disable();
+//		  httpSecurity.httpBasic(Customizer.withDefaults());
+//	
+//	        httpSecurity.formLogin().disable();
+//	        httpSecurity.httpBasic().disable();
 
 	    httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	    httpSecurity
@@ -94,38 +97,38 @@ public class confi {
 	    return httpSecurity.build();
 	}
 
+//	@Bean
+//	public AuthenticationProvider authenticationProvider() {
+//		DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
+//		authenticationProvider.setUserDetailsService( detailsService());
+//		authenticationProvider.setPasswordEncoder(passwordEncoder());
+//		return authenticationProvider;
+//	}
 	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService( detailsService());
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
+	    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+	    provider.setUserDetailsService(detailsService());
+	    provider.setPasswordEncoder(passwordEncoder());
+	    return provider;
 	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+//	@Bean
+//	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//		return authenticationConfiguration.getAuthenticationManager();
+//		
+//	}
+//	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-		
+	    return authenticationConfiguration.getAuthenticationManager();
 	}
-	
-	 @Bean
-	    public WebMvcConfigurer corsConfigurer() {
-	        return new WebMvcConfigurer() {
-	            @Override
-	            public void addCorsMappings(CorsRegistry registry) {
-	                registry.addMapping("/**") // Allow all endpoints
-	                        .allowedOrigins("http://127.0.0.1:5500") // Your front-end URL
-	                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-	                        .allowedHeaders("*") // Allow all headers
-	                        .allowCredentials(true); // Allow credentials if needed
-	            }
-	        };
 
-	 }
+	
 	 @Bean
 	    public JavaMailSender javaMailSender() {
 	        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

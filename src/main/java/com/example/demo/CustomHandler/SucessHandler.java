@@ -49,9 +49,9 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	       
 	        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
 	        	
-	            redirectUrl = "/adminpanel";
+	            redirectUrl = "/admin";
 	        } else if (authorities.contains(new SimpleGrantedAuthority("USER"))) {
-	            redirectUrl = "/home";
+	            redirectUrl = "/";
 	        } else {
 	        	System.out.println("no user role");
 	            redirectUrl = "/login?error=true"; // fallback in case no role is found
