@@ -53,8 +53,8 @@ public class confi {
 	}
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		//return new SucessHandler();
-		return new SimpleUrlAuthenticationSuccessHandler("/"); 
+		return new SucessHandler();
+		
 	}
 	
 	
@@ -62,12 +62,13 @@ public class confi {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
 		  httpSecurity.cors().and()
 	        .csrf(csrf -> csrf.disable()); 
-		  httpSecurity
-	         .authorizeHttpRequests(req -> req
-	             .requestMatchers("/", "/public/**", "/error","/**", "/favicon.ico","/css/**", "/js/**", "/img/**","/login","/perform","/admin","/dash","/admin/dash").permitAll() 
-	         
-	             .anyRequest().authenticated()
-	         );
+//		  httpSecurity
+//	         .authorizeHttpRequests(req -> req
+//	             .requestMatchers("/", "/public/**","/css","js").permitAll() 
+//	         
+//	             .anyRequest().authenticated()
+//	         );
+		  httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
 	     
 	       httpSecurity .formLogin()
 	            .loginPage("/login")

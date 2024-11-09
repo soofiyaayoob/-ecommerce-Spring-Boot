@@ -16,6 +16,8 @@ import com.example.demo.repositry.CategoryRepo;
 import com.example.demo.repositry.UserRepo;
 import com.example.demo.repositry.productRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AdminServices {
 	
@@ -37,7 +39,7 @@ public class AdminServices {
 		
 		
 	}
-
+@Transactional
 	public void AddAdmin(UserEntity userEntity) {
 		
 		userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));

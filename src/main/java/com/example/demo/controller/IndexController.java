@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.UserService;
 import com.example.demo.model.AddressEntity;
+import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repositry.UserRepo;
 
@@ -30,6 +32,9 @@ public class IndexController {
 	UserService userService;
 	@Autowired
 	UserRepo userRepo;
+	
+	@Autowired
+	CategoryService categoryService;
 	
 	 @GetMapping("/")
 	    public String home() {
@@ -88,10 +93,13 @@ public class IndexController {
 //		    
 //	  }
 	 
-	 @GetMapping("/admin")
-	    public String showAdminPage() {
-	        return "admin"; // Ensure "register.html" exists in the templates folder
-	    }
+//	 @GetMapping("/admin")
+//	    public String showAdminPage(Model model) {
+//		 
+//		List<CategoryEntity>  categories=categoryService.getAllcategries();
+//		 model.addAttribute("categories", categories);
+//	        return "admin"; // Ensure "register.html" exists in the templates folder
+//	    }
 	 
 	 @GetMapping("/error")
 	    public String showERrorPage() {

@@ -21,6 +21,10 @@ public class CategoryEntity {
 	   
 	   @Column(nullable = false)
 	    private String name;
+	   
+	   
+	   @Column(nullable = false)
+	   private String imageName;
 
 	    @OneToMany(mappedBy = "category")  // "category" is the field in Product
 	    private List<ProductEntity> products; // Optional, useful for retrieving products by category
@@ -41,6 +45,14 @@ public class CategoryEntity {
 			this.name = name;
 		}
 
+		public String getImageName() {
+			return imageName;
+		}
+
+		public void setImageName(String imageName) {
+			this.imageName = imageName;
+		}
+
 		public List<ProductEntity> getProducts() {
 			return products;
 		}
@@ -49,17 +61,18 @@ public class CategoryEntity {
 			this.products = products;
 		}
 
-		public CategoryEntity(Long id, String name, List<ProductEntity> products) {
+		public CategoryEntity(Long id, String name, String imageName, List<ProductEntity> products) {
 			super();
 			this.id = id;
 			this.name = name;
+			this.imageName = imageName;
 			this.products = products;
 		}
 
 		public CategoryEntity() {
 			
 		}
-		
+
 		
 
 	    // Constructors, getters, and setters

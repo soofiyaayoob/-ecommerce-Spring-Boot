@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-brand">
-            <img src="/Login/taam smaak.png" alt="Home" width="50" height="50"> <!-- Replace with your icon -->
+            <img src="/img/taam smaak.png" alt="Home" width="50" height="50"> <!-- Replace with your icon -->
             TA'AM SMAAK
         </div>
         <div class="search-container">
@@ -26,12 +26,15 @@
             </ul>
         </div>
     </nav>
-
+	<div th:if="${message}" class="alert alert-success">
+			          <p th:text="${message}"></p>
+		   </div>
     <!-- Main Content -->
   <!-- Main Content -->
 <div class="main-content">
     <div id="content-area">
         <div class="welcome-note">Welcome to the Admin Dashboard!</div>
+		
         <div class="options-container">
             <div class="option-box" onclick="showAddProductForm()">
                 <i class="fas fa-box option-icon"></i>
@@ -79,7 +82,7 @@
 <div id="add-product-overlay" class="product-overlay" style="display: none;">
     <div id="add-product-form" class="product-form" style="display: none;">
         <h2>Add New Product</h2>
-        <form th:action="@{/products/add}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/admin/Addproduct}" method="post" enctype="multipart/form-data">
             <label for="productName">Name:</label>
             <input type="text" id="productName" name="productName" required>
 
@@ -121,52 +124,58 @@
 <div id="add-admin-overlay" class="admin-overlay" style="display: none;">
     <div id="add-admin-form" class="admin-form" style="display: none;">
         <h2>Add New Admin</h2>
-        <form th:action="@{/admins/add}" method="post">
-            <label for="fullName">Full Name:</label>
-            <input type="text" id="fullName" name="fullName" required>
+		<form th:action="@{/admin/add}" method="post" th:object="${adminForm}">
+		    <label for="fullName">Full Name:</label>
+		    <input type="text" th:field="*{fullName}" id="fullName" name="fullName" required>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+		    <label for="username">Username:</label>
+		    <input type="text" th:field="*{username}" id="username" name="username" required>
 
-            <label for="phone">Phone No:</label>
-            <input type="tel" id="phone" name="phone" required>
+		    <label for="phone">Phone No:</label>
+		    <input type="tel" th:field="*{mobileNo}" id="phone" name="phone" required>
 
-            <label for="email">Email:</label> <!-- Added Email field -->
-            <input type="email" id="email" name="email" required>
+		    <label for="email">Email:</label>
+		    <input type="email" th:field="*{Email}" id="email" name="email" required>
 
-            <!-- Address Section -->
-            <label for="state">State:</label>
-            <input type="text" id="state" name="state" required>
+		    <!-- Address Section -->
+		    <label for="state">State:</label>
+		    <input type="text" th:field="*{addresses[0].state}" id="state" name="state" required>
 
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" required>
+		    <label for="city">City:</label>
+		    <input type="text" th:field="*{addresses[0].city}" id="city" name="city" required>
 
-            <label for="pincode">Pincode:</label>
-            <input type="text" id="pincode" name="pincode" required>
+		    <label for="pincode">Pincode:</label>
+		    <input type="text" th:field="*{addresses[0].pincode}" id="pincode" name="pincode" required>
 
-            <!-- Password Section -->
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+		    <!-- Password Section -->
+		    <label for="password">Password:</label>
+		    <input type="password" th:field="*{password}" id="password" name="password" required>
 
-            <label for="gender">Gender:</label>
-            <select id="gender" name="gender" required>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-            </select>
+		    <label for="gender">Gender:</label>
+		    <select th:field="*{gender}" id="gender" name="gender" required>
+		        <option value="male">Male</option>
+		        <option value="female">Female</option>
+		        <option value="other">Other</option>
+		    </select>
 
-            <button type="submit" class="add-admin-button">Add Admin</button>
-            <button type="button" onclick="hideAddAdminForm()">Cancel</button>
-        </form>
+		    <button type="submit">Add Admin</button>
+		</form>
+
     </div>
 </div>
 
+
 <div id="add-category-overlay" class="category-overlay" style="display: none;">
     <div id="add-category-form" class="product-form" style="display: none;">
+		
         <h2>Add New Category</h2>
-        <form id="categoryForm" th:action="@{/categories/add}" method="post">
+		
+        <form id="categoryForm" th:action="@{/admin/categories/add}" method="post" enctype="multipart/form-data">
             <label for="categoryName">Category Name:</label>
             <input type="text" id="categoryName" name="categoryName" required>
+			
+			<label for="categoryImage">Category Image:</label>
+			  <input type="file" id="categoryImage" name="categoryImage" accept="image/*" required>
 
             <button type="submit" class="add-category-button">Submit</button>
             <button type="button" onclick="hideAddCategoryForm()">Cancel</button>
@@ -177,19 +186,12 @@
 <div id="add-offer-overlay" class="offer-overlay" style="display: none;">
     <div id="add-offer-form" class="admin-form" style="display: none;">
         <h2>Add Offer</h2>
-        <form id="offerForm" th:action="@{/offers/add}" method="post">
+        <form id="offerForm" th:action="@{/Addoffers}" method="post">
             <label for="productId">Product ID:</label>
             <input type="text" id="productId" name="productId" required oninput="fetchProductDetails()">
 
-            <!-- Product details will be displayed here -->
-            <div id="productDetails" style="display:none;">
-                <div id="productCard">
-                    <img id="productImage" src="" alt="Product Image" style="width: 100px; height: 100px;">
-                    <div id="productName"></div>
-                    <div id="productPrice"></div>
-                    <div id="productDescription" style="font-size: small;"></div>
-                </div>
-            </div>
+           
+           
 
             <label for="discountPercentage">Discount Percentage:</label>
             <input type="number" id="discountPercentage" name="discountPercentage" min="0" max="100" required>
