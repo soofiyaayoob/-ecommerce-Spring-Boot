@@ -68,10 +68,19 @@ function hideAddOfferForm() {
     document.getElementById("add-offer-form").style.display = "none";
 }
 
+
 // Event listener to close the Add Offer form if clicked outside the form (on the overlay)
 document.getElementById("add-offer-overlay").addEventListener("click", function(event) {
     if (event.target === this) {
         hideAddOfferForm();
     }
 });
-
+document.addEventListener("DOMContentLoaded", function() {
+    var messageElement = document.querySelector('.alert');
+    if (messageElement) {
+        console.log(messageElement);  // Log the element to make sure it's correct
+        setTimeout(function() {
+            messageElement.style.display = 'none';  // Hide the element after 5 seconds
+        }, 5000);
+    }
+});

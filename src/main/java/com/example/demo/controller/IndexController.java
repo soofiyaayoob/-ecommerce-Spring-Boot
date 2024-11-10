@@ -117,4 +117,6 @@ public class IndexController {
 	        
 	        return "redirect:/login"; // Redirect to the login page after successful registration
 	    }
+
+	  
 }

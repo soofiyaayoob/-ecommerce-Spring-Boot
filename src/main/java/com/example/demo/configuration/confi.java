@@ -53,7 +53,8 @@ public class confi {
 	}
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		return new SucessHandler();
+		return new SimpleUrlAuthenticationSuccessHandler("/");
+		//return new SucessHandler();
 		
 	}
 	
@@ -90,7 +91,7 @@ public class confi {
 //	        httpSecurity.formLogin().disable();
 //	        httpSecurity.httpBasic().disable();
 
-	    httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+	  //  httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	    httpSecurity
 	    .sessionManagement()
 	        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // Ensures each request is authenticated individually

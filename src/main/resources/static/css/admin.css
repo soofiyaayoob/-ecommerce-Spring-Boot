@@ -14,7 +14,7 @@ body {
 
 /* Navbar */
 .navbar {
-    background-color: #333;
+    background-color:orange;
     color: white;
     width: 100%;
     padding: 1rem;
@@ -104,7 +104,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     max-width: 900px; /* Adjusted max-width to fit five boxes per row */
-    margin: 100px auto;
+    margin: 50px auto;
 }
     
     .option-box {
@@ -332,17 +332,22 @@ body {
     z-index: 1000;
     width: 600px;  /* Increased width */
 }
-.alert {
-    position: fixed; /* Fix the alert on the screen */
-    top: 20%; /* Set the top padding */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust to fully center */
-    padding: 10px 20px; /* Padding around the message */
-   
-    color: rgb(0, 0, 0); /* Text color */
-    border-radius: 5px; /* Rounded corners */
-    z-index: 1000; /* Ensure it's on top of other elements */
-    opacity: 1; /* Make it visible initially */
-    transition: opacity 1s ease-out; /* Fade out effect */
-}
 
+ .success {
+	      background-color: green;
+	      color: white;
+		  
+	      padding: 10px;
+		  margin-bottom: 20px;
+		 border-radius: 5px;
+	  }
+
+ .error {
+	      background-color: red;
+	      color: white;
+		 
+		 padding: 10px;
+		 margin-bottom: 20px;
+		  border-radius: 5px;
+	  }
+	  

@@ -21,14 +21,14 @@
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/Home/home.html">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
             </ul>
         </div>
     </nav>
-	<div th:if="${message}" class="alert alert-success">
-			          <p th:text="${message}"></p>
-		   </div>
+
+
+
     <!-- Main Content -->
   <!-- Main Content -->
 <div class="main-content">
@@ -40,7 +40,7 @@
                 <i class="fas fa-box option-icon"></i>
                 <span>Add Product</span>
             </div>
-            <div class="option-box">
+            <div class="option-box"  th:onclick="|window.location.href='@{/admin/products}'|">
                 <i class="fas fa-box-open option-icon"></i>
                 <span>View Products</span>
             </div>
@@ -79,6 +79,11 @@
         </div>
     </div>
 </div>
+<div th:if="${message}" class="alert" th:class="${messageType}">
+    <span th:text="${message}"></span>
+</div>
+
+
 <div id="add-product-overlay" class="product-overlay" style="display: none;">
     <div id="add-product-form" class="product-form" style="display: none;">
         <h2>Add New Product</h2>
@@ -124,7 +129,7 @@
 <div id="add-admin-overlay" class="admin-overlay" style="display: none;">
     <div id="add-admin-form" class="admin-form" style="display: none;">
         <h2>Add New Admin</h2>
-		<form th:action="@{/admin/add}" method="post" th:object="${adminForm}">
+		<form th:action="@{/admin/addAdmin}" method="post" th:object="${adminForm}">
 		    <label for="fullName">Full Name:</label>
 		    <input type="text" th:field="*{fullName}" id="fullName" name="fullName" required>
 
@@ -170,7 +175,7 @@
 		
         <h2>Add New Category</h2>
 		
-        <form id="categoryForm" th:action="@{/admin/categories/add}" method="post" enctype="multipart/form-data">
+        <form id="categoryForm" th:action="@{/admin/Addcategories}" method="post" enctype="multipart/form-data">
             <label for="categoryName">Category Name:</label>
             <input type="text" id="categoryName" name="categoryName" required>
 			
@@ -183,12 +188,13 @@
     </div>
 </div>
 
-<div id="add-offer-overlay" class="offer-overlay" style="display: none;">
+<div id="add-offer-overlay" class="offer-overlay" style="display: none;"   >
+	
     <div id="add-offer-form" class="admin-form" style="display: none;">
         <h2>Add Offer</h2>
-        <form id="offerForm" th:action="@{/Addoffers}" method="post">
+        <form id="offerForm" th:action="@{/admin/Addoffer}" method="post">
             <label for="productId">Product ID:</label>
-            <input type="text" id="productId" name="productId" required oninput="fetchProductDetails()">
+            <input type="text" id="productId" name="productId" required >
 
            
            
@@ -198,12 +204,15 @@
 
             <label for="offerEndDate">Offer End Date:</label>
             <input type="date" id="offerEndDate" name="offerEndDate" required>
-
+		
             <button type="submit" class="add-offer-button">Add Offer</button>
+			
+			
             <button type="button" onclick="hideAddOfferForm()">Cancel</button>
         </form>
     </div>
 </div>
+
 
 
 

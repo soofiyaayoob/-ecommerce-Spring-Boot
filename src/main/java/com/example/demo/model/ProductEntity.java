@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,13 +33,16 @@ public class ProductEntity {
 	    
 	    @Column
 	    private String imageName;
+	    
+	  
+	    private transient String imageBase64;
 
 	    @Column(nullable = false)
 	    private Double price;
 
-	    // One-to-many relationship with ProductOffer
-	    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<OfferEntity> offers;
+	   
+	    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+	    private OfferEntity offer;
 
 	    // One-to-many relationship with Size
 	    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -88,6 +92,14 @@ public class ProductEntity {
 			this.imageName = imageName;
 		}
 
+		public String getImageBase64() {
+			return imageBase64;
+		}
+
+		public void setImageBase64(String imageBase64) {
+			this.imageBase64 = imageBase64;
+		}
+
 		public Double getPrice() {
 			return price;
 		}
@@ -96,12 +108,12 @@ public class ProductEntity {
 			this.price = price;
 		}
 
-		public List<OfferEntity> getOffers() {
-			return offers;
+		public OfferEntity getOffer() {
+			return offer;
 		}
 
-		public void setOffers(List<OfferEntity> offers) {
-			this.offers = offers;
+		public void setOffer(OfferEntity offer) {
+			this.offer = offer;
 		}
 
 		public List<SizeEntity> getSizes() {
@@ -120,17 +132,17 @@ public class ProductEntity {
 			this.category = category;
 		}
 
-		public ProductEntity(Long id, String name, String description, byte[] imageDate, String imageName, Double price,
-				List<OfferEntity> offers, List<SizeEntity> sizes, CategoryEntity category) {
-
-
+		public ProductEntity(Long id, String name, String description, byte[] imageDate, String imageName,
+				String imageBase64, Double price, OfferEntity offer, List<SizeEntity> sizes, CategoryEntity category) {
+			
 			this.id = id;
 			this.name = name;
 			this.description = description;
 			this.imageDate = imageDate;
 			this.imageName = imageName;
+			this.imageBase64 = imageBase64;
 			this.price = price;
-			this.offers = offers;
+			this.offer = offer;
 			this.sizes = sizes;
 			this.category = category;
 		}
@@ -139,7 +151,7 @@ public class ProductEntity {
 			
 		}
 
-	
+
 
 
 	    // Getters and setters
