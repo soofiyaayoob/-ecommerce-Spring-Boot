@@ -144,7 +144,7 @@ public class AdminController {
 	         @RequestParam("productDescription") String description,
 	         @RequestParam("productImage") MultipartFile image,
 	         @RequestParam("productSize") List<String> sizes,
-	         @RequestParam("category") Long categoryId,RedirectAttributes redirectAttributes) {  
+	         @RequestParam("category") Long categoryId,RedirectAttributes redirectAttributes) throws IOException {  
 		 CategoryEntity categoryEntity=categoryService.findCayegory(categoryId);
 		  String productImage=image.getOriginalFilename();
 		  
@@ -154,7 +154,7 @@ public class AdminController {
 		     product.setDescription(description);
 		     product.setCategory(categoryEntity); 
 		     product.setImageName(productImage);
-		     product.setImageDate(productImage.getBytes());
+		     product.setImageDate(image.getBytes());
 
 	     ProductEntity savedProduct =productservices.addProduct(product);
 
@@ -233,14 +233,14 @@ public class AdminController {
 	     public  String getAllprod(Model model) {
 	    	List<ProductEntity> productEntities= productservices.getAllProducts();
 
-	        // Convert each product image from bytes to Base64 and set it back in ProductEntity
+	       
 	        for (ProductEntity productEntity : productEntities) {
 	            if (productEntity.getImageDate() != null) {
-	            	byte[] imageData = productEntity.getImageDate();  // Assuming this is how you retrieve the image from the database
+	            	byte[] imageData = productEntity.getImageDate();  
 
 	            	// Print the byte array to see the image data
 	            	System.out.println("Image Data (byte array): " + Arrays.toString(imageData));
-	            	System.out.println(productEntity.getImageName().getBytes());
+	            //	System.out.println(productEntity.getImageName().getBytes());
 	            	System.out.println(productEntity.getImageDate());
 //	                 if (productEntity.getImageDate() != null) {
 	                String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageData);
@@ -257,8 +257,9 @@ public class AdminController {
 	        
 
 	       
-	        return "AdminViewProducts";
+	        return "allProducts";
 	    }
+	     
 	    	
 	    	} 	
 	    	 

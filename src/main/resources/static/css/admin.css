@@ -17,15 +17,16 @@ body {
     background-color:orange;
     color: white;
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem 1rem; /* Reduced padding for smaller height */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.3s ease; /* Smooth animation effect */
 }
 
 .navbar-brand {
-    font-size: 2rem; /* Make the brand name larger */
-    font-weight: bold; /* Optional: make it bold */
+    font-size: 1.5rem; /* Adjusted font size */
+    font-weight: bold;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -36,36 +37,28 @@ body {
     list-style: none;
 }
 .nav-item {
-    margin-left: 20px; /* Adjust space between items */
+    margin-left: 20px;
 }
 
 .nav-link {
-    color: white; /* Change color to fit your navbar */
-    text-decoration: none; /* Remove underline */
+    color: white;
+    text-decoration: none;
 }
 
 .nav-link:hover {
-    text-decoration: underline; /* Optional: Add hover effect */
+    text-decoration: underline;
 }
 
 .navbar-brand {
     font-size: 1.5rem;
 }
-
-.search-container {
-    flex-grow: 1;
-    margin: 0 1rem;
-}
-
-.search-bar {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: none;
+.navbar:hover {
+    background-color: darkorange; 
+    padding: 0.8rem 1rem; 
 }
 
 
-/* Main container with sidebar and content */
+
 .main-container {
     display: flex;
     flex-grow: 1;
@@ -79,31 +72,31 @@ body {
     padding: 2rem;
     background-color: #ffffff;
     display: flex;
-    flex-direction: column; /* Changed to column */
-    margin-top: 20px; /* Move the main content down */
+    flex-direction: column; 
+    margin-top: 20px;
     font-size: 1.5rem;
     
 }
 
-/* Ensure both sidebar and main-content have the same height */
+
 .main-container > .sidebar, 
 .main-container > .main-content {
     height: 100%;
 }
 
-/* Welcome Note */
+
 .welcome-note {
-    margin-bottom: 3rem; /* Increased space */
+    margin-bottom: 3rem; 
     text-align: center;
 }
-/* Options Container */
+
 
 .options-container {
     display: flex;
     gap: 2rem;
     justify-content: center;
     flex-wrap: wrap;
-    max-width: 900px; /* Adjusted max-width to fit five boxes per row */
+    max-width: 900px; 
     margin: 50px auto;
 }
     
@@ -175,7 +168,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.5); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,23 +179,23 @@ body {
 .product-form select, 
 .product-form button {
     width: 100%;
-    margin-top: 0.5rem; /* Adds space above each element */
+    margin-top: 0.5rem; 
     height: 40px;
     
 
     
 }
 .add-product-button {
-    background-color: black;  /* Set button background color to black */
-    color: white;             /* Set text color to white */
-    border: none;             /* Remove default border */
-    padding: 0.5rem;          /* Add padding for better spacing */
-    cursor: pointer;          /* Change cursor to pointer on hover */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    background-color: black; 
+    color: white;           
+    border: none;            
+    padding: 0.5rem;
+    cursor: pointer;       
+    transition: background-color 0.3s;
 }
 
 .add-product-button:hover {
-    background-color: #444;   /* Slightly lighter on hover */
+    background-color: #444;  
 }
 .admin-form {
     position: fixed;
@@ -214,7 +207,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     z-index: 1000;
-    width: 600px;  /* Increased width */
+    width: 600px; 
 }
 
 .admin-form h2 {
@@ -230,16 +223,16 @@ body {
 .admin-form input, .admin-form select, .admin-form button {
     width: 100%;
     margin-top: 0.5rem;
-    height: 27px; /* Reduced input height */
+    height: 27px; 
 }
 
 .add-admin-button {
-    background-color: black;  /* Set button background color to black */
-    color: white;             /* Set text color to white */
-    border: none;             /* Remove default border */
-    padding: 0.5rem;          /* Add padding for better spacing */
-    cursor: pointer;          /* Change cursor to pointer on hover */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    background-color: black; 
+    color: white;           
+    border: none;             
+    padding: 0.5rem;         
+    cursor: pointer;       
+    transition: background-color 0.3s; 
 }
 
 .add-admin-button:hover {
@@ -259,30 +252,29 @@ body {
     z-index: 1000;
 }
 .product-form div {
-    display: flex; /* Use flexbox for horizontal alignment */
-    align-items: center; /* Center align the items vertically */
-    margin-bottom: 5px; /* Adjust this value for spacing */
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 5px; 
+
 }
-
-
 .product-form input[type="checkbox"] {
-    width: 15px; /* Desired width */
-    height: 15px; /* Desired height */
+    width: 15px; 
+    height: 15px; 
     transform: scale(0.8); /* Scale down the checkbox */
-    margin-right: 5px; /* Space between checkbox and label */
-    cursor: pointer; /* Change cursor to pointer */
+    margin-right: 5px; 
+    cursor: pointer; 
 }
 .add-category-button {
-    background-color: black;  /* Set button background color to black */
-    color: white;             /* Set text color to white */
-    border: none;             /* Remove default border */
-    padding: 0.5rem;          /* Add padding for better spacing */
-    cursor: pointer;          /* Change cursor to pointer on hover */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    background-color: black; 
+    color: white;           
+    border: none;            
+    padding: 0.5rem;          
+    cursor: pointer;        
+    transition: background-color 0.3s; 
 }
 
 .add-category-button:hover {
-    background-color: #444;   /* Slightly lighter on hover */
+    background-color: #444;  
 }
 .category-overlay {
     position: fixed;
@@ -290,7 +282,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -306,7 +298,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     z-index: 1000;
-    width: 600px;  /* Increased width */
+    width: 600px; 
 }
 .offer-overlay {
     position: fixed;
@@ -314,7 +306,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.5); 
     display: flex;
     align-items: center;
     justify-content: center;
