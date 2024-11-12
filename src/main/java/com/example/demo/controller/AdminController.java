@@ -27,6 +27,7 @@ import com.example.demo.Service.AdminServices;
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
+import com.example.demo.Service.UserService;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
@@ -49,6 +50,9 @@ public class AdminController {
 	
 	@Autowired
 	OfferServicea offerServicea;
+	
+	@Autowired
+	UserService userService;
 	
 	
 	@GetMapping("/dash")
@@ -86,56 +90,7 @@ public class AdminController {
 	       return "redirect:/admin/dash";
 	        
 	    }
-//	   Category category = new Category();
-//       category.setName(categoryName);
-//       category.setImageName(imageName);
-//       categoryService.saveCategory(category);
-	
-// 
-//	 @PostMapping("/register")
-//	 public ResponseEntity<Object> CreateAdmin(@RequestBody UserEntity userEntity){
-//		 
-//		 adminServices.AddAdmin(userEntity);
-//		 System.out.println("admin added");
-//		// ResponseEntity.ok().body("Registration Successful");
-//		 return ResponseEntity.
-//			 ok().body("added");
-//		 }
-	 
-	 
-	 
-//	 @GetMapping("/getCategories")
-//	 public ResponseEntity<List<CategoryEntity>>getMethodName() {
-//		 System.out.println("gettimg categories");
-//		    List<CategoryEntity> categories = adminServices.getCategories();
-//		    return ResponseEntity.ok(categories);  // This should return a JSON list
-//		}
-//	 
-//	 @PostMapping("/addProduct")
-//	 public ResponseEntity<?> addProduct(@RequestPart ProductEntity productEntity,@RequestPart MultipartFile multipartFile) throws IOException{
-//		 adminServices.addProduct(productEntity,multipartFile);
-//		 return ResponseEntity.ok().body("added");
-//	 }
-//	 @GetMapping("/search")
-//	    public String searchProducts(@RequestParam("query") String query, Model model) {
-//	        List<Product> searchResults = productService.searchProducts(query);
-//	        model.addAttribute("products", searchResults);
-//	        return "admin-dashboard";
-//	    }
-//
-//	    @GetMapping("/products/add")
-//	    public String showAddProductForm(Model model) {
-//	        List<Category> categories = categoryService.getAllCategories();
-//	        model.addAttribute("categories", categories);
-//	        return "add-product";
-//	    }
-//
-//	    @PostMapping("/products/add")
-//	    public String addProduct(@ModelAttribute("product") Product product, @RequestParam("productImage") MultipartFile image) {
-//	        // Save the product and the image
-//	        productService.saveProduct(product, image);
-//	        return "redirect:/admin-dashboard";
-//	    }
+
 	 
 	 @PostMapping("/Addproduct")
 	 public String addProduct(
@@ -168,20 +123,20 @@ public class AdminController {
 	     redirectAttributes.addFlashAttribute("message","nw produced added succesfully!");
 	     redirectAttributes.addFlashAttribute("messageType","success");  
 
-	     return "redirect:/admin/dash"; // Redirect after saving
+	     return "redirect:/admin/dash";
 	 }
 	 
-  // Assuming you have a UserService to handle persistence
+  
 
 	     @PostMapping("/addAdmin")
 	     public String addAdmin(@ModelAttribute("adminForm") UserEntity userEntity, Model model,RedirectAttributes 
 	    		 redirectAttributes) {
 	      
 	    	  try {
-	    	         // If the address list is not empty, set the user reference for each address
+	    	       
 	    	         if (userEntity.getAddresses() != null && !userEntity.getAddresses().isEmpty()) {
 	    	             AddressEntity address = userEntity.getAddresses().get(0);
-	    	             address.setUser(userEntity); // Associate the user with the address
+	    	             address.setUser(userEntity); 
 	    	         }
 
 	    	         
@@ -238,9 +193,9 @@ public class AdminController {
 	            if (productEntity.getImageDate() != null) {
 	            	byte[] imageData = productEntity.getImageDate();  
 
-	            	// Print the byte array to see the image data
+	            	
 	            	System.out.println("Image Data (byte array): " + Arrays.toString(imageData));
-	            //	System.out.println(productEntity.getImageName().getBytes());
+	          
 	            	System.out.println(productEntity.getImageDate());
 //	                 if (productEntity.getImageDate() != null) {
 	                String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageData);
@@ -252,15 +207,26 @@ public class AdminController {
 	   
 
 	        model.addAttribute("products", productEntities);
-	       
-	       
-	        
-
-	       
+	
 	        return "allProducts";
 	    }
+	     @GetMapping("/users")
+	     public String listUsers(Model model) {
+	         List<UserEntity> users = userService.getAllUsers(); // Fetch users from the service
+	         model.addAttribute("users", users);
+	         return "Allusers"; 
+	     }
 	     
-	    	
+//	     @PostMapping("/users/deactivate/{id}")
+//	     @ResponseBody
+//	     public ResponseEntity<?> deactivateUser(@PathVariable Long id) {
+//	         userService.deactivateUser(id); // Your service method to deactivate the user
+//	         return ResponseEntity.ok().build();
+//	     }
+	     
+	     
+	     
+	     
 	    	} 	
 	    	 
 	     

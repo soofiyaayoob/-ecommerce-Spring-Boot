@@ -39,7 +39,7 @@ public class AdminServices {
 		
 		
 	}
-@Transactional
+     @Transactional
 	public void AddAdmin(UserEntity userEntity) {
 		
 		userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
@@ -57,7 +57,7 @@ public class AdminServices {
 	}
 
 	public List<CategoryEntity> getCategories() {
-		// TODO Auto-generated method stub
+		
 		return categoryRepo.findAll();
 	}
 

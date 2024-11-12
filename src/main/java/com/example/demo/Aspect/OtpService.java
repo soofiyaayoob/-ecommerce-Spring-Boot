@@ -22,6 +22,7 @@ public class OtpService {
 
     public boolean validateOtp(String username, String otp) {
         OtpData otpData = otpStore.get(username);
+        System.out.println(otpData);
         if (otpData != null && otpData.getOtp().equals(otp) && System.currentTimeMillis() < otpData.getExpiryTime()) {
             otpStore.remove(username); // Remove OTP after successful validation
             return true;

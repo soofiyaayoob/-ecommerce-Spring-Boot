@@ -67,38 +67,48 @@
 <body>
 </head>
 <body>
-    <div class="verification-container">
-        <h2>Mobile Phone Verification</h2>
-        <p>Enter the 6-digit verification code that was sent to your phone number.</p>
-        <div class="code-inputs">
-            <input type="text" maxlength="1" id="code1" oninput="moveToNext(this, 'code2')">
-            <input type="text" maxlength="1" id="code2" oninput="moveToNext(this, 'code3')">
-            <input type="text" maxlength="1" id="code3" oninput="moveToNext(this, 'code4')">
-            <input type="text" maxlength="1" id="code4" oninput="moveToNext(this, 'code5')">
-            <input type="text" maxlength="1" id="code5" oninput="moveToNext(this, 'code6')">
-            <input type="text" maxlength="1" id="code6" oninput="moveToNext(this, '')">
-        </div>
-        <button class="btn" onclick="verifyCode()">Verify Account</button>
-        <div class="resend">
-            <p>Didn't receive code? <a href="#">Resend</a></p>
-        </div>
-    </div>
+	<div class="verification-container">
+	        <h2>Mobile Phone Verification</h2>
+	        <p>Enter the 6-digit verification code that was sent to your phone number.</p>
+	        
+	        <!-- Form to submit OTP -->
+	        <form action="/verify" method="post">
+	            <div class="code-inputs">
+	                <input type="text" name="code1" maxlength="1">
+	                <input type="text" name="code2" maxlength="1">
+	                <input type="text" name="code3" maxlength="1">
+	                <input type="text" name="code4" maxlength="1">
+	                <input type="text" name="code5" maxlength="1">
+	                <input type="text" name="code6" maxlength="1">
+	            </div>
+	            <button class="btn" type="submit">Verify Account</button>
+	        </form>
+
+	        <div class="resend">
+	            <p>Didn't receive the code? <a th:href="@{/resetOtp}">Resend</a></p>
+	        </div>
+
+	        <!-- Displaying success or error message -->
+	        <div th:if="${message}">
+	            <p th:text="${message}"></p>
+	        </div>
+	    </div>
     
     <script>
        
-            // Collecting values from all input fields
+          
             const code = 
                 document.getElementById('code1').value +
                 document.getElementById('code2').value +
                 document.getElementById('code3').value +
                 document.getElementById('code4').value +
                 document.getElementById('code5').value +
-                document.getElementById('code6').value; // Combine values
+                document.getElementById('code6').value; 
     
-            // Check if all inputs are filled
+           
             if (code.length < 6) {
                 alert("Please enter the complete 6-digit code.");
-                return; // Exit if not all digits are entered
+                return; 
             }
     
          

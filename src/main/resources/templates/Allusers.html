@@ -1,181 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profiles</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .user-card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            background-color: #f8f9fa;
-            margin-bottom: 20px;
-            height: 250px; 
-            width: 250px;   /* Set a fixed width for each card */
-            margin-left: auto;
-            margin-right: auto;  /* Center cards horizontally */ /* Added height to make cards consistent in size */
-        }
-        .user-card h6 {
-            margin-bottom: 10px;
-        }
-        .actions {
-            margin-top: 20px;
-        }
-        /* Ensure the cards are distributed across the available space */
-        .row {
-            display: flex;
-            justify-content: space-between;
-          
-    margin-left: 0;
-    margin-right: 0;
-
-
-        }
-        .col-md-3 {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-        .col-md-3 {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-.input__container {
-        position: relative;
-        background: rgba(255, 255, 255, 0.664);
-        padding: 10px 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        border-radius: 22px;
-        max-width: 75%;
-        width: 100%;
-       border: #08213f;
-        perspective: none;
-    }
-
-
-    .input__button__shadow {
-        cursor: pointer;
-        border: none;
-        background: none;
-        transition: transform 400ms, background 400ms;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 12px;
-        padding: 5px;
-    }
-
-    .input__button__shadow:hover {
-        background: rgba(255, 255, 255, 0.411);
-    }
-
-    .input__search {
-        width: 100%;
-        border-radius: 20px;
-        outline: none;
-        border: 2px solid #08213f; /* Add border with color */
-        padding: 8px;
-        position: relative;
-        transition: border-color 0.3s ease; /* Animation for border color */
-    }
-    .input__search:focus {
-    border-color: #3498db; /* Change border color on focus */
-}
-
-
-        
-    </style>
+    <title>User Management</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <h1>User List</h1>
+	<div class="d-flex justify-content-center mb-4">
+	        <div class="input__container">
+	            <div class="shadow__input"></div>
+	            <button class="input__button__shadow">
+	                <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" height="20px" width="20px">
+	                    <path d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z" fill-rule="evenodd" fill="#17202A"></path>
+	                </svg>
+	            </button>
+	            <input type="text" name="text" class="input__search" placeholder="What do you want to search?">
+	        </div>
+	    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Phone No</th>
+                <th>Address</th> 
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.fullName}">Full Name</td>
+                <td th:text="${user.username}">Username</td>
+                <td th:text="${user.gender}">Gender</td>
+                <td th:text="${user.email}">Email</td>
+                <td th:text="${user.phone}">Phone No</td>
+                <td>
+                    <ul>
+                        <li th:each="address : ${user.addresses}" th:text="${address}">Address</li>
+                    </ul>
+                </td>
+                
+                <td>
+                    <button th:attr="data-id=${user.id}"
+                            th:text="${user.active ? 'Deactivate' : 'Inactive'}"
+                            th:class="${user.active ? 'btn-active' : 'btn-inactive'}"
+                            onclick="deactivateUser(this)">Deactivate</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<div class="container">
-    <div class="d-flex justify-content-center mb-4">
-        <div class="input__container">
-            <div class="shadow__input"></div>
-            <button class="input__button__shadow">
-                <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" height="20px" width="20px">
-                    <path d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z" fill-rule="evenodd" fill="#17202A"></path>
-                </svg>
-            </button>
-            <input type="text" name="text" class="input__search" placeholder="What do you want to search?">
-        </div>
-    </div>
-    <div class="row">
-        <!-- User Card 1 -->
-        <div class="col-md-3">
-            <div class="user-card">
-                <h6>John Doe</h6>
-                <p class="text-muted">Admin</p>
-                <p><strong>Email:</strong> johndoe@example.com</p>
-                <div class="actions">
-                    <button class="btn btn-primary btn-sm">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        </div>
+    <script>
+        function deactivateUser(button) {
+            const userId = button.getAttribute("data-id");
+            $.ajax({
+                url: `/admin/users/deactivate/${userId}`,
+                type: 'POST',
+                success: function() {
+                    button.textContent = "Inactive";
+                    button.classList.remove("btn-active");
+                    button.classList.add("btn-inactive");
+                },
+                error: function() {
+                    alert("Failed to deactivate user.");
+                }
+            });
+        }
+    </script>
 
-        <!-- User Card 2 -->
-        <div class="col-md-3">
-            <div class="user-card">
-                <h6>Jane Smith</h6>
-                <p class="text-muted">User</p>
-                <p><strong>Email:</strong> janesmith@example.com</p>
-                <div class="actions">
-                    <button class="btn btn-primary btn-sm">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        </div>
+    <style>
+        .btn-active {
+            color: white;
+            background-color: green;
+        }
+        .btn-inactive {
+            color: white;
+            background-color: red;
+        }
+         /* Base styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        text-align: center;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    table {
+        margin: 0 auto;
+        width: 80%;
+        border-collapse: collapse;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: rgb(255, 128, 64);
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
 
-        <!-- User Card 3 -->
-        <div class="col-md-3">
-            <div class="user-card">
-                <h6>Mike Johnson</h6>
-                <p class="text-muted">Admin</p>
-                <p><strong>Email:</strong> mikejohnson@example.com</p>
-                <div class="actions">
-                    <button class="btn btn-primary btn-sm">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        </div>
+    /* Button styles */
+    .btn-active, .btn-inactive {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        <!-- User Card 4 -->
-        <div class="col-md-3">
-            <div class="user-card">
-                <h6>Emily Clark</h6>
-                <p class="text-muted">User</p>
-                <p><strong>Email:</strong> emilyclark@example.com</p>
-                <div class="actions">
-                    <button class="btn btn-primary btn-sm">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        </div>
+    .btn-active {
+        color: #fff;
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+    .btn-inactive {
+        color: #fff;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+    }
 
-        <!-- User Card 5 -->
-        <div class="col-md-3">
-            <div class="user-card">
-                <h6>Chris Evans</h6>
-                <p class="text-muted">User</p>
-                <p><strong>Email:</strong> chrisevans@example.com</p>
-                <div class="actions">
-                    <button class="btn btn-primary btn-sm">Activate</button>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    /* Button hover effects */
+    .btn-active:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        transform: scale(1.05);
+    }
+    .btn-inactive:hover {
+        background: linear-gradient(135deg, #c82333, #bd2130);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        transform: scale(1.05);
+    }
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        table {
+            width: 100%;
+        }
+        th, td {
+            font-size: 0.9em;
+            padding: 8px;
+        }
+    }		/* Search Bar Styles */
+		    .input__container {
+		        position: relative;
+		        background: rgba(255, 255, 255, 0.664);
+		        padding: 10px 15px;
+		        display: flex;
+		        justify-content: center;
+		        align-items: center;
+		        gap: 5px;
+		        border-radius: 22px;
+		        max-width: 75%;
+		        width: 100%;
+		        margin: 30px auto 0; /* Centers the search bar and adds margin-top */
+				margin-bottom: 25px;
+		    }
+
+		    .input__button__shadow {
+		        cursor: pointer;
+		        border: none;
+		        background: none;
+		        transition: transform 400ms, background 400ms;
+		        display: flex;
+		        justify-content: center;
+		        align-items: center;
+		        border-radius: 12px;
+		        padding: 5px;
+		    }
+
+		    .input__button__shadow:hover {
+		        background: rgba(255, 255, 255, 0.411);
+		    }
+
+		    .input__search {
+		        width: 100%;
+		        border-radius: 20px;
+		        outline: none;
+		        border: 2px solid #08213f; /* Add border with color */
+		        padding: 8px;
+		        position: relative;
+		    }
+    </style>
 </body>
 </html>

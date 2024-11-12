@@ -10,11 +10,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class ProductEntity {
@@ -52,6 +60,12 @@ public class ProductEntity {
 	    @ManyToOne
 	    @JoinColumn(name = "category_id", nullable = false)  // Foreign key in product table
 	    private CategoryEntity category;
+	    
+	    @OneToMany(mappedBy = "product")
+	    private List<OrderItemEntity> orderProducts;
+
+	    @OneToMany(mappedBy = "product")
+	    private List<wishlistItemEntity> wishlistItem;
 
 		public Long getId() {
 			return id;
@@ -133,9 +147,26 @@ public class ProductEntity {
 			this.category = category;
 		}
 
+		public List<OrderItemEntity> getOrderProducts() {
+			return orderProducts;
+		}
+
+		public void setOrderProducts(List<OrderItemEntity> orderProducts) {
+			this.orderProducts = orderProducts;
+		}
+
+		public List<wishlistItemEntity> getWishlistItem() {
+			return wishlistItem;
+		}
+
+		public void setWishlistItem(List<wishlistItemEntity> wishlistItem) {
+			this.wishlistItem = wishlistItem;
+		}
+
 		public ProductEntity(Long id, String name, String description, byte[] imageDate, String imageName,
-				String imageBase64, Double price, OfferEntity offer, List<SizeEntity> sizes, CategoryEntity category) {
-			
+				String imageBase64, Double price, OfferEntity offer, List<SizeEntity> sizes, CategoryEntity category,
+				List<OrderItemEntity> orderProducts, List<wishlistItemEntity> wishlistItem) {
+			super();
 			this.id = id;
 			this.name = name;
 			this.description = description;
@@ -146,13 +177,15 @@ public class ProductEntity {
 			this.offer = offer;
 			this.sizes = sizes;
 			this.category = category;
+			this.orderProducts = orderProducts;
+			this.wishlistItem = wishlistItem;
 		}
 
 		public ProductEntity() {
 			
-		}
-
-
+		} 
+	  
+	    
 
 
 	    // Getters and setters
