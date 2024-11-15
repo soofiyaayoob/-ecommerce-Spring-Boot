@@ -2,9 +2,11 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +40,8 @@ public class ProductEntity {
 	    private String description;
 
 	    @Column@Lob
-	    private byte[] imageDate;
+	    @Basic(fetch = FetchType.EAGER)
+	    private byte[] imageData;
 	    
 	    @Column
 	    private String imageName;
@@ -54,8 +57,7 @@ public class ProductEntity {
 	    private OfferEntity offer;
 
 	    // One-to-many relationship with Size
-	    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<SizeEntity> sizes;
+	  
 	    
 	    @ManyToOne
 	    @JoinColumn(name = "category_id", nullable = false)  // Foreign key in product table
@@ -91,12 +93,12 @@ public class ProductEntity {
 			this.description = description;
 		}
 
-		public byte[] getImageDate() {
-			return imageDate;
+		public byte[] getImageData() {
+			return imageData;
 		}
 
-		public void setImageDate(byte[] imageDate) {
-			this.imageDate = imageDate;
+		public void setImageData(byte[] imageDate) {
+			this.imageData = imageDate;
 		}
 
 		public String getImageName() {
@@ -131,13 +133,9 @@ public class ProductEntity {
 			this.offer = offer;
 		}
 
-		public List<SizeEntity> getSizes() {
-			return sizes;
-		}
+		
 
-		public void setSizes(List<SizeEntity> sizes) {
-			this.sizes = sizes;
-		}
+	
 
 		public CategoryEntity getCategory() {
 			return category;
@@ -164,18 +162,18 @@ public class ProductEntity {
 		}
 
 		public ProductEntity(Long id, String name, String description, byte[] imageDate, String imageName,
-				String imageBase64, Double price, OfferEntity offer, List<SizeEntity> sizes, CategoryEntity category,
+				String imageBase64, Double price, OfferEntity offer, CategoryEntity category,
 				List<OrderItemEntity> orderProducts, List<wishlistItemEntity> wishlistItem) {
 			super();
 			this.id = id;
 			this.name = name;
 			this.description = description;
-			this.imageDate = imageDate;
+			this.imageData = imageDate;
 			this.imageName = imageName;
 			this.imageBase64 = imageBase64;
 			this.price = price;
 			this.offer = offer;
-			this.sizes = sizes;
+			
 			this.category = category;
 			this.orderProducts = orderProducts;
 			this.wishlistItem = wishlistItem;

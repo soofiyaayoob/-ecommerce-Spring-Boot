@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/css/theme.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+      .motion-effect {
+    animation: buttonMotion 1.5s; /* Animation applied on load */
+}
+
+/* Keyframe for motion effect */
+@keyframes buttonMotion {
+    0% {
+        transform: translateY(0); /* Initial position */
+    }
+    25% {
+        transform: translateY(-10px); /* Slight lift */
+    }
+    50% {
+        transform: translateY(0); /* Back to initial position */
+    }
+    75% {
+        transform: translateY(-5px); /* Slight lift again */
+    }
+    100% {
+        transform: translateY(0); /* Back to initial position */
+    }
+}
+/* Common button style */
+
+
+/* Add to Cart button style */
+.add-to-cart {
+    background-color: #f07204;
+    color: white;
+    width: 175px;
+    height: 34px;
+}
+
+.add-to-cart:hover {
+    background-color: #ff9729;
+}
+
+/* Wishlist button style */
+.wishlist {
+    background-color: #f3510b;
+    width: 0px;
+    height: 35px;
+    color: white;
+    display: flex;
+    align-items: center; /* Ensures icon and text are aligned */
+}
+
+.wishlist i {
+    margin-right: 8px; /* Space between the icon and text */
+}
+
+.wishlist:hover {
+    background-color: #e53935;
+}
+.del {
+    text-decoration: line-through;
+    color: gray;
+}
+#testimonial {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+
+  
+  .card-img-wrapper {
+    height: 250px; /* Fixed height for images */
+    overflow: hidden;
+  }
+  
+  .card-img-wrapper img {
+    object-fit: cover; /* Ensures image covers the entire div */
+    width: 100%;
+    height: 100%;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  
+
+  .wishlist:hover, .add-to-cart:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  
+  .text-1000 {
+    font-weight: 600;
+  }
+  
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (min-width: 992px) {
+    .col-lg-2 {
+      flex: 0 0 19.2%; /* Make each item take up ~19.2% of the container width */
+      max-width: 19.2%;
+    }
+  }
+  
+ /* Image size and layout for category items */
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+   
+    padding: 20px 0;
+}
+
+.category-item {
+    flex: 0 0 calc(100% / 5);
+    box-sizing: border-box;
+}
+
+.card-span {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Set fixed height and width for images */
+.card-img-wrapper img {
+    height: 200px; /* Adjust as necessary */
+    width: 200px; /* Adjust as necessary */
+    object-fit: cover; /* Ensure the image covers the box without distorting */
+}
+
+
+    </style>
+	
+</head>
+<body>
+    <section id="testimonial">
+        <div class="container">
+          <div class="row h-100">
+            <div class="col-lg-7 mx-auto text-center mb-6">
+              <h5 class="fw-bold fs-3">All <span th:text="${products[0].category.name}">Category</span> Products</h5>
+            </div>
+          </div>
+          <div class="row gx-2">
+            <!-- Iterating over the products list -->
+            <div class="col-sm-6 col-md-4 col-lg-2 h-100 mb-5" th:each="product : ${products}">
+              <div class="card card-span h-100 text-white rounded-3">
+                <div class="card-img-wrapper">
+                  <img class="img-fluid rounded-3" th:src="@{${product.imageBase64}}" alt="..." />
+                </div>
+                <div class="card-img-overlay ps-0">
+                  <span class="badge bg-danger p-2 ms-3">
+                    <i class="fas fa-tag me-2 fs-0"></i>
+                    <span class="fs-0" th:text="${product.offer != null ? product.offer.discountPercentage : ''}">20% off</span>
+                  </span>
+                </div>
+                <div class="card-body ps-0">
+                  <h5 class="fw-bold text-1000 text-truncate mb-1" th:text="${product.name}">Cheese Burger</h5>
+                  <span class="text-1000 fw-bold">
+                    <span th:text="${product.offer != null ? (product.offer.offerPrice != null ? product.offer.offerPrice : product.price) : product.price}"></span>
+                    <span th:if="${product.offer != null and product.offer.offerPrice != null}">
+                      <del th:text="${product.price}"></del>
+                    </span>
+                  </span>
+                </div>
+      
+               
+              </div>
+              <div class="button-container d-flex justify-content-start align-items-center">
+                <button class="btn wishlist ">
+                  <i class="fas fa-heart"></i>
+                </button>
+                <button class="btn add-to-cart">
+                  <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+              </div>
+            </div>
+             <!-- Buttons for wishlist and cart -->
+            
+          </div>
+        </div>
+      </section>
+</body>
+</html>

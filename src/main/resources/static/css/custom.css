@@ -1,0 +1,133 @@
+.motion-effect {
+    animation: buttonMotion 1.5s; /* Animation applied on load */
+}
+
+/* Keyframe for motion effect */
+@keyframes buttonMotion {
+    0% {
+        transform: translateY(0); /* Initial position */
+    }
+    25% {
+        transform: translateY(-10px); /* Slight lift */
+    }
+    50% {
+        transform: translateY(0); /* Back to initial position */
+    }
+    75% {
+        transform: translateY(-5px); /* Slight lift again */
+    }
+    100% {
+        transform: translateY(0); /* Back to initial position */
+    }
+}
+/* Common button style */
+
+
+/* Add to Cart button style */
+.add-to-cart {
+    background-color: #f07204;
+    color: white;
+    width: 175px;
+    height: 34px;
+}
+
+.add-to-cart:hover {
+    background-color: #ff9729;
+}
+
+/* Wishlist button style */
+.wishlist {
+    background-color: #f3510b;
+    width: 0px;
+    height: 0px;
+    color: white;
+    display: flex;
+    align-items: center; /* Ensures icon and text are aligned */
+}
+
+.wishlist i {
+    margin-right: 8px; /* Space between the icon and text */
+}
+
+.wishlist:hover {
+    background-color: #e53935;
+}
+.del {
+    text-decoration: line-through;
+    color: gray;
+}
+#testimonial {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+
+  
+  .card-img-wrapper {
+    height: 250px; /* Fixed height for images */
+    overflow: hidden;
+  }
+  
+  .card-img-wrapper img {
+    object-fit: cover; /* Ensures image covers the entire div */
+    width: 100%;
+    height: 100%;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  
+
+  .wishlist:hover, .add-to-cart:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  
+  .text-1000 {
+    font-weight: 600;
+  }
+  
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (min-width: 992px) {
+    .col-lg-2 {
+      flex: 0 0 19.2%; /* Make each item take up ~19.2% of the container width */
+      max-width: 19.2%;
+    }
+  }
+  
+ /* Image size and layout for category items */
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+   
+    padding: 20px 0;
+}
+
+.category-item {
+    flex: 0 0 calc(100% / 5);
+    box-sizing: border-box;
+}
+
+.card-span {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Set fixed height and width for images */
+.card-img-wrapper img {
+    height: 200px; /* Adjust as necessary */
+    width: 200px; /* Adjust as necessary */
+    object-fit: cover; /* Ensure the image covers the box without distorting */
+}
+

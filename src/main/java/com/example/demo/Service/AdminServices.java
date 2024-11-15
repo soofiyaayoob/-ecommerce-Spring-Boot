@@ -63,7 +63,7 @@ public class AdminServices {
 
 	public void addProduct(ProductEntity productEntity, MultipartFile imageFile) throws IOException {
 		productEntity.setImageName(imageFile.getOriginalFilename());
-		productEntity.setImageDate(imageFile.getBytes());
+		productEntity.setImageData(imageFile.getBytes());
 		productRepo.save(productEntity);
 	}
 	

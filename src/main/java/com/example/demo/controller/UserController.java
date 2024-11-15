@@ -47,10 +47,7 @@ public class UserController {
 	@Autowired
 	OtpService otpService;
 	
-	 @GetMapping("/")
-	    public String home() {
-	        return "index"; 
-	    }
+	
 	 @GetMapping("/login")
 	 public String loginPage() {
 	     return "login"; 

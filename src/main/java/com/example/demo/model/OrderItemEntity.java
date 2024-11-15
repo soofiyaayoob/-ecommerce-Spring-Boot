@@ -31,8 +31,18 @@ public class OrderItemEntity {
 	    @ManyToOne
 	    @JoinColumn(name = "product_id", nullable = false)
 	    private ProductEntity product;  
+	    
+	    private Integer Quantity;
 
-	    private BigDecimal priceAtOrder;
+	    public Integer getQuantity() {
+			return Quantity;
+		}
+
+		public void setQuantity(Integer quantity) {
+			Quantity = quantity;
+		}
+
+		private BigDecimal priceAtOrder;
 
 		public Long getId() {
 			return id;
@@ -66,12 +76,13 @@ public class OrderItemEntity {
 			this.priceAtOrder = priceAtOrder;
 		}
 
-		public OrderItemEntity(Long id, OrderEntity order, ProductEntity product, BigDecimal priceAtOrder) {
+		public OrderItemEntity(Long id, OrderEntity order, ProductEntity product, BigDecimal priceAtOrder,Integer quantity) {
 			
 			this.id = id;
 			this.order = order;
 			this.product = product;
 			this.priceAtOrder = priceAtOrder;
+			this.Quantity=quantity;
 		}
 
 		public OrderItemEntity() {

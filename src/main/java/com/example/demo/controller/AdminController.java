@@ -32,7 +32,7 @@ import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
 import com.example.demo.model.ProductEntity;
-import com.example.demo.model.SizeEntity;
+
 import com.example.demo.model.UserEntity;
 
 @Controller
@@ -66,13 +66,15 @@ public class AdminController {
 	
 	 @PostMapping("/Addcategories")
 	    public String createCategory(@RequestParam String categoryName, 
-                @RequestParam("categoryImage") MultipartFile file,RedirectAttributes redirectAttributes) {
+                @RequestParam("categoryImage") MultipartFile file,RedirectAttributes redirectAttributes) throws IOException {
 		 
 		 CategoryEntity categoryEntity=new CategoryEntity();
 		 
 		 if(!file.isEmpty()) {
 			 String image=file.getOriginalFilename();
+			byte[] data= file.getBytes();
 			 categoryEntity.setImageName(image);
+			 categoryEntity.setImageData(data);
 		 }
 	       boolean existCategory=categoryService.existCategory(categoryName);
 	       
@@ -98,7 +100,7 @@ public class AdminController {
 	         @RequestParam("productPrice") Double price,
 	         @RequestParam("productDescription") String description,
 	         @RequestParam("productImage") MultipartFile image,
-	         @RequestParam("productSize") List<String> sizes,
+	        
 	         @RequestParam("category") Long categoryId,RedirectAttributes redirectAttributes) throws IOException {  
 		 CategoryEntity categoryEntity=categoryService.findCayegory(categoryId);
 		  String productImage=image.getOriginalFilename();
@@ -109,17 +111,12 @@ public class AdminController {
 		     product.setDescription(description);
 		     product.setCategory(categoryEntity); 
 		     product.setImageName(productImage);
-		     product.setImageDate(image.getBytes());
+		     product.setImageData(image.getBytes());
 
 	     ProductEntity savedProduct =productservices.addProduct(product);
 
 	     // Step 3: Save each size entry with a reference to the product
-	     for (String size : sizes) {
-	         SizeEntity productSize = new SizeEntity();
-	         productSize.setSizeName(size);
-	         productSize.setProduct(savedProduct);
-	         productservices.addSizes(productSize);
-	     }
+	   
 	     redirectAttributes.addFlashAttribute("message","nw produced added succesfully!");
 	     redirectAttributes.addFlashAttribute("messageType","success");  
 
@@ -187,26 +184,7 @@ public class AdminController {
 	     @GetMapping("/products")
 	     public  String getAllprod(Model model) {
 	    	List<ProductEntity> productEntities= productservices.getAllProducts();
-
-	       
-	        for (ProductEntity productEntity : productEntities) {
-	            if (productEntity.getImageDate() != null) {
-	            	byte[] imageData = productEntity.getImageDate();  
-
-	            	
-	            	System.out.println("Image Data (byte array): " + Arrays.toString(imageData));
-	          
-	            	System.out.println(productEntity.getImageDate());
-//	                 if (productEntity.getImageDate() != null) {
-	                String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageData);
-	                productEntity.setImageBase64(base64Image);
-	                System.out.println(productEntity.getImageBase64());
-	            }
-	            }
-	   
-	   
-
-	        model.addAttribute("products", productEntities);
+              model.addAttribute("products", productEntities);
 	
 	        return "allProducts";
 	    }
