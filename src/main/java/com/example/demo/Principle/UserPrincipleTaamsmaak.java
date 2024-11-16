@@ -40,6 +40,8 @@ private UserEntity userEntity;
 		// TODO Auto-generated method stub
 		return userEntity.getEmail();
 	}
-	
+	 public Long getUserid() {
+	        return userEntity.getId();
+	    }
 
 }

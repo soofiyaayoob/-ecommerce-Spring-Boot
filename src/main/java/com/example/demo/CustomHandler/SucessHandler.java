@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.jwtServiceTaamsmaak;
 
 import jakarta.servlet.ServletException;
@@ -26,9 +27,10 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		System.out.println("perform login here customise authentication ");
-		
-		  String jwt = jwtServiceTaamsmaak.generateToken(authentication.getName());
+		 Long userid = ((UserPrincipleTaamsmaak) authentication.getPrincipal()).getUserid();
+		  String jwt = jwtServiceTaamsmaak.generateToken(authentication.getName(),userid);
 	        System.out.println("Generated JWT Token: " + jwt);
+	       
 
 	        // Set the JWT in a cookie
 	        ResponseCookie cookie = ResponseCookie.from("jwt", jwt)

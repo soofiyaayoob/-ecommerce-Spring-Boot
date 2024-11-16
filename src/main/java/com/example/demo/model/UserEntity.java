@@ -68,6 +68,25 @@ public class UserEntity {
 	    
 	    @OneToMany(mappedBy = "user")
 	    private List<OrderEntity> orderProducts;
+	    
+	    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	    private WishlistEntity wishlist;
+
+		public boolean isIsActive() {
+			return IsActive;
+		}
+
+		public void setIsActive(boolean isActive) {
+			IsActive = isActive;
+		}
+
+		public WishlistEntity getWishlist() {
+			return wishlist;
+		}
+
+		public void setWishlist(WishlistEntity wishlist) {
+			this.wishlist = wishlist;
+		}
 
 		public Long getId() {
 			return id;
@@ -157,9 +176,11 @@ public class UserEntity {
 			this.orderProducts = orderProducts;
 		}
 
+		
+
 		public UserEntity(Long id, String fullName, String username, String mobileNo, String gender, String password,
-				String email, Role role, List<AddressEntity> addresses, CartEntity cart,
-				List<OrderEntity> orderProducts) {
+				String email, boolean isActive, Role role, List<AddressEntity> addresses, CartEntity cart,
+				List<OrderEntity> orderProducts, WishlistEntity wishlist) {
 			super();
 			this.id = id;
 			this.fullName = fullName;
@@ -168,10 +189,12 @@ public class UserEntity {
 			this.gender = gender;
 			this.password = password;
 			Email = email;
+			IsActive = isActive;
 			this.role = role;
 			this.addresses = addresses;
 			this.cart = cart;
 			this.orderProducts = orderProducts;
+			this.wishlist = wishlist;
 		}
 
 		public UserEntity() {

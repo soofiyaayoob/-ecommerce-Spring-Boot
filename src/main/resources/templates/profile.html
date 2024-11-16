@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    margin: 35px;
+    padding: 0;
+    /* Remove the height: 100vh to prevent full height of body */
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* No need for height: 100% anymore */
+}
+
+.full-width {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    flex-shrink: 0;
+}
+
+.split-container {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.left, .right {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.left h2, .right h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.detail {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.detail strong {
+    margin: 10px;
+}
+
+.detail span {
+    font-weight: normal;
+    color: #333;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+</style>
+<body>
+    <div class="container">
+        <!-- Full-Width Div -->
+        <div class="full-width">
+            <h1>Profile Page</h1>
+        </div>
+
+        <!-- Two Sections -->
+        <div class="split-container">
+            <!-- Left Div: User Details -->
+            <div class="left">
+                <h2>User Details</h2>
+                <div class="detail">
+                    <strong>Full Name:</strong> <span>John Doe</span>
+                </div>
+                <div class="detail">
+                    <strong>Username:</strong> <span>johndoe</span>
+                </div>
+                <div class="detail">
+                    <strong>Email:</strong> <span>johndoe@gmail.com</span>
+                </div>
+                <div class="detail">
+                    <strong>Phone No:</strong> <span>+1234567890</span>
+                </div>
+            </div>
+
+            <!-- Right Div: Addresses -->
+            <div class="right">
+                <h2>Addresses</h2>
+                <div id="address-list">
+                    <p>123 Main Street, Springfield</p>
+                    <p>456 Elm Street, Metropolis</p>
+                </div>
+                <button id="add-address-btn">Add New Address</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="add-address-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Add New Address</h3>
+            <form id="add-address-form">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" required>
+                <label for="pincode">Pincode:</label>
+                <input type="text" id="pincode" name="pincode" required>
+                <button type="submit">Save Address</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Variables for button and modal
+        const addAddressBtn = document.getElementById('add-address-btn');
+        const addAddressModal = document.getElementById('add-address-modal');
+        const addAddressForm = document.getElementById('add-address-form');
+
+        // Show the modal when the "Add New Address" button is clicked
+        addAddressBtn.addEventListener('click', () => {
+            addAddressModal.classList.remove('hidden'); // Show modal
+        });
+
+        // Close the modal when clicked outside the modal content
+        window.addEventListener('click', (e) => {
+            if (e.target === addAddressModal) {
+                addAddressModal.classList.add('hidden'); // Hide modal
+            }
+        });
+
+        // Close modal on form submit and reset form
+        addAddressForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            addAddressModal.classList.add('hidden'); // Close modal
+            addAddressForm.reset(); // Reset form fields
+        });
+    </script>
+</body>
+</html>

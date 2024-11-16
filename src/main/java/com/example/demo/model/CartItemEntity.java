@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,18 +19,18 @@ public class CartItemEntity {
 	private Long id;
 	
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)  
     @JoinColumn(name = "cart_id", nullable = false)
     private CartEntity cart;  // Each item belongs to a cart
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)  
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product; 
 	
     
-    private BigDecimal priceAfterDiscount;
+   
 
-    private Integer quantity;
+    private Integer quantity=1;
 
 	public Long getId() {
 		return id;
@@ -55,14 +56,7 @@ public class CartItemEntity {
 		this.product = product;
 	}
 
-	public BigDecimal getPriceAfterDiscount() {
-		return priceAfterDiscount;
-	}
-
-	public void setPriceAfterDiscount(BigDecimal priceAfterDiscount) {
-		this.priceAfterDiscount = priceAfterDiscount;
-	}
-
+	
 	public Integer getQuantity() {
 		return quantity;
 	}
@@ -71,13 +65,13 @@ public class CartItemEntity {
 		this.quantity = quantity;
 	}
 
-	public CartItemEntity(Long id, CartEntity cart, ProductEntity product, BigDecimal priceAfterDiscount,
+	public CartItemEntity(Long id, CartEntity cart, ProductEntity product, 
 			Integer quantity) {
 		super();
 		this.id = id;
 		this.cart = cart;
 		this.product = product;
-		this.priceAfterDiscount = priceAfterDiscount;
+		
 		this.quantity = quantity;
 	}
 

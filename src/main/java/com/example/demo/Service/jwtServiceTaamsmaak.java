@@ -12,6 +12,8 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.UserEntity;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -60,11 +62,14 @@ public class jwtServiceTaamsmaak {
                 userDetails.getUsername().equals(claims.getSubject());
     }
 
-	public static String generateToken(String username) {
+	public static String generateToken(String username,long userid) {
+		 System.out.println("User ID: " + userid);
 		 Map<String, Object> claims = new HashMap<>();
+		claims.put("UserId", userid);
 	        String token =Jwts.builder()
 	                .setClaims(claims)
 	                .setSubject(username)
+	                
 	                .setIssuedAt(new Date(System.currentTimeMillis()))
 	                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
 	                .signWith(getKey(), SignatureAlgorithm.HS256)

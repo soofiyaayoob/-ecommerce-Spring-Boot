@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,9 +19,16 @@ public class WishlistEntity {
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
+	 
+	 @OneToOne(cascade = CascadeType.ALL) 
+	    @JoinColumn(name = "user_id", nullable = false)
+	    private UserEntity user; 
+	    
+	 @ManyToOne(cascade = CascadeType.ALL)  
+	    @JoinColumn(name = "product_id", nullable = false)
+	    private ProductEntity product;
 
-	    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL)
-	    private List<wishlistItemEntity> wishlistitem;
+	    private Integer quantity=1;
 
 		public Long getId() {
 			return id;
@@ -28,23 +38,42 @@ public class WishlistEntity {
 			this.id = id;
 		}
 
-		public List<wishlistItemEntity> getWishlistitem() {
-			return wishlistitem;
+		public UserEntity getUser() {
+			return user;
 		}
 
-		public void setWishlistitem(List<wishlistItemEntity> wishlistitem) {
-			this.wishlistitem = wishlistitem;
+		public void setUser(UserEntity user) {
+			this.user = user;
 		}
 
-		public WishlistEntity(Long id, List<wishlistItemEntity> wishlistitem) {
+		public ProductEntity getProduct() {
+			return product;
+		}
+
+		public void setProduct(ProductEntity product) {
+			this.product = product;
+		}
+
+		public Integer getQuantity() {
+			return quantity;
+		}
+
+		public void setQuantity(Integer quantity) {
+			this.quantity = quantity;
+		}
+
+		public WishlistEntity(Long id, UserEntity user, ProductEntity product, Integer quantity) {
 			super();
 			this.id = id;
-			this.wishlistitem = wishlistitem;
+			this.user = user;
+			this.product = product;
+			this.quantity = quantity;
 		}
 
 		public WishlistEntity() {
 			
-		}  
-
+		}
 	    
+	    
+
 }

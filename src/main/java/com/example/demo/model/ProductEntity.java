@@ -67,7 +67,7 @@ public class ProductEntity {
 	    private List<OrderItemEntity> orderProducts;
 
 	    @OneToMany(mappedBy = "product")
-	    private List<wishlistItemEntity> wishlistItem;
+	    private List<WishlistEntity> wishlistItem;
 
 		public Long getId() {
 			return id;
@@ -153,17 +153,17 @@ public class ProductEntity {
 			this.orderProducts = orderProducts;
 		}
 
-		public List<wishlistItemEntity> getWishlistItem() {
+		public List<WishlistEntity> getWishlistItem() {
 			return wishlistItem;
 		}
 
-		public void setWishlistItem(List<wishlistItemEntity> wishlistItem) {
+		public void setWishlistItem(List<WishlistEntity> wishlistItem) {
 			this.wishlistItem = wishlistItem;
 		}
 
 		public ProductEntity(Long id, String name, String description, byte[] imageDate, String imageName,
 				String imageBase64, Double price, OfferEntity offer, CategoryEntity category,
-				List<OrderItemEntity> orderProducts, List<wishlistItemEntity> wishlistItem) {
+				List<OrderItemEntity> orderProducts, List<WishlistEntity> wishlistItem) {
 			super();
 			this.id = id;
 			this.name = name;
