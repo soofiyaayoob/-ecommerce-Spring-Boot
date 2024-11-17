@@ -230,3 +230,61 @@
     width: 100%;
   }
   
+
+
+  /* alert and sucess message */
+
+  .alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    animation: fadeInOut 5s forwards;
+}
+
+/* Success alert styling */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Error alert styling */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Animation to fade in and out the message */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    10% {
+        opacity: 1;
+        visibility: visible;
+    }
+    90% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Optional: To prevent the message from showing until it's assigned */
+.alert.show {
+    opacity: 1;
+    visibility: visible;
+}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.AttributeNotFoundException;
+import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
@@ -27,6 +30,7 @@ import com.example.demo.CustomHandler.SucessHandler;
 import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
+import com.example.demo.Service.wishlistService;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
 import com.example.demo.model.ProductEntity;
@@ -41,7 +45,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,11 +56,18 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class Homecontroller {
 	
+	private static final Logger logger=LoggerFactory.getLogger(Homecontroller.class);
+	
 	@Autowired
 	OfferServicea offerService;
 	
 	@Autowired
 	Productservices productservices;
+	
+	@Autowired
+	wishlistService wishlistService;
+	
+	
 	 @GetMapping("/")
 	    public String home(Model model) {
 		 List<OfferEntity>offers=offerService.get4Greatoffers();
@@ -67,8 +80,19 @@ public class Homecontroller {
 		   model.addAttribute("latestProducts",latestproducts);
 		   model.addAttribute("products",Allproducts);
 		   model.addAttribute("categories",Allcategory);
+		   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        if (authentication != null) {
+	            logger.info("Principal: {}", authentication.getPrincipal());
+	            System.out.println("authentication is not null");
+	        } else {
+	            logger.info("No authentication context found.");
+	          System.out.println("it is null");
+	            
+	            
+	        }
+	    
 		    return "home";
-		}
+}
 	  @GetMapping("/categories/{id}")
 	    public String getProductsByCategory(@PathVariable Long id, Model model) {
 	     
@@ -78,6 +102,27 @@ public class Homecontroller {
 
 	        return "CategoryProduct"; 
 	    }
+	  @PostMapping("/Addwishlist/{id}")
+	  
+	  public String addToWishlist(@PathVariable Long id,HttpSession session) {
+		  try {
+			  System.out.println("coming");
+		        wishlistService.addProductToWishlist(id);
+		        session.setAttribute("message", "Product successfully added to wishlist");
+		    } catch (Exception e) {
+		 
+		        session.setAttribute("error", "An error occurred while adding product to wishlist");
+		    }
+		  return "home"; 
+	  }
+	  @PostMapping("/AddCart/{id}")
+	  public void addTocart(@PathVariable Long id,HttpServletResponse response) {
+	      
+	      System.out.println("Product added to cart: " + id);
+	      response.setStatus(HttpServletResponse.SC_NO_CONTENT); 
+	     
+	  }
+
 	
 }	
 

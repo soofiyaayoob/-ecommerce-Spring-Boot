@@ -68,6 +68,7 @@ public class confi {
 //	             .requestMatchers("/", "/public/**","/css","js").permitAll() 
 //	         
 //	             .anyRequest().authenticated()
+//		  .anonymous().disable() 
 //	         );
 		  httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
 	     

@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -20,11 +21,11 @@ public class WishlistEntity {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 	 
-	 @OneToOne(cascade = CascadeType.ALL) 
+	 @OneToOne
 	    @JoinColumn(name = "user_id", nullable = false)
 	    private UserEntity user; 
 	    
-	 @ManyToOne(cascade = CascadeType.ALL)  
+	 @ManyToOne
 	    @JoinColumn(name = "product_id", nullable = false)
 	    private ProductEntity product;
 
