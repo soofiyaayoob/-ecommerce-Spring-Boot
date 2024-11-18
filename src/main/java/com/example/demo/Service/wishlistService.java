@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.ProductEntity;
@@ -25,28 +26,31 @@ UserRepo userRepo;
 @Autowired
 productRepo productRepo;
 
-public void addProductToWishlist(Long id) {
-	
-    // Fetch user and product
-	String username = SecurityContextHolder.getContext().getAuthentication().getName();
+public boolean addProductToWishlist(Long id, String username) {
 
-    // Now you can use the `username` to find the user
-    UserEntity user = userRepo.findByUsername(username);
-                                    
+    UserEntity user = userRepo.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+    
     ProductEntity product = productRepo.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-    
-   // int finalQuantity = (quantity != null) ? quantity : 1;
+
    
+    boolean productExists = user.getWishlists().stream()
+            .anyMatch(wishlist -> wishlist.getProduct().getId().equals(product.getId()));
+
+    if (productExists) {
+       
+        return false;
+    }
+
+  
     WishlistEntity wishlistEntity = new WishlistEntity();
     wishlistEntity.setUser(user);
     wishlistEntity.setProduct(product);
-  
-    
-    
-   wishlistRepo.save(wishlistEntity);
 
+    wishlistRepo.save(wishlistEntity);
+    return true; 
 }
 
 

@@ -30,7 +30,6 @@ public class CategoryEntity {
 	   private String imageName;
 	   
 	    @Column@Lob
-	   
 	    private byte[] imageData;
 	    
 	   
@@ -107,7 +106,6 @@ public class CategoryEntity {
 
 		
 
-	    // Constructors, getters, and setters
 	    
 	    
 

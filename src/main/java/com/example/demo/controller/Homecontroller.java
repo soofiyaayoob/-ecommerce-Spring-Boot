@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.security.Principal;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
 import com.example.demo.CustomHandler.SucessHandler;
+import com.example.demo.Service.CartService;
 import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
@@ -67,9 +69,12 @@ public class Homecontroller {
 	@Autowired
 	wishlistService wishlistService;
 	
+	@Autowired
+	CartService cartService;
+	
 	
 	 @GetMapping("/")
-	    public String home(Model model) {
+	    public String home(Model model,HttpSession session) {
 		 List<OfferEntity>offers=offerService.get4Greatoffers();
 		
 		List<ProductEntity>latestproducts=productservices.LatestProduct();
@@ -90,7 +95,22 @@ public class Homecontroller {
 	            
 	            
 	        }
-	    
+//	        
+//	        String message = (String) session.getAttribute("message");
+//	        String error = (String) session.getAttribute("error");
+//
+//	        // Add message to the model if it exists
+//	        if (message != null) {
+//	            model.addAttribute("message", message);
+//	            session.removeAttribute("message");  // Remove the message after displaying it
+//	        }
+//
+//	        // Add error to the model if it exists
+//	        if (error != null) {
+//	            model.addAttribute("error", error);
+//	            session.removeAttribute("error");  // Remove the error after displaying it
+//	        }
+//	    
 		    return "home";
 }
 	  @GetMapping("/categories/{id}")
@@ -102,26 +122,79 @@ public class Homecontroller {
 
 	        return "CategoryProduct"; 
 	    }
-	  @PostMapping("/Addwishlist/{id}")
 	  
-	  public String addToWishlist(@PathVariable Long id,HttpSession session) {
+//	  @PostMapping("/Addwishlist/{id}")
+//	  public String addToWishlist(@PathVariable Long id,HttpSession session) {
+//		  try {
+//			  System.out.println("coming");
+//		        wishlistService.addProductToWishlist(id);
+//		        session.setAttribute("message", "Product successfully added to wishlist");
+//		    } catch (Exception e) {
+//		 
+//		        session.setAttribute("error", "An error occurred while adding product to wishlist");
+//		    }
+//		  return "home"; 
+//	  }
+	  @PostMapping("/Addwishlist/{id}")
+	  public String addToWishlist(@PathVariable Long id, Principal principal, HttpSession session) {
 		  try {
-			  System.out.println("coming");
-		        wishlistService.addProductToWishlist(id);
-		        session.setAttribute("message", "Product successfully added to wishlist");
+		        if (principal == null) {
+		       
+		            return "redirect:/login";
+		        }
+
+		    
+		        String username = principal.getName();
+		        System.out.println(username);
+
+		       
+		        boolean productAdded = wishlistService.addProductToWishlist(id, username);
+
+		     
+		        if (productAdded) {
+		            session.setAttribute("message", "Product successfully added to wishlist");
+		        } else {
+		          
+		            session.setAttribute("message", "Product is already in your wishlist");
+		        }
+
+		       
+		        return "redirect:/";
+
 		    } catch (Exception e) {
-		 
-		        session.setAttribute("error", "An error occurred while adding product to wishlist");
+		       
+		        session.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
+		        return "redirect:/home";
 		    }
-		  return "home"; 
 	  }
-	  @PostMapping("/AddCart/{id}")
-	  public void addTocart(@PathVariable Long id,HttpServletResponse response) {
-	      
-	      System.out.println("Product added to cart: " + id);
-	      response.setStatus(HttpServletResponse.SC_NO_CONTENT); 
-	     
-	  }
+	  
+	  
+	  @PostMapping("/Addcart/{id}")
+	  public String addTocart(@PathVariable Long id,HttpSession session,Principal principal) {
+	     System.out.println("in add to cart");
+		  try {
+		        
+		        if (principal == null) {
+		            return "redirect:/login";  
+		        }
+
+		    
+		        boolean productAdded = cartService.addProductToCart(id);
+
+		        if (productAdded) {
+		            session.setAttribute("message", "Product successfully added to cart");
+		        } else {
+		            session.setAttribute("message", "Product is already in your cart");
+		        }
+
+		        return "redirect:/";  
+
+		    } catch (Exception e) {
+		       
+		        session.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
+		        return "redirect:/home"; 
+		    }
+		}
 
 	
 }	

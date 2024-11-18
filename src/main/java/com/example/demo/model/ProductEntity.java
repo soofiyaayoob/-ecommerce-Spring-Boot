@@ -40,7 +40,7 @@ public class ProductEntity {
 	    private String description;
 
 	    @Column@Lob
-	    @Basic(fetch = FetchType.EAGER)
+//	    @Basic(fetch = FetchType.EAGER)
 	    private byte[] imageData;
 	    
 	    @Column

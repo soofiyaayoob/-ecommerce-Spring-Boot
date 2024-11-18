@@ -154,7 +154,7 @@ public class UserController {
 	            	userService.registerUserEntity(userDto);
 	              
 	                model.addAttribute("message", "OTP Verified Successfully!");
-	                return "home";  
+	                return"redirect:/";
 	            } else {
 	               
 	                model.addAttribute("message", "Invalid OTP Code.");

@@ -37,8 +37,8 @@
 
 
   <body>
-<!-- 
-    <div th:if="${message}" class="alert alert-success">
+
+    <!-- <div th:if="${message}" class="alert alert-success">
       <p th:text="${message}"></p>
   </div>
   <div th:if="${error}" class="alert alert-danger">
@@ -307,13 +307,16 @@
                 
               </div>
               <div class="button-container d-flex justify-content-start align-items-center">
-                <a class="btn wishlist h-auto" th:href="@{/Addwishlist/{id}(id=${product.id})}">
-                  <i class="fas fa-heart"></i>
-              </a>
-              
-                <button class="btn add-to-cart " >
-                  <i class="fas fa-cart-plus"></i> Add to
+                <form th:action="@{/Addwishlist/{id}(id=${product.id})}" method="post">
+                  <button type="submit" class="btn wishlist h-auto">
+                      <i class="fas fa-heart"></i> 
+                  </button>
+              </form>
+              <form action="@{/Addcart/{id}(id=${product.id})}" method="post">
+                <button type="submit" class="btn add-to-cart">
+                    <i class="fas fa-cart-plus"></i> Add to
                 </button>
+            </form>
               </div>
 
             </div>

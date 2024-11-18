@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.model.UserEntity;
 
 import com.example.demo.repositry.UserRepo;
@@ -71,6 +72,20 @@ public class UserService{
 			
 			return userRepo.findAll();
 		}
+		
+		public Long getCurrentUserId() {
+	        // Get the current authenticated user from SecurityContext
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        
+	        // Check if the authentication object is valid
+	        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipleTaamsmaak) {
+	            // Get UserPrincipleTaamsmaak object and return user ID
+	            UserPrincipleTaamsmaak userPrinciple = (UserPrincipleTaamsmaak) authentication.getPrincipal();
+	            return userPrinciple.getUserid();  // This will return the user ID
+	        }
+	        
+	        return null;  
+	    }
 	}
 
 	
