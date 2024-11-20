@@ -1,6 +1,8 @@
 package com.example.demo.Service;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.List;
 
 import javax.management.AttributeNotFoundException;
 
@@ -15,6 +17,8 @@ import com.example.demo.repositry.CartItemRepo;
 import com.example.demo.repositry.UserRepo;
 import com.example.demo.repositry.cartRepo;
 import com.example.demo.repositry.productRepo;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CartService {
@@ -65,6 +69,39 @@ public class CartService {
 	    cartItemRepo.save(cartItem); 
 
 	    return true; 
+	}
+
+
+@Transactional
+	public List<CartItemEntity> getbyUserId() {
+		Long id= userService.getCurrentUserId();
+		
+		
+		 CartEntity cart = cartRepo.findByUserId(id);
+		        
+		 for (CartItemEntity cartItem : cart.getCartItems()) {
+		
+		        ProductEntity product = cartItem.getProduct();
+		        
+		        String imageBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(product.getImageData());
+	            product.setImageBase64(imageBase64); 
+		       
+		        
+		    }
+		 
+		 return cart.getCartItems();
+		
+	}
+
+
+
+	public void updateQuantity(Long productId, Integer quantity) {
+		
+		 CartItemEntity cartItem = cartItemRepo.findByProductId(productId);
+		          
+		    cartItem.setQuantity(quantity);
+		    cartItemRepo.save(cartItem);
+		
 	}
 }
 

@@ -3,80 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Wishlist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+         
+            justify-content: center;
+            padding: 20px 0;
+           
+            min-height: 100vh;  /* Ensure full height */
+            margin: 0;  /* Remove default margin */
+            padding: 0;  /* Remove padding */
+        }
+
+        .wishlist-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 20px; /* Adjust as needed */
+        }
+        
+
+        .wishlist-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #212529;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wishlist-item {
+            display: grid;
+            grid-template-columns: 120px 1fr 200px;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .wishlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            justify-self: center;
+        }
+
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .product-details h4 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .product-details p {
+            margin: 0;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-self: end;
+        }
+
+        .actions a {
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #007bff;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s;
+            min-width: 150px;
+        }
+
+        .actions a.remove {
+            background-color: #dc3545;
+        }
+
+        .actions a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .actions a.remove:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 992px) {
+            .wishlist-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .product-image {
+                justify-self: center;
+            }
+
+            .actions {
+                justify-self: center;
+                width: 100%;
+            }
+
+            .actions a {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .wishlist-container {
+                padding: 15px;
+            }
+
+            .wishlist-title {
+                font-size: 24px;
+            }
+
+            .product-details h4 {
+                font-size: 18px;
+            }
+
+            .product-details p {
+                font-size: 14px;
+            }
+        }
+        del {
+    text-decoration: line-through;
+    color: #dc3545; /* Optional: Change the color of the strikethrough text */
+}
+
+    </style>
 </head>
 <body>
-    <div class="card">
-        <div class="row">
-            <div class="col-md-8 cart">
-                <div class="title">
-                    <div class="row">
-                        <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                        <div class="col align-self-center text-right text-muted">3 items</div>
+    
+    <div class="container">
+        <h1 class="wishlist-title mt-3">My Wishlist</h1>
+        <div th:if="${wishlist == null or wishlist.isEmpty()}" class="text-center">
+            <p>No products in your wishlist.</p>
+        </div>
+    
+        <div th:if="${wishlist != null and !wishlist.isEmpty()}">
+            <div class="wishlist-container">
+                <div th:each="wishlist : ${wishlist}" class="wishlist-item">
+                    <img th:src="${wishlist.product.imageBase64}" alt="Product Image" class="product-image">
+                    <div class="product-details">
+                        <h4 th:text="${wishlist.product.name}">Product Name</h4>
+                        <p th:text="${wishlist.product.description}">Product description goes here.</p>
+    
+                        <!-- Dynamically display price -->
+                        <span th:text="${wishlist.product.offer != null ? (wishlist.product.offer.offerPrice != null ? wishlist.product.offer.offerPrice : wishlist.product.price) : wishlist.product.price}"></span>
+                        <span th:if="${wishlist.product.offer != null and wishlist.product.offer.offerPrice != null}">
+                            <del th:text="${wishlist.product.price}"></del>
+                        </span>
                     </div>
-                </div>    
-                <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                    <div class="actions">
+                        <a th:href="@{/deletewishlist(productId=${wishlist.product.id})}" class="remove">Remove</a>
+                        <a th:href="@{/postcart(productId=${wishlist.product.id})}">Move to Cart</a>
                     </div>
                 </div>
-                <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div>
-                <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
-            </div>
-            <div class="col-md-4 summary">
-                <div><h5><b>Summary</b></h5></div>
-                <hr>
-                <div class="row">
-                    <div class="col" style="padding-left:0;">ITEMS 3</div>
-                    <div class="col text-right">&euro; 132.00</div>
-                </div>
-                <form>
-                    <p>SHIPPING</p>
-                    <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
-                    <p>GIVE CODE</p>
-                    <input id="code" placeholder="Enter your code">
-                </form>
-                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                    <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">&euro; 137.00</div>
-                </div>
-                <button class="btn">CHECKOUT</button>
             </div>
         </div>
+    
         
     </div>
+    
 </body>
 </html>

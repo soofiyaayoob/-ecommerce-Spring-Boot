@@ -38,20 +38,20 @@
 
   <body>
 
-    <!-- <div th:if="${message}" class="alert alert-success">
+    <div th:if="${message}" class="alert alert-success">
       <p th:text="${message}"></p>
   </div>
   <div th:if="${error}" class="alert alert-danger">
       <p th:text="${error}"></p>
-  </div> -->
+  </div>
 
-  <div th:if="${session.message}" class="alert alert-success">
+  <!-- <div th:if="${session.message}" class="alert alert-success">
     <p th:text="${session.message}"></p>
 </div>
 
 <div th:if="${session.error}" class="alert alert-danger">
     <p th:text="${session.error}"></p>
-</div>
+</div> -->
 
    
 
@@ -78,14 +78,17 @@
                 </div>
       
                 <!-- Wishlist Icon -->
-                <button class="btn btn-white shadow-warning text-warning mx-2" type="button" id="wishlistIcon">
+                <a th:href="@{/wishlist}" class="btn btn-white shadow-warning text-warning mx-2" id="wishlistIcon">
                   <i class="fas fa-heart"></i>
-                </button>
+              </a>
+              
       
                 <!-- Cart Icon -->
-                <button class="btn btn-white shadow-warning text-warning mx-2" type="button" id="cartIcon">
+               
+
+                <a th:href="@{/cart}" class="btn btn-white shadow-warning text-warning  mx-2" id="cartIcon" >
                   <i class="fas fa-shopping-cart"></i>
-                </button>
+                </a>
       
                 <!-- Login Button -->
                 <a href="/admin/dash" style="text-decoration: none;">
@@ -95,7 +98,7 @@
               </a>
               <a href="#"th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" style="text-decoration: none;" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
                 <button class="btn btn-white shadow-warning text-warning" id="openSidebar" type="button">
-                    <i class="fas fa-user me-2"></i> User
+                    <i class="fas fa-user me-2 " th:text="${#authentication.principal.username}" ></i> 
                 </button>
             </a>
             
@@ -312,7 +315,7 @@
                       <i class="fas fa-heart"></i> 
                   </button>
               </form>
-              <form action="@{/Addcart/{id}(id=${product.id})}" method="post">
+              <form th:action="@{/Addcart/{id}(id=${product.id})}" method="post">
                 <button type="submit" class="btn add-to-cart">
                     <i class="fas fa-cart-plus"></i> Add to
                 </button>

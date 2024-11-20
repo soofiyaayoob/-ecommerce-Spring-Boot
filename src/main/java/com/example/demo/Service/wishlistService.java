@@ -1,5 +1,8 @@
 package com.example.demo.Service;
 
+import java.util.Base64;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,9 @@ import com.example.demo.repositry.UserRepo;
 import com.example.demo.repositry.productRepo;
 import com.example.demo.repositry.wishlistRepo;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+
 @Service
 public class wishlistService {
 @Autowired
@@ -25,6 +31,10 @@ UserRepo userRepo;
 
 @Autowired
 productRepo productRepo;
+
+@Autowired
+UserService userService;
+
 
 public boolean addProductToWishlist(Long id, String username) {
 
@@ -51,6 +61,26 @@ public boolean addProductToWishlist(Long id, String username) {
 
     wishlistRepo.save(wishlistEntity);
     return true; 
+}
+@Transactional
+public List<WishlistEntity> getbyuserId() {
+	
+	
+	
+		Long id= userService.getCurrentUserId();
+		
+		  List<WishlistEntity> wishlistEntities = wishlistRepo.findByUserId(id);
+
+		    wishlistEntities.forEach(wishlistEntity -> {
+		        ProductEntity product = wishlistEntity.getProduct();
+		        if (product.getImageData() != null) {
+		        	System.out.println(product.getImageData());
+		            String imageBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(product.getImageData());
+		            product.setImageBase64(imageBase64); 
+		        }
+		    });
+
+		    return wishlistEntities;
 }
 
 

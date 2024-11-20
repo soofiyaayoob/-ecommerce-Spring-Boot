@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.security.Principal;
 import java.util.Base64;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
@@ -33,10 +35,13 @@ import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.wishlistService;
+import com.example.demo.model.CartEntity;
+import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
 import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.WishlistEntity;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
@@ -95,22 +100,7 @@ public class Homecontroller {
 	            
 	            
 	        }
-//	        
-//	        String message = (String) session.getAttribute("message");
-//	        String error = (String) session.getAttribute("error");
-//
-//	        // Add message to the model if it exists
-//	        if (message != null) {
-//	            model.addAttribute("message", message);
-//	            session.removeAttribute("message");  // Remove the message after displaying it
-//	        }
-//
-//	        // Add error to the model if it exists
-//	        if (error != null) {
-//	            model.addAttribute("error", error);
-//	            session.removeAttribute("error");  // Remove the error after displaying it
-//	        }
-//	    
+    
 		    return "home";
 }
 	  @GetMapping("/categories/{id}")
@@ -136,7 +126,7 @@ public class Homecontroller {
 //		  return "home"; 
 //	  }
 	  @PostMapping("/Addwishlist/{id}")
-	  public String addToWishlist(@PathVariable Long id, Principal principal, HttpSession session) {
+	  public String addToWishlist(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
 		  try {
 		        if (principal == null) {
 		       
@@ -152,10 +142,11 @@ public class Homecontroller {
 
 		     
 		        if (productAdded) {
-		            session.setAttribute("message", "Product successfully added to wishlist");
+
+		        	  redirectAttributes.addFlashAttribute("message", "Product successfully added to wishlist");
 		        } else {
 		          
-		            session.setAttribute("message", "Product is already in your wishlist");
+		        	 redirectAttributes.addFlashAttribute("message", "Product is already in your wishlist");
 		        }
 
 		       
@@ -163,14 +154,14 @@ public class Homecontroller {
 
 		    } catch (Exception e) {
 		       
-		        session.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
-		        return "redirect:/home";
+		    	 redirectAttributes.addFlashAttribute("error", "An unexpected error occurred: " + e.getMessage());
+		        return "redirect:/";
 		    }
 	  }
 	  
 	  
 	  @PostMapping("/Addcart/{id}")
-	  public String addTocart(@PathVariable Long id,HttpSession session,Principal principal) {
+	  public String addTocart(@PathVariable Long id,RedirectAttributes redirectAttributes,Principal principal) {
 	     System.out.println("in add to cart");
 		  try {
 		        
@@ -180,21 +171,62 @@ public class Homecontroller {
 
 		    
 		        boolean productAdded = cartService.addProductToCart(id);
+		        
 
 		        if (productAdded) {
-		            session.setAttribute("message", "Product successfully added to cart");
+		        	redirectAttributes.addFlashAttribute("message", "Product successfully added to cart");
 		        } else {
-		            session.setAttribute("message", "Product is already in your cart");
+		        	redirectAttributes.addFlashAttribute ("message", "Product is already in your cart");
 		        }
 
 		        return "redirect:/";  
 
 		    } catch (Exception e) {
 		       
-		        session.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
-		        return "redirect:/home"; 
+		    	redirectAttributes.addFlashAttribute("error", "An unexpected error occurred: " + e.getMessage());
+		        return "redirect:/"; 
 		    }
 		}
+	  
+	  @GetMapping("/wishlist")
+	  public String getWishist(Principal principal,Model model) {
+		  if (principal == null) {
+		       
+		        return "redirect:/login";
+		    }
+		  
+		List<WishlistEntity> wishlistEntity=  wishlistService.getbyuserId();
+		model.addAttribute("wishlist", wishlistEntity);
+			 return"wishlist";
+		 }     
+	  
+	  
+	  
+	  @GetMapping("/cart")
+	  public String getCart(Principal principal,Model model) {
+		  
+	System.out.println("gootten in cart get mapping");
+		 if(principal==null) {
+			 return"login";
+		 }
+		 List<CartItemEntity> cart=cartService.getbyUserId();
+    
+	    model.addAttribute("cartItems",cart);
+			 return"cart";
+		 }
+	  
+	  
+	  
+	  @PostMapping("/cart/update")
+	  public String updateQuantity(@RequestParam Long productId,@RequestParam Integer quantity) {
+		  
+		  System.out.println(quantity);
+	  
+	  	cartService.updateQuantity(productId,quantity);
+	  	return "redirect:/cart";
+	  }
+	  
+	  
 
 	
 }	

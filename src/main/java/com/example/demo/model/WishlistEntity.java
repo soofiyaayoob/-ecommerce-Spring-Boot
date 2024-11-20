@@ -26,11 +26,11 @@ public class WishlistEntity {
 	    @JoinColumn(name = "user_id", nullable = false)
 	    private UserEntity user; 
 	    
-	 @ManyToOne(fetch = FetchType.LAZY)
+	 @ManyToOne()
 	    @JoinColumn(name = "product_id", nullable = false)
 	    private ProductEntity product;
 
-	    private Integer quantity=1;
+	    
 
 		public Long getId() {
 			return id;
@@ -56,20 +56,14 @@ public class WishlistEntity {
 			this.product = product;
 		}
 
-		public Integer getQuantity() {
-			return quantity;
-		}
+	
 
-		public void setQuantity(Integer quantity) {
-			this.quantity = quantity;
-		}
-
-		public WishlistEntity(Long id, UserEntity user, ProductEntity product, Integer quantity) {
+		public WishlistEntity(Long id, UserEntity user, ProductEntity product) {
 			super();
 			this.id = id;
 			this.user = user;
 			this.product = product;
-			this.quantity = quantity;
+			
 		}
 
 		public WishlistEntity() {
