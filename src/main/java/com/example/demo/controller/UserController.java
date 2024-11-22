@@ -61,7 +61,7 @@ public class UserController {
 
 
 		    model.addAttribute("user", user);
-		    System.out.println("User addresses initialized with size: " + user.getAddresses().size());
+		   // System.out.println("User addresses initialized with size: " + user.getAddresses().size());
 	        return "register"; // Returns the register.ht
 	        
 	    }
@@ -75,12 +75,12 @@ public class UserController {
 	        address.setState(state);
 	        address.setCity(city);
 	        address.setPincode(pincode);
-	        address.setUser(userEntity);  // Setting the relationship
+	        address.setUser(userEntity);  
 
-	        userEntity.getAddresses().add(address);  // Adding the address to the user's address list
-	        userService.registerUserEntity(userEntity); // Save the UserEntity which will cascade to save AddressEntity
+	        userEntity.getAddresses().add(address);  
+	        userService.registerUserEntity(userEntity); 
 
-	        return "redirect:/login"; // Redirect after successful save
+	        return "redirect:/login";
 	    }
 	 
 
@@ -142,12 +142,10 @@ public class UserController {
 	        try {
 	        	 UserEntity userDto = (UserEntity) session.getAttribute("user");
 	        	 String username=userDto.getUsername();
-	        	 System.out.println(username);
-	        	System.out.println(otpCode);
+	        	
 	         
 	            boolean isValid = otpService.validateOtp(username, otpCode);
-	            
-	            System.out.println(isValid);
+	         
 
 	            if (isValid) {
 	            	

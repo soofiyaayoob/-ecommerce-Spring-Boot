@@ -25,9 +25,9 @@ public class AddressEntity {
 	    @Column(nullable = false)
 	    private String pincode;
 
-	    // Many-to-One relationship with User
+	    
 	    @ManyToOne
-	    @JoinColumn(name = "user_id", nullable = false)  // Defines the foreign key
+	    @JoinColumn(name = "user_id", nullable = false) 
 	    private UserEntity user;
 
 		public Long getId() {

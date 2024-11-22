@@ -94,7 +94,7 @@ public class CartService {
 	}
 
 
-
+@Transactional
 	public void updateQuantity(Long productId, Integer quantity) {
 		
 		 CartItemEntity cartItem = cartItemRepo.findByProductId(productId);
@@ -102,6 +102,29 @@ public class CartService {
 		    cartItem.setQuantity(quantity);
 		    cartItemRepo.save(cartItem);
 		
+	}
+
+
+	public double calculateTotalprice(List<CartItemEntity> cart) {
+		
+		return cart.stream()
+			    .mapToDouble(item -> {
+			        ProductEntity product = item.getProduct();
+			        double price = (product.getOffer() != null)
+			                ? product.getOffer().getOfferPrice()
+			                : product.getPrice();
+			        return item.getQuantity() * price;
+			    })
+			    .sum();
+	}
+
+
+	public double calculateExactPrice(List<CartItemEntity> cart) {
+		
+		return cart.stream()
+                .mapToDouble(item -> item.getQuantity() * item.getProduct().getPrice())
+                .sum();
+
 	}
 }
 

@@ -19,8 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
+import com.example.demo.model.AddressEntity;
 import com.example.demo.model.UserEntity;
-
+import com.example.demo.repositry.AddressRepo;
 import com.example.demo.repositry.UserRepo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,11 +39,17 @@ public class UserService{
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	
+	@Autowired
+	AddressRepo addressRepo;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private jwtServiceTaamsmaak jwtservicetaamsmaak;
+
+	
 	
 	@Transactional
 	public UserEntity registerUserEntity(UserEntity user) {
@@ -86,6 +93,16 @@ public class UserService{
 	        
 	        return null;  
 	    }
+
+
+		public List<AddressEntity> getAddressesByUserId() {
+			
+		Long userId=this.getCurrentUserId();
+		List<AddressEntity> addressEntities = addressRepo.findByUserId(userId);
+			return addressEntities;
+		}
+		
+		
 	}
 
 	

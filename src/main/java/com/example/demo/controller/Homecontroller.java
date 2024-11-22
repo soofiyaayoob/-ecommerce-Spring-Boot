@@ -35,6 +35,7 @@ import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.wishlistService;
+import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CartEntity;
 import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.CategoryEntity;
@@ -50,6 +51,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -76,6 +78,9 @@ public class Homecontroller {
 	
 	@Autowired
 	CartService cartService;
+	
+	@Autowired
+	UserService userService;
 	
 	
 	 @GetMapping("/")
@@ -210,21 +215,48 @@ public class Homecontroller {
 			 return"login";
 		 }
 		 List<CartItemEntity> cart=cartService.getbyUserId();
-    
-	    model.addAttribute("cartItems",cart);
+		 
+		double totalPrice= cartService.calculateTotalprice(cart);
+		 double Mrp = cartService.calculateExactPrice(cart);
+//		 double totalPrice = cart.stream()
+//				    .mapToDouble(item -> {
+//				        ProductEntity product = item.getProduct();
+//				        double price = (product.getOffer() != null)
+//				                ? product.getOffer().getOfferPrice()
+//				                : product.getPrice();
+//				        return item.getQuantity() * price;
+//				    })
+//				    .sum();
+		 
+	      double saved=Mrp - totalPrice;
+		 String formattedMrp = String.format("%.2f", saved);
+		 
+		  List<AddressEntity> addresses = userService.getAddressesByUserId();
+		
+		 System.out.println(addresses.get(0).getPincode());
+		 model.addAttribute("totalPrice",totalPrice);
+		 model.addAttribute("totalSaved",formattedMrp);
+         model.addAttribute("cartItems",cart);
+         model.addAttribute("addresses",addresses);
+	    
 			 return"cart";
 		 }
 	  
 	  
 	  
-	  @PostMapping("/cart/update")
+	  @PostMapping("/cart/updateQuantity")
 	  public String updateQuantity(@RequestParam Long productId,@RequestParam Integer quantity) {
-		  
-		  System.out.println(quantity);
 	  
 	  	cartService.updateQuantity(productId,quantity);
+	  	
 	  	return "redirect:/cart";
 	  }
+	  @PostMapping("/cart/addressform")
+	    public String submitForm(@ModelAttribute AddressEntity address) {
+	      System.out.println("getting in acrt address form");
+		  System.out.println("Received: City = " + address.getCity() + ", State = " + address.getState() + ", Postal Code = " + address.getPincode());
+			return "redirect:/cart";
+	    }
 	  
 	  
 
