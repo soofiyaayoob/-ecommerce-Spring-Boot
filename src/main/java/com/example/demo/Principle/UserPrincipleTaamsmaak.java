@@ -43,5 +43,9 @@ private UserEntity userEntity;
 	 public Long getUserid() {
 	        return userEntity.getId();
 	    }
+	  public UserEntity getUser() {
+	        return userEntity;
+	    }
+
 
 }

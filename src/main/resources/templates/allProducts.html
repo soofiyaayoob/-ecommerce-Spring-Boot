@@ -96,8 +96,8 @@
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
+        background-color: #f87736d0;
+        border-color: #ff6702c9;
     }
 
     .col {
@@ -226,7 +226,8 @@
                            
                             
                             <!-- Edit Button with dynamic ID -->
-                            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary w-100">Edit Product</a>
+                            <a th:href="@{/admin/editProduct(productId=${product.id})}" class="btn btn-primary w-100">Edit Product</a>
+
                         </div>
                     </div>
                 </div>

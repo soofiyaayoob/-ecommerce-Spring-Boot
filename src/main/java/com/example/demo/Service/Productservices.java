@@ -1,11 +1,12 @@
 package com.example.demo.Service;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.ProductEntity;
@@ -21,6 +22,9 @@ public class Productservices {
 	
 	@Autowired
 	productRepo productRepo;
+	
+	@Autowired
+	CategoryService categoryService;
 	
 
 	
@@ -102,6 +106,25 @@ public class Productservices {
 		});
 		return products;
 
+	}
+
+
+	public void updateproduct(ProductEntity productEntity, MultipartFile image, Long categoryId) throws IOException {
+		String productImage=image.getOriginalFilename();
+		CategoryEntity categoryEntity=categoryService.findCayegory(categoryId);
+		  ProductEntity product = new ProductEntity();
+		    
+		     product.setCategory(categoryEntity); 
+		     product.setImageName(productImage);
+		     product.setImageData(image.getBytes());
+		     productRepo.save(product);
+		
+	}
+
+
+	public void imageBase64(ProductEntity product) {
+		String base64="data:image/png;base64,"+Base64.getEncoder().encodeToString(product.getImageData());
+		product.setImageBase64(base64);
 	}
 
 

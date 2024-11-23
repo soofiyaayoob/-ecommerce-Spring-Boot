@@ -101,6 +101,9 @@ public class UserService{
 		List<AddressEntity> addressEntities = addressRepo.findByUserId(userId);
 			return addressEntities;
 		}
+		   public void saveAddress(AddressEntity address) {
+		        addressRepo.save(address);
+		    }
 		
 		
 	}

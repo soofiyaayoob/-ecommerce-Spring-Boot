@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -203,7 +204,41 @@ public class AdminController {
 //	     }
 	     
 	     
+	     @GetMapping("/editProduct")
+	     public String EditProduct(Model model,@RequestParam("productId") Long productId) {
+	    	 ProductEntity productEntity=productservices.GetById(productId);
+	    	 productservices.imageBase64(productEntity);
+	    	 
+	    	 List<CategoryEntity>  categories=categoryService.getAllcategries();
+	    	 model.addAttribute("product",productEntity);
+			 model.addAttribute("categories", categories);
+	     	return "EditProduct";
+	     }
 	     
+//	     @PostMapping("/update-product")
+//	     public String postMethodName(@ModelAttribute ProductEntity productEntity,@RequestParam("productImage")
+//	    		 MultipartFile file,  @RequestParam("category") Long categoryId,RedirectAttributes redirectAttributes) throws IOException {
+//	     	productservices.updateproduct(productEntity,file,categoryId);
+//	    	 redirectAttributes.addFlashAttribute("message", "product edited succsessfuly");
+//	    	 
+//	    return "redirect:/editProduct";
+//	     }
+	     
+	     @PostMapping("/update-product")
+	     public String postMethodName(
+	             @ModelAttribute ProductEntity productEntity, 
+	             @RequestParam("productImage") MultipartFile file,
+	             @RequestParam("category") Long categoryId, 
+	             RedirectAttributes redirectAttributes) {
+	         try {
+	             productservices.updateproduct(productEntity, file, categoryId);
+	             redirectAttributes.addFlashAttribute("message", "Product edited successfully");
+	         } catch (Exception e) {
+	             redirectAttributes.addFlashAttribute("error", "Failed to edit product: " + e.getMessage());
+	         }
+	         return "EditProduct"; 
+	     }
+
 	     
 	    	} 	
 	    	 

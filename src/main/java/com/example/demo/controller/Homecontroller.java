@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
 import com.example.demo.CustomHandler.SucessHandler;
+import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.CartService;
 import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
@@ -252,9 +254,13 @@ public class Homecontroller {
 	  	return "redirect:/cart";
 	  }
 	  @PostMapping("/cart/addressform")
-	    public String submitForm(@ModelAttribute AddressEntity address) {
+	    public String submitForm(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak userpriniciple) {
 	      System.out.println("getting in acrt address form");
-		  System.out.println("Received: City = " + address.getCity() + ", State = " + address.getState() + ", Postal Code = " + address.getPincode());
+	      if (userpriniciple == null ||userpriniciple .getUser() == null) {
+	          throw new IllegalStateException("No authenticated user found.");
+	      }
+	      address.setUser(userpriniciple.getUser());
+		  userService.saveAddress(address);
 			return "redirect:/cart";
 	    }
 	  
