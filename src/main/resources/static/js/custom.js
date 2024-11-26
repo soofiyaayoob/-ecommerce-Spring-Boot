@@ -39,3 +39,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+function openProductModalFromData(element) {
+  const imageBase64 = element.getAttribute('data-image-base64');
+  const name = element.getAttribute('data-name');
+  const description = element.getAttribute('data-description');
+
+  // Call the modal-opening function
+  openProductModal(imageBase64, name, description);
+}
+
+function openProductModal(image, name, description) {
+  // Populate modal fields
+  document.getElementById('modalProductImage').src = image;
+  document.getElementById('modalProductName').innerText = name;
+  document.getElementById('modalProductDescription').innerText = description;
+
+  // Display the modal
+  const modal = document.getElementById('productDetailsModal');
+  modal.style.display = 'block';
+}
+
+// Close modal on clicking outside the content
+window.onclick = function(event) {
+  const modal = document.getElementById('productDetailsModal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+};
+function closeModal() {
+  const modal = document.getElementById('productDetailsModal');
+  modal.style.display = 'none';
+}
+

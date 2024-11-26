@@ -59,62 +59,74 @@
     <!--    Main Content-->
     <!-- ===============================================-->
     <main class="main" id="top">
+      Responsive Navigation Bar
+
+      Responsive Navigation Bar
+
       <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-navbar-on-scroll="data-navbar-on-scroll">
-        
-        
-        <div class="container"><a class="navbar-brand d-inline-flex" href="index.html"><img class="d-inline-block" src="/img/gallery/logo.svg" alt="logo" /><span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Ta'am smaak</span></a>
-            <!-- Navbar Toggler for Mobile View -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-      
-            <!-- Navbar Content (Expanded Search Bar and Icons) -->
-            <div class="collapse navbar-collapse border-top border-lg-0 my-2 mt-lg-0" id="navbarSupportedContent">
-              <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0 align-items-center" style="flex-grow: 1;">
-                <!-- Expanded Search Bar -->
-                <div class="input-group-icon pe-2 flex-grow-1">
-                  <i class="fas fa-search input-box-icon text-primary"></i>
-                  <input class="form-control border-0 input-box bg-100 w-100" type="search" placeholder="Search Food" aria-label="Search" />
-                </div>
-      
-                <!-- Wishlist Icon -->
-                <a th:href="@{/wishlist}" class="btn btn-white shadow-warning text-warning mx-2" id="wishlistIcon">
-                  <i class="fas fa-heart"></i>
+          <div class="container">
+              <!-- Logo and Brand -->
+              <a class="navbar-brand d-inline-flex align-items-center" href="index.html">
+                  <img class="d-inline-block" src="/img/gallery/logo.svg" alt="logo" style="max-height: 40px;"/>
+                  <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Ta'am smaak</span>
               </a>
-              
       
-                <!-- Cart Icon -->
-               
-
-                <a th:href="@{/cart}" class="btn btn-white shadow-warning text-warning  mx-2" id="cartIcon" >
-                  <i class="fas fa-shopping-cart"></i>
-                </a>
+              <!-- Navbar Toggler -->
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
       
-                <!-- Login Button -->
-                <a href="/admin/dash" style="text-decoration: none;">
-                  <button class="btn btn-white shadow-warning text-warning" type="button">
-                      <i class="fas fa-user me-2"></i>Adminpanel
-                  </button>
-              </a>
-              <a href="#"th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" style="text-decoration: none;" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-                <button class="btn btn-white shadow-warning text-warning" id="openSidebar" type="button">
-                    <i class="fas fa-user me-2 " th:text="${#authentication.principal.username}" ></i> 
-                </button>
-            </a>
-            
-            <a href="/login" th:if="${#authentication.principal == 'anonymousUser'}" style="text-decoration: none;">
-                <button class="btn btn-white shadow-warning text-warning" type="button">
-                    <i class="fas fa-user me-2"></i> Login
-                </button>
-            </a>
-
-
-            
-              </form>
-            </div>
-
-        </div>
+              <!-- Collapsible Content -->
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <!-- Search and Actions Container -->
+                  <div class="ms-auto d-flex flex-column flex-lg-row align-items-center gap-3">
+                      <!-- Search Bar -->
+                      <div class="input-group-icon pe-lg-2" style="min-width: 250px;">
+                          <i class="fas fa-search input-box-icon text-primary position-absolute" 
+                             style="left: 1rem; top: 50%; transform: translateY(-50%);"></i>
+                          <input class="form-control border-0 input-box bg-100 ps-5" type="search" 
+                                 placeholder="Search Food" aria-label="Search"/>
+                      </div>
+      
+                      <!-- Action Buttons -->
+                      <div class="d-flex align-items-center gap-2">
+                          <!-- Wishlist -->
+                          <a th:href="@{/wishlist}" class="btn btn-white shadow-warning text-warning">
+                              <i class="fas fa-heart"></i>
+                          </a>
+      
+                          <!-- Cart -->
+                          <a th:href="@{/cart}" class="btn btn-white shadow-warning text-warning">
+                              <i class="fas fa-shopping-cart"></i>
+                          </a>
+      
+                          <!-- Admin Panel -->
+                          <a href="/admin/dash" class="btn btn-white shadow-warning text-warning">
+                              <i class="fas fa-user me-1"></i>
+                              <span class="d-none d-lg-inline">Adminpanel</span>
+                          </a>
+      
+                          <!-- User Menu -->
+                          <a href="#" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
+                             class="btn btn-white shadow-warning text-warning"
+                             data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                              <i class="fas fa-user me-1"></i>
+                              <span class="d-none d-lg-inline" th:text="${#authentication.principal.username}"></span>
+                          </a>
+      
+                          <!-- Login Button -->
+                          <a href="/login" th:if="${#authentication.principal == 'anonymousUser'}" 
+                             class="btn btn-white shadow-warning text-warning">
+                              <i class="fas fa-user me-1"></i>
+                              <span class="d-none d-lg-inline">Login</span>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </nav>
+      
       <div class="custom-sidebar" id="sidebar">
         <div class="sidebar-header">
           <h5 class="text-white"
@@ -195,7 +207,9 @@
 		                <div class="card card-span h-100">
 		                    <div class="position-relative">
 		                        <!-- Corrected th:src syntax -->
-		                        <img class="img-fluid rounded-3 w-100" th:src="${offer.product.imageBase64}" style="width: 200px; height: 300px;"alt="Offer Image" />
+		                        <img class="img-fluid rounded-3 w-100" th:src="${offer.product.imageBase64}" style="width: 200px; height: 300px;"
+                            alt="Offer Image"  
+                            data-image-base64="${offer.product.imageBase64}" />
 		                        <div class="card-actions position-absolute top-0 start-0 p-2">
 		                            <div class="badge badge-foodwagon bg-primary p-4">
 		                                <div class="d-flex flex-between-center">
@@ -224,6 +238,9 @@
 
       <!-- <section> close ============================-->
       <!-- ============================================-->
+
+
+
 
 
 
@@ -276,131 +293,126 @@
 
 
       <!-- ============================================-->
-      <section id="testimonial">
+      <section class="product-section" id="testimonial">
         <div class="container">
-          <div class="row h-100">
-            <div class="col-lg-7 mx-auto text-center mb-6">
-              <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Latest products</h5>
+            <!-- Latest Products Section -->
+            <div class="row h-100">
+                <div class="col-lg-7 mx-auto text-center mb-4">
+                    <h5 class="fw-bold fs-3 fs-lg-5 lh-sm">Latest Products</h5>
+                </div>
             </div>
-          </div>
-          <div class="row gx-2">
-            <!-- Iterating over the products list -->
-            <div class="col-sm-6 col-md-4 col-lg-2 h-100 mb-5" th:each="product : ${latestProducts}">
-              <div class="card card-span h-100 text-white rounded-3">
-                <div class="card-img-wrapper">
-                  <img class="img-fluid rounded-3" th:src="@{${product.imageBase64}}" alt="..." />
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3">
+                <div class="col" th:each="product : ${latestProducts}">
+                    <div class="card h-100 product-card">
+                        <div class="card-img-wrapper position-relative">
+                            <img class="img-fluid rounded-top" th:src="@{${product.imageBase64}}" alt="product image" />
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-danger" th:if="${product.offer != null}">
+                                    <i class="fas fa-tag me-1"></i>
+                                    <span th:text="${product.offer.discountPercentage}">20% off</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="product-title text-truncate mb-2" th:text="${product.name}">Cheese Burger</h5>
+                            <div class="price-container mb-2">
+                                <span class="current-price" th:text="${product.offer != null ? (product.offer.offerPrice != null ? product.offer.offerPrice : product.price) : product.price}"></span>
+                                <span class="original-price" th:if="${product.offer != null and product.offer.offerPrice != null}">
+                                    <del th:text="${product.price}"></del>
+                                </span>
+                            </div>
+                            <div class="button-container d-flex gap-2">
+                                <form th:action="@{/Addwishlist/{id}(id=${product.id})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </form>
+                                <form th:action="@{/Addcart/{id}(id=${product.id})}" method="post" class="d-inline flex-grow-1">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                                        <i class="fas fa-cart-plus me-1"></i>
+                                        <span class="d-none d-sm-inline">Add to Cart</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-img-overlay ps-0">
-                  <span class="badge bg-danger p-2 ms-3">
-                    <i class="fas fa-tag me-2 fs-0"></i>
-                    <span class="fs-0" th:text="${product.offer != null ? product.offer.discountPercentage : ''}">20% off</span>
-                  </span>
-                </div>
-                <div class="card-body ps-0">
-                  <h5 class="fw-bold text-1000 text-truncate mb-1" th:text="${product.name}">Cheese Burger</h5>
-                  <span class="text-1000 fw-bold">
-                    <span th:text="${product.offer != null ? (product.offer.offerPrice != null ? product.offer.offerPrice : product.price) : product.price}"></span>
-                    <span th:if="${product.offer != null and product.offer.offerPrice != null}">
-                      <del th:text="${product.price}"></del>
-                    </span>
-                  </span>
-                </div>
-      
-                <!-- Buttons for wishlist and cart -->
-                
-              </div>
-              <div class="button-container d-flex justify-content-start align-items-center">
-                <form th:action="@{/Addwishlist/{id}(id=${product.id})}" method="post">
-                  <button type="submit" class="btn wishlist h-auto">
-                      <i class="fas fa-heart"></i> 
-                  </button>
-              </form>
-              <form th:action="@{/Addcart/{id}(id=${product.id})}" method="post">
-                <button type="submit" class="btn add-to-cart">
-                    <i class="fas fa-cart-plus"></i> Add to
-                </button>
-            </form>
-              </div>
-
             </div>
-          </div>
         </div>
-      </section>
+    </section>
     
-      <!-- <section> close ============================-->
-      <!-- ============================================-->
-
-
-      <section id="testimonial">
+    <!-- All Products Section (Similar Structure) -->
+    <section class="product-section" id="all-products">
         <div class="container">
-          <div class="row h-100">
-            <div class="col-lg-7 mx-auto text-center mb-6">
-              <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">All Products</h5>
+            <div class="row h-100">
+                <div class="col-lg-7 mx-auto text-center mb-4">
+                    <h5 class="fw-bold fs-3 fs-lg-5 lh-sm">All Products</h5>
+                </div>
             </div>
-          </div>
-          <div class="row gx-2">
-            <!-- Iterating over the products list -->
-            <div class="col-sm-6 col-md-4 col-lg-2 h-100 mb-5" th:each="product : ${products}">
-              <div class="card card-span h-100 text-white rounded-3">
-                <div class="card-img-wrapper">
-                  <img class="img-fluid rounded-3" th:src="@{${product.imageBase64}}" alt="..." />
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3">
+                <div class="col" th:each="product : ${products}">
+                    <div class="card h-100 product-card">
+                        <div class="card-img-wrapper position-relative">
+                            <img class="img-fluid rounded-top" th:src="@{${product.imageBase64}}" alt="product image" />
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-danger" th:if="${product.offer != null}">
+                                    <i class="fas fa-tag me-1"></i>
+                                    <span th:text="${product.offer.discountPercentage}">20% off</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="product-title text-truncate mb-2" th:text="${product.name}">Cheese Burger</h5>
+                            <div class="price-container mb-2">
+                                <span class="current-price" th:text="${product.offer != null ? (product.offer.offerPrice != null ? product.offer.offerPrice : product.price) : product.price}"></span>
+                                <span class="original-price" th:if="${product.offer != null and product.offer.offerPrice != null}">
+                                    <del th:text="${product.price}"></del>
+                                </span>
+                            </div>
+                            <div class="button-container d-flex gap-2">
+                                <button class="btn btn-outline-danger btn-sm wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm flex-grow-1" 
+                                        th:onclick="|window.location.href='@{/addtoCart/{id}(id=${product.id})}'|">
+                                    <i class="fas fa-cart-plus me-1"></i>
+                                    <span class="d-none d-sm-inline">Add to Cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-img-overlay ps-0">
-                  <span class="badge bg-danger p-2 ms-3">
-                    <i class="fas fa-tag me-2 fs-0"></i>
-                    <span class="fs-0" th:text="${product.offer != null ? product.offer.discountPercentage : ''}">20% off</span>
-                  </span>
-                </div>
-                <div class="card-body ps-0">
-                  <h5 class="fw-bold text-1000 text-truncate mb-1" th:text="${product.name}">Cheese Burger</h5>
-                  <span class="text-1000 fw-bold">
-                    <span th:text="${product.offer != null ? (product.offer.offerPrice != null ? product.offer.offerPrice : product.price) : product.price}"></span>
-                    <span th:if="${product.offer != null and product.offer.offerPrice != null}">
-                      <del th:text="${product.price}"></del>
-                    </span>
-                  </span>
-                </div>
-      
-                <!-- Buttons for wishlist and cart -->
-                
-              </div>
-              <div class="button-container d-flex justify-content-start align-items-center">
-                <button class="btn wishlist h-auto">
-                  <i class="fas fa-heart"></i>
-                </button>
-                <button class="btn add-to-cart " th:onclick="|window.location.href='@{/addtoCart/{id}(id=${product.id})}'|">
-                  <i class="fas fa-cart-plus"></i> Add to Cart
-                </button>
-              </div>
-
             </div>
-          </div>
         </div>
-      </section>
+    </section>
       
 
 
       <!-- ============================================-->
       <!-- <section> begin ============================-->
-        <section class="py-8 overflow-hidden">
+        <section class="categories-section py-8 overflow-hidden">
           <div class="container">
               <div class="col-lg-7 mx-auto text-center mb-6">
                   <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Categories</h5>
               </div>
-      
+              
               <!-- Scrollable container for categories -->
               <div class="scroll-container">
-                  <div class="category-item" th:each="category : ${categories}">
-                    <a th:href="@{/categories/{id}(id=${category.id})}" class="text-decoration-none">
-                      <div class="card card-span h-100 rounded-circle text-center">
-                          <!-- Image with specific height and width -->
-                          <img class="img-fluid rounded-circle" th:src="${category.imageBase64}" alt="..." style="height: 200px; width: 200px;" />
-                          <div class="card-body ps-0">
-                              <!-- Category Name under the image -->
-                              <h5 class="text-center fw-bold text-1000 text-truncate mb-2" th:text="${category.name}"></h5>
-                          </div>
+                  <div class="category-wrapper">
+                      <div class="category-item" th:each="category : ${categories}">
+                          <a th:href="@{/categories/{id}(id=${category.id})}" class="text-decoration-none">
+                              <div class="category-card">
+                                  <div class="img-wrapper">
+                                      <img class="img-fluid" th:src="${category.imageBase64}" alt="category image" />
+                                  </div>
+                                  <div class="category-name">
+                                      <h5 class="fw-bold text-1000 text-truncate mb-0" th:text="${category.name}">
+                                          Category Name
+                                      </h5>
+                                  </div>
+                              </div>
+                          </a>
                       </div>
-                    </a>
                   </div>
               </div>
           </div>
@@ -648,8 +660,9 @@
     <!--    JavaScripts-->
     <!-- ===============================================-->
    
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/custom.js"></script>
+    
   </body>
 
 </html>
