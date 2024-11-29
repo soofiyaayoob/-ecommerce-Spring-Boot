@@ -7,6 +7,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.Session.Cookie;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -54,7 +55,7 @@ public class confi {
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
 		return new SimpleUrlAuthenticationSuccessHandler("/");
-		//return new SucessHandler();
+	
 		
 	}
 	
@@ -63,13 +64,7 @@ public class confi {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
 		  httpSecurity.cors().and()
 	        .csrf(csrf -> csrf.disable()); 
-//		  httpSecurity
-//	         .authorizeHttpRequests(req -> req
-//	             .requestMatchers("/", "/public/**","/css","js").permitAll() 
-//	         
-//	             .anyRequest().authenticated()
-//		  .anonymous().disable() 
-//	         );
+
 		  httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
 	     
 	       httpSecurity .formLogin()
@@ -87,26 +82,15 @@ public class confi {
 	            .logoutSuccessUrl("/login?logout")
 	            .permitAll());
 	
-//		  httpSecurity.httpBasic(Customizer.withDefaults());
-//	
-//	        httpSecurity.formLogin().disable();
-//	        httpSecurity.httpBasic().disable();
 
-	  //  httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	    httpSecurity
 	    .sessionManagement()
-	        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED); // Ensures each request is authenticated individually
+	        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
 	    return httpSecurity.build();
 	}
 
-//	@Bean
-//	public AuthenticationProvider authenticationProvider() {
-//		DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
-//		authenticationProvider.setUserDetailsService( detailsService());
-//		authenticationProvider.setPasswordEncoder(passwordEncoder());
-//		return authenticationProvider;
-//	}
+
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
 	    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -120,12 +104,7 @@ public class confi {
 		return new BCryptPasswordEncoder();
 	}
 	
-//	@Bean
-//	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//		return authenticationConfiguration.getAuthenticationManager();
-//		
-//	}
-//	
+
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 	    return authenticationConfiguration.getAuthenticationManager();
@@ -149,24 +128,7 @@ public class confi {
 	        return mailSender;
 	    }
 	 
-//	 @Bean
-//	 public CookieSerializer cookieSerializer() {
-//	     DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-//	     serializer.setCookieName("JSESSIONID");
-//	     serializer.setSameSite("None"); // or "None" if you need cross-origin requests
-//	  
-//	     serializer.setUseSecureCookie(false); // Ensure secure attribute is true for HTTPS
-//	        serializer.setUseHttpOnlyCookie(true);
-//	     serializer.setCookiePath("/");
-//	     return serializer;
-//	 }
-//	
-//	 @Bean
-//	    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//	        RedisTemplate<String, Object> template = new RedisTemplate<>();
-//	        template.setConnectionFactory(redisConnectionFactory);
-//	        return template;
-//	    }
+
 
 
 	 

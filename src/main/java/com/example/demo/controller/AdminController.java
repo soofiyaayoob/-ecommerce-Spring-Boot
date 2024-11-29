@@ -2,10 +2,9 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Base64;
+
 import java.util.List;
-import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -189,12 +187,12 @@ public class AdminController {
 	
 	        return "allProducts";
 	    }
-	     @GetMapping("/users")
-	     public String listUsers(Model model) {
-	         List<UserEntity> users = userService.getAllUsers(); // Fetch users from the service
-	         model.addAttribute("users", users);
-	         return "Allusers"; 
-	     }
+//	     @GetMapping("/users")
+//	     public String listUsers(Model model) {
+//	         List<UserEntity> users = userService.getAllUsers(); // Fetch users from the service
+//	         model.addAttribute("users", users);
+//	         return "Allusers"; 
+//	     }
 	     
 //	     @PostMapping("/users/deactivate/{id}")
 //	     @ResponseBody
@@ -238,6 +236,32 @@ public class AdminController {
 	         }
 	         return "EditProduct"; 
 	     }
+	     
+     
+	     @GetMapping("/users")
+	     public String getAllUsers(Model model) {
+	    	List<UserEntity> user= userService.getAllUsers();
+	    	model.addAttribute("users",user);
+	     	return "users";
+	     }
+	     
+	
+	     
+
+	     @PostMapping("/users/toggleActive/{id}")
+	     @ResponseBody
+	     public ResponseEntity<String> deactivateUser(@PathVariable Long id) {
+	    	 System.out.println("hey there");
+	         try {
+	             userService.toggleActive(id);
+	             return ResponseEntity.ok("User deactivated successfully.");
+	         } catch (Exception e) {
+	             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                                  .body("Failed to deactivate user soo");
+	         }
+	     }
+	     
+	     
 
 	     
 	    	} 	

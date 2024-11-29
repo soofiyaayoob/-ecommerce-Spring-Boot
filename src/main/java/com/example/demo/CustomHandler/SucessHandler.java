@@ -32,11 +32,11 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	        System.out.println("Generated JWT Token: " + jwt);
 	       
 
-	        // Set the JWT in a cookie
+	       
 	        ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
 	                .httpOnly(true)
 	                .path("/")
-	                .maxAge(7 * 24 * 60 * 60) // 1 week
+	                .maxAge(7 * 24 * 60 * 60) 
 	                .secure(true)
 	                .build();
 	        response.addHeader("Set-Cookie", cookie.toString());
@@ -46,7 +46,7 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	        System.out.println("User Roles: " + authorities);
 
 
-	        // Determine redirect URL based on roles
+	       
 	        String redirectUrl;
 	       
 	        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
@@ -56,10 +56,10 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	            redirectUrl = "/";
 	        } else {
 	        	System.out.println("no user role");
-	            redirectUrl = "/login?error=true"; // fallback in case no role is found
+	            redirectUrl = "/login?error=true"; 
 	        }
 
-	        // Perform the redirect
+	       
 	        response.sendRedirect(redirectUrl);
 	    }
 	}

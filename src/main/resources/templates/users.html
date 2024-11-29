@@ -9,7 +9,7 @@
 	<div class="d-flex justify-content-center mb-4">
 	        <div class="input__container">
 	            <div class="shadow__input"></div>
-	            <button class="input__button__shadow">
+	            <button class="input_button_shadow">
 	                <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" height="20px" width="20px">
 	                    <path d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2z" fill-rule="evenodd" fill="#17202A"></path>
 	                </svg>
@@ -35,40 +35,48 @@
                 <td th:text="${user.username}">Username</td>
                 <td th:text="${user.gender}">Gender</td>
                 <td th:text="${user.email}">Email</td>
-                <td th:text="${user.phone}">Phone No</td>
+                <td th:text="${user.mobileNo}">Phone No</td>
                 <td>
                     <ul>
-                        <li th:each="address : ${user.addresses}" th:text="${address}">Address</li>
+                        <li th:each="address : ${user.addresses}"th:text="${address.state + ', ' + address.city + ', ' + address.pincode}">Address</li>
                     </ul>
                 </td>
-                
                 <td>
-                    <button th:attr="data-id=${user.id}"
-                            th:text="${user.active ? 'Deactivate' : 'Inactive'}"
+                    <button id="toggleButton"
                             th:class="${user.active ? 'btn-active' : 'btn-inactive'}"
-                            onclick="deactivateUser(this)">Deactivate</button>
+                            th:text="${user.active ? 'Deactivate' : 'Activate'}"
+                            onclick="toggleUserStatus([[$user.id]],this)">
+                    </button>
                 </td>
+                
+                
             </tr>
         </tbody>
     </table>
 
     <script>
-        function deactivateUser(button) {
-            const userId = button.getAttribute("data-id");
-            $.ajax({
-                url: `/admin/users/deactivate/${userId}`,
-                type: 'POST',
-                success: function() {
-                    button.textContent = "Inactive";
-                    button.classList.remove("btn-active");
-                    button.classList.add("btn-inactive");
-                },
-                error: function() {
-                    alert("Failed to deactivate user.");
-                }
-            });
+     function toggleUserStatus(userId, button) {
+    fetch(`/admin/users/toggleActive/${userId}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        if (response.ok) {
+            // Update the button text and class
+            const isActive = button.classList.contains('btn-active');
+            button.classList.toggle('btn-active', !isActive);  // Switch classes
+            button.classList.toggle('btn-inactive', isActive);  // Switch classes
+            button.textContent = isActive ? 'Activate' : 'Deactivate'; // Update button text
+        } else {
+            alert('Failed to update user status');
         }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+      
+
     </script>
+    
 
     <style>
         .btn-active {
@@ -167,7 +175,7 @@
 				margin-bottom: 25px;
 		    }
 
-		    .input__button__shadow {
+		    .input_button_shadow {
 		        cursor: pointer;
 		        border: none;
 		        background: none;
@@ -179,7 +187,7 @@
 		        padding: 5px;
 		    }
 
-		    .input__button__shadow:hover {
+		    .input_button_shadow:hover {
 		        background: rgba(255, 255, 255, 0.411);
 		    }
 

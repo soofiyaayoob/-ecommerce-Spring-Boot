@@ -6,7 +6,15 @@
     <title>Menu Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        /* Styles for the overlay */
+        /* Responsive and improved styles */
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
+
         .product-overlay {
             position: fixed;
             top: 0;
@@ -14,54 +22,57 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            display: none; /* Initially hidden */
+            display: none;
             justify-content: center;
             align-items: center;
+            z-index: 1000;
+            overflow: auto;
         }
 
         .product-form {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-form label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .product-form input,
-        .product-form textarea,
-        .product-form select {
+            padding: 30px;
+            border-radius: 10px;
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            margin: 20px;
         }
 
-        .product-form button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-        }
-
-        .product-form button:hover {
-            background-color: #218838;
-        }
-
-        /* Close button for overlay */
         .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 24px;
+            font-size: 30px;
+            color: #dc3545;
             cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #a71d2a;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -70,7 +81,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/" th:href="@{/}">My Restaurant</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -87,69 +98,130 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5">
+    <div class="container">
         <h1 class="mb-4">Menu Management</h1>
 
-        <!-- Add Product Button (Aligned Right) -->
+        <!-- Add Product Button -->
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" onclick="showAddProductForm()">Add Product</button>
         </div>
 
         <!-- Product Table -->
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Offer Price</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="product : ${products}">
-                    <td><img th:src="@{${product.imageUrl}}" alt="Product Image" class="img-thumbnail" style="width: 100px;"></td>
-                    <td th:text="${product.name}">Product Name</td>
-                    <td th:text="${product.price}">0.00</td>
-                    <td th:text="${product.offerPrice}">0.00</td>
-                    <td th:text="${product.description}">Product Description</td>
-                    <td th:text="${product.category}">Category</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm">Update</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Offer Price</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.id}">
+                        </td>
+                        <td>
+                            <img th:src="@{${product.imageUrl}}" 
+                                 alt="Product Image" 
+                                 class="product-image img-thumbnail">
+                        </td>
+                        <td th:text="${product.name}">Product Name</td>
+                        <td th:text="${product.price}">0.00</td>
+                        <td th:text="${product.offerPrice}">0.00</td>
+                        <td th:text="${product.description}">Product Description</td>
+                        <td th:text="${product.category}">Category</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" 
+                            th:onclick="'showUpdateProductForm(' + ${product.id} + ')'">
+                                Update
+                            </button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Add Product Overlay -->
     <div id="add-product-overlay" class="product-overlay">
-        <div id="add-product-form" class="product-form">
+        <div class="product-form">
             <span class="close-btn" onclick="closeAddProductForm()">&times;</span>
-            <h2>Add New Product</h2>
+            <h2 class="mb-4">Add New Product</h2>
             <form th:action="@{/admin/Addproduct}" method="post" enctype="multipart/form-data">
-                <label for="productName">Name:</label>
-                <input type="text" id="productName" name="productName" required>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="productName" name="productName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="productPrice" class="form-label">Price:</label>
+                    <input type="number" class="form-control" id="productPrice" name="productPrice" step="0.01" required>
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="offerPrice" class="form-label">Offer Price (Optional):</label>
+                    <input type="number" class="form-control" id="offerPrice" name="offerPrice" step="0.01">
+                </div> -->
+                <div class="mb-3">
+                    <label for="productDescription" class="form-label">Description:</label>
+                    <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="productImage" class="form-label">Image:</label>
+                    <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" required>
+                </div>
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Category:</label>
+                    <select class="form-select" id="categorySelect" name="category" required>
+                        <option value="">Select a Category</option>
+                        <option th:each="category : ${categories}" 
+                                th:value="${category.id}" 
+                                th:text="${category.name}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Add Product</button>
+            </form>
+        </div>
+    </div>
 
-                <label for="productPrice">Price:</label>
-                <input type="number" id="productPrice" name="productPrice" required>
-
-                <label for="productDescription">Description:</label>
-                <textarea id="productDescription" name="productDescription" required></textarea>
-
-                <label for="productImage">Image:</label>
-                <input type="file" id="productImage" name="productImage" accept="image/*" required>
-
-                <label for="categorySelect">Category:</label>
-                <select id="categorySelect" name="category" required>
-                    <option value="">Select a Category</option>
-                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                </select>
-
-                <button type="submit" class="add-product-button">Add Product</button>
+    <!-- Update Product Overlay -->
+    <div id="update-product-overlay" class="product-overlay">
+        <div class="product-form">
+            <span class="close-btn" onclick="closeUpdateProductForm()">&times;</span>
+            <h2 class="mb-4">Update Product</h2>
+            <form th:action="@{/admin/updateProduct}" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="updateProductId" name="productId">
+                <div class="mb-3">
+                    <label for="updateProductName" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="updateProductName" name="productName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="updateProductPrice" class="form-label">Price:</label>
+                    <input type="number" class="form-control" id="updateProductPrice" name="productPrice" step="0.01" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="updateProductDescription" class="form-label">Description:</label>
+                    <textarea class="form-control" id="updateProductDescription" name="productDescription" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="updateProductImage" class="form-label">Update Image:</label>
+                    <input type="file" class="form-control" id="updateProductImage" name="productImage" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label for="updateCategorySelect" class="form-label">Category:</label>
+                    <select class="form-select" id="updateCategorySelect" name="category" required>
+                        <option value="">Select a Category</option>
+                        <option th:each="category : ${categories}" 
+                                th:value="${category.id}" 
+                                th:text="${category.name}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Update Product</button>
             </form>
         </div>
     </div>
@@ -158,21 +230,46 @@
         // Function to show the 'Add Product' form
         function showAddProductForm() {
             document.getElementById('add-product-overlay').style.display = 'flex';
-            document.getElementById('add-product-form').style.display = 'block';
         }
 
         // Function to close the 'Add Product' form
         function closeAddProductForm() {
             document.getElementById('add-product-overlay').style.display = 'none';
-            document.getElementById('add-product-form').style.display = 'none';
         }
 
-        // Close the form if clicked outside of it
+        // Function to show the 'Update Product' form
+        function showUpdateProductForm(productId) {
+            const updateOverlay = document.getElementById('update-product-overlay');
+            updateOverlay.style.display = 'flex';
+
+            // Fetch product details via AJAX (you'll need to implement this server-side)
+            fetch(`/admin/product/${productId}`)
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('updateProductId').value = product.id;
+                    document.getElementById('updateProductName').value = product.name;
+                    document.getElementById('updateProductPrice').value = product.price;
+                    // document.getElementById('updateOfferPrice').value = product.offerPrice || '';
+                    document.getElementById('updateProductDescription').value = product.description;
+                    document.getElementById('updateCategorySelect').value = product.categoryId;
+                });
+        }
+
+        // Function to close the 'Update Product' form
+        function closeUpdateProductForm() {
+            document.getElementById('update-product-overlay').style.display = 'none';
+        }
+
+        // Close forms when clicking outside
         window.onclick = function(event) {
-            const overlay = document.getElementById('add-product-overlay');
-            const form = document.getElementById('add-product-form');
-            if (event.target === overlay) {
+            const addOverlay = document.getElementById('add-product-overlay');
+            const updateOverlay = document.getElementById('update-product-overlay');
+            
+            if (event.target === addOverlay) {
                 closeAddProductForm();
+            }
+            if (event.target === updateOverlay) {
+                closeUpdateProductForm();
             }
         };
     </script>

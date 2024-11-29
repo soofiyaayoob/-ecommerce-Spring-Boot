@@ -6,6 +6,8 @@ import org.apache.catalina.User;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,70 +40,30 @@ public class OrderEntity {
 	private CurrentDateTimeProvider orderAt;
 	
 	private LocalDateTime orderedAt;
+	public enum OrderStatus {
+	    PENDING,    
+	    PROCESSING,  
+	    SHIPPED,     
+	    DELIVERED,   
+	    CANCELED,    
+	    RETURNED     
+	}
+@Enumerated(EnumType.STRING)
+	private OrderStatus status=OrderStatus.PENDING;
 	
 	 @ManyToOne
      @JoinColumn(name = "address_id")
 	 private AddressEntity shippingAddress; 
 	 
+	 private String paymentType;
+	 
+	
 	 @PrePersist
 	    protected void onCreate() {
 	        this.orderedAt = LocalDateTime.now();
 	    }
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
-	public UserEntity getUser() {
-		return user;
-	}
-
-	public void setUser(UserEntity user) {
-		this.user = user;
-	}
-
-	public CurrentDateTimeProvider getOrderAt() {
-		return orderAt;
-	}
-
-	public void setOrderAt(CurrentDateTimeProvider orderAt) {
-		this.orderAt = orderAt;
-	}
-
-	public LocalDateTime getOrderedAt() {
-		return orderedAt;
-	}
-
-	public void setOrderedAt(LocalDateTime orderedAt) {
-		this.orderedAt = orderedAt;
-	}
-
-	public AddressEntity getShippingAddress() {
-		return shippingAddress;
-	}
-
-	public void setShippingAddress(AddressEntity shippingAddress) {
-		this.shippingAddress = shippingAddress;
-	}
-
-	public OrderEntity(Long id, UserEntity user, CurrentDateTimeProvider orderAt, LocalDateTime orderedAt,
-			AddressEntity shippingAddress) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.orderAt = orderAt;
-		this.orderedAt = orderedAt;
-		this.shippingAddress = shippingAddress;
-	}
-
-	public OrderEntity() {
-		
-	}
-	 
-	 
 
 }

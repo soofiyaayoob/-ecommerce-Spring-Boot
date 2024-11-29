@@ -31,4 +31,19 @@ public class EmailService {
 //	        message.setText("Your OTP code is: ");
 //	        mailSender.send(message);
 //	    }
+
+	    public Boolean sendResetPasswordMail(String url, String email) {
+	        try {
+	            SimpleMailMessage message = new SimpleMailMessage();
+	            message.setTo(email);
+	            message.setSubject("Reset Password");
+	            message.setText("To change your password, click the link below:\n" + url);
+	            
+	            mailSender.send(message); 
+	            return true; 
+	        } catch (Exception e) {
+	            e.printStackTrace(); 
+	            return false;
+	        }
+	    }
 }

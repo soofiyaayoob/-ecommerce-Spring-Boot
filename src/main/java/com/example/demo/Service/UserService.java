@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
+
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repositry.AddressRepo;
@@ -74,7 +75,7 @@ public class UserService{
 	    return userRepo.save(user);
 	}
 
-
+@Transactional
 		public List<UserEntity> getAllUsers() {
 			
 			return userRepo.findAll();
@@ -104,9 +105,47 @@ public class UserService{
 		   public void saveAddress(AddressEntity address) {
 		        addressRepo.save(address);
 		    }
+
+
+		public UserEntity getUserByEmail(String email) {
+			
+			return userRepo.findByEmail(email);
+		}
+
+
+		public UserEntity getUserByToken(String token) {
+			
+			return userRepo.findByToken(token);
+		}
+
+
+		public void setPassword(UserEntity userByToken, String password) {
+			userByToken.setPassword(passwordEncoder.encode(password));
+			userByToken.setToken(null);
+			userRepo.save(userByToken);
+			
+		}
+
+
+		public void setToken(UserEntity userByEmail, String token) {
+			userByEmail.setToken(token);
+			userRepo.save(userByEmail);
+			
+		}
+
+		public void toggleActive(Long id) {
+			 UserEntity user = userRepo.findById(id)
+          .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+			 user.setActive(!user.isActive());
+			 userRepo.save(user);
+}
+			
+		}
+
+
 		
 		
-	}
+	
 
 	
 

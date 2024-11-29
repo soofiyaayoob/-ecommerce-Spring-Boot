@@ -1,91 +1,143 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offer Management</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .table-responsive {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center">Offer Management</h1>
+    <div class="container-fluid p-4">
+        <h1 class="text-center mb-4">Offer Management</h1>
 
-    <!-- Add Offer Button -->
-    <div class="text-start mb-4">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addOfferModal">
-            Add Offer
-        </button>
-    </div>
+        <!-- Add Offer Button -->
+        <div class="text-end mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfferModal">
+                Add Offer
+            </button>
+        </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Product Image</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Offer Price</th>
-                    <th>Offer Percentage</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Active</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="offer : ${offers}">
-                    <td><img th:src="${offer.productImage}" alt="Product Image" class="img-thumbnail" style="width: 100px; height: auto;"></td>
-                    <td th:text="${offer.productName}"></td>
-                    <td th:text="${offer.price} + ' $'"></td>
-                    <td th:text="${offer.offerPrice} + ' $'"></td>
-                    <td th:text="${offer.offerPercentage} + '%'"></td>
-                    <td th:text="${offer.startDate}"></td> <!-- Assuming startDate is a string or formatted as required -->
-                    <td th:text="${offer.endDate}"></td>   <!-- Assuming endDate is a string or formatted as required -->
-                    <td th:text="${offer.active} ? 'Active' : 'Inactive'"></td> <!-- Displaying either 'Active' or 'Inactive' based on the value of offer.active -->
-                    <td>
-                        <form th:action="@{/offer-management/delete/{id}(id=${offer.id})}" method="post">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    
-</div>
+        <!-- Offers Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>product id</th>
+                        <th>Product Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Offer Price</th>
+                        <th>Offer %</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr th:each="offer : ${offers}">
+                        <td th:text="${product.id}">
 
-</div>
-
-<!-- Add Offer Modal -->
-<div class="modal fade" id="addOfferModal" tabindex="-1" role="dialog" aria-labelledby="addOfferModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addOfferModalLabel">Add New Offer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form th:action="@{/offer-management/add}" method="post">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="discountPercentage">Discount Percentage</label>
-                        <input type="number" class="form-control" id="discountPercentage" name="discountPercentage" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="endDate">Offer End Date</label>
-                        <input type="date" class="form-control" id="endDate" name="endDate" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Offer</button>
-                </div>
-            </form>
+                        </td>
+                        <td>
+                            <img th:src="${offer.productImage}" 
+                                 alt="Product Image" 
+                                 class="product-image img-thumbnail">
+                        </td>
+                        <td th:text="${offer.productName}"></td>
+                        <td th:text="${offer.price} + ' $'"></td>
+                        <td th:text="${offer.offerPrice} + ' $'"></td>
+                        <td th:text="${offer.offerPercentage} + '%'"></td>
+                        <td th:text="${offer.startDate}"></td>
+                        <td th:text="${offer.endDate}"></td>
+                        <td>
+                            <span th:class="${offer.active} ? 'badge bg-success' : 'badge bg-secondary'" 
+                                  th:text="${offer.active} ? 'Active' : 'Inactive'"></span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                
+                                <form th:action="@{/offer-management/delete/{id}(id=${offer.id})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
+    <!-- Add Offer Modal -->
+    <div class="modal fade" id="addOfferModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Offer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action="@{/offer-management/add}" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="productId" class="form-label">Product ID</label>
+                            <input type="text" class="form-control" id="productId" name="productId" 
+                                   placeholder="Enter Product ID" required>
+                            <small class="form-text text-muted">
+                                Enter the unique identifier of the product for this offer
+                            </small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                            <input type="number" class="form-control" id="discountPercentage" 
+                                   name="discountPercentage" min="0" max="100" required>
+                            <small class="form-text text-muted">
+                                Enter discount percentage (0-100)
+                            </small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">Offer End Date</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Offer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+       
+    </script>
 </body>
 </html>

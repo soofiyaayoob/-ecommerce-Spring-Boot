@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class OtpService {
 	
 	private static final int OTP_LENGTH = 6;
-    private static final int EXPIRY_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+    private static final int EXPIRY_DURATION = 5 * 60 * 1000; 
     private final SecureRandom secureRandom = new SecureRandom();
     private final Map<String, OtpData> otpStore = new HashMap<>();
 
