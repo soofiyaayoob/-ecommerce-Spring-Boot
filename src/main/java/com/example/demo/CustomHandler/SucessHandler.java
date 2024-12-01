@@ -56,7 +56,7 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	            redirectUrl = "/";
 	        } else {
 	        	System.out.println("no user role");
-	            redirectUrl = "/login?error=true"; 
+	            redirectUrl = "/login?error=UsernotFound"; 
 	        }
 
 	       

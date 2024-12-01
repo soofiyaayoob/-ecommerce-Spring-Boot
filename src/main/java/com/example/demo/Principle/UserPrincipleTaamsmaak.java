@@ -33,11 +33,14 @@ private UserEntity userEntity;
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
+		
 		return userEntity.getUsername();
 	}
+	  public boolean isActive() {
+	        return userEntity.isActive(); 
+	    }
 	public String getEmail() {
-		// TODO Auto-generated method stub
+		
 		return userEntity.getEmail();
 	}
 	 public Long getUserid() {

@@ -32,22 +32,22 @@ public class UserEntity {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 
-	    @Column(nullable = false)
+	    @Column
 	    private String fullName;
 
-	    @Column(nullable = false, unique = true)
+	    @Column( unique = true)
 	    private String username;
 
-	    @Column(nullable = false)
+	    @Column
 	    private String mobileNo;
 
-	    @Column(nullable = false)
+	    @Column
 	    private String gender;
 	    
-	    @Column(nullable = false)
+	    @Column
 	    private String password;
 	    
-	    @Column(nullable = false)
+	    @Column
 	    private String email;
 	    
 	    @Column
@@ -77,7 +77,7 @@ public class UserEntity {
 	    private List<OrderEntity> orderProducts;
 	    
 	    
-	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	    @OneToMany(mappedBy = "user",  orphanRemoval = true)
 	    private List<WishlistEntity> wishlists;
 
 	    

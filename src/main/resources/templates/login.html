@@ -78,8 +78,16 @@
         </form>
     
         <!-- Display error message if login fails -->
-        <div id="error-message" class="error-message mt-3">
-            <span th:if="${param.error}" th:text="'Invalid username or password'"></span>
+        
+        <div th:if="${session.error != null}" style="color: red;">
+            <p th:text="${session.error}"></p>
+        </div>
+        
+        <!-- If session.error is null, display param.error (Invalid username or password) -->
+        <div th:if="${session.error == null}">
+            <div id="error-message" class="error-message mt-3">
+                <span th:if="${param.error}" th:text="'Invalid username or password'"></span>
+            </div>
         </div>
         <div class="mt-3 text-center">
             <button type="button" class="btn btn-link" id="forgotPasswordToggle">Forgot Password?</button>

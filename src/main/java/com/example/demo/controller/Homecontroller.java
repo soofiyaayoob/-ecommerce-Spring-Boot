@@ -6,6 +6,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.management.AttributeNotFoundException;
 import javax.security.auth.login.AccountNotFoundException;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,6 +61,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
+import org.hibernate.internal.build.AllowSysOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -235,7 +238,7 @@ public class Homecontroller {
 		 
 		  List<AddressEntity> addresses = userService.getAddressesByUserId();
 		
-		 System.out.println(addresses.get(0).getPincode());
+		
 		 model.addAttribute("totalPrice",totalPrice);
 		 model.addAttribute("totalSaved",formattedMrp);
          model.addAttribute("cartItems",cart);
@@ -264,6 +267,29 @@ public class Homecontroller {
 			return "redirect:/cart";
 	    }
 	  
+	  @GetMapping("/profile")
+		public String getprofile(Model model) {
+		UserEntity user= userService.findUser();
+		model.addAttribute("newAddress",new AddressEntity());
+		  model.addAttribute("user",user);
+			return "profile";
+		}
+	  
+	  @PostMapping("profile/updateUser")
+	  public String updateUser(@ModelAttribute("user") UserEntity user) {
+		  System.out.println(user.getId());
+	      userService.updateUser(user); 
+	      
+	      return "redirect:/profile"; 
+	  }
+	  
+	  @PostMapping("/profile/addaddress")
+	  public String addAddress(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak principleTaamsmaak) {
+		  address.setUser(principleTaamsmaak.getUser());
+	      userService.saveAddress(address); 
+	      return "redirect:/profile";
+	  }
+
 	  
 
 	

@@ -108,9 +108,8 @@
                           </a>
       
                           <!-- User Menu -->
-                          <a href="profile" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
-                             class="btn btn-white shadow-warning text-warning"
-                             data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                          <a th:href="@{/profile}" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
+                             class="btn btn-white shadow-warning text-warning">
                               <i class="fas fa-user me-1"></i>
                               <span class="d-none d-lg-inline" th:text="${#authentication.principal.username}"></span>
                           </a>

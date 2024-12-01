@@ -42,12 +42,14 @@
                     </ul>
                 </td>
                 <td>
-                    <button id="toggleButton"
-                            th:class="${user.active ? 'btn-active' : 'btn-inactive'}"
-                            th:text="${user.active ? 'Deactivate' : 'Activate'}"
-                            onclick="toggleUserStatus([[$user.id]],this)">
-                    </button>
+                    <button id="toggleButton" 
+                    th:class="${user.active ? 'btn-active' : 'btn-inactive'}" 
+                    th:text="${user.active ? 'Deactivate' : 'Activate'}" 
+                    th:onclick="'toggleUserStatus(' + ${user.id} + ', this)'">
+            </button>
+            
                 </td>
+              
                 
                 
             </tr>
@@ -61,11 +63,11 @@
     })
     .then(response => {
         if (response.ok) {
-            // Update the button text and class
+          
             const isActive = button.classList.contains('btn-active');
-            button.classList.toggle('btn-active', !isActive);  // Switch classes
-            button.classList.toggle('btn-inactive', isActive);  // Switch classes
-            button.textContent = isActive ? 'Activate' : 'Deactivate'; // Update button text
+            button.classList.toggle('btn-active', !isActive); 
+            button.classList.toggle('btn-inactive', isActive);  
+            button.textContent = isActive ? 'Activate' : 'Deactivate'; 
         } else {
             alert('Failed to update user status');
         }

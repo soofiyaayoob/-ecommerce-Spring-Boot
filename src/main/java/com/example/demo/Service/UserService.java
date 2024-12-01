@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
@@ -139,6 +140,18 @@ public class UserService{
 			 user.setActive(!user.isActive());
 			 userRepo.save(user);
 }
+
+		public UserEntity findUser() {
+			long id=this.getCurrentUserId();
+			UserEntity user=userRepo.findById(id).orElseThrow();
+			return user;
+		}
+
+		public void updateUser(UserEntity user) {
+			user.setPassword(user.getPassword());
+			userRepo.save(user);
+			
+		}
 			
 		}
 

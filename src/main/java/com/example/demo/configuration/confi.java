@@ -34,7 +34,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.CustomHandler.SucessHandler;
-import com.example.demo.Service.UserDetailsServiceTaamsmaak;
+import com.example.demo.Principle.UserDetailsServiceTaamsmaak;
 import com.example.demo.filter.JwtFilter;
 
 import jakarta.servlet.ServletContext;
