@@ -272,12 +272,14 @@ public class Homecontroller {
 		UserEntity user= userService.findUser();
 		model.addAttribute("newAddress",new AddressEntity());
 		  model.addAttribute("user",user);
+		  
 			return "profile";
 		}
 	  
 	  @PostMapping("profile/updateUser")
-	  public String updateUser(@ModelAttribute("user") UserEntity user) {
+	  public String updateUser(@ModelAttribute("user") UserEntity user,@AuthenticationPrincipal UserPrincipleTaamsmaak principleTaamsmaak) {
 		  System.out.println(user.getId());
+		  user.setPassword(principleTaamsmaak.getPassword());
 	      userService.updateUser(user); 
 	      
 	      return "redirect:/profile"; 
@@ -285,10 +287,39 @@ public class Homecontroller {
 	  
 	  @PostMapping("/profile/addaddress")
 	  public String addAddress(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak principleTaamsmaak) {
+		  System.out.println("got end adda adress");
 		  address.setUser(principleTaamsmaak.getUser());
 	      userService.saveAddress(address); 
 	      return "redirect:/profile";
 	  }
+	  
+	
+
+	  @PostMapping("profile/resetPassword")
+	    public String resetPassword(
+	            @RequestParam("currentPassword") String currentPassword,
+	            @RequestParam("newPassword") String newPassword,RedirectAttributes redirectAttributes) {
+	          
+	       
+	          try {
+	     
+	        	   userService.changePassword(currentPassword,newPassword);
+	             
+	              redirectAttributes.addFlashAttribute("message", "Password changed successfully.");
+	              System.out.println();
+	            
+
+	          } catch (Exception e) {
+	             
+	              redirectAttributes.addFlashAttribute("error", e.getMessage());
+	             
+	          }
+	          System.out.println("Flash message: " + redirectAttributes.getFlashAttributes());
+	          return "redirect:/profile"; 
+	       
+	      }
+	  
+
 
 	  
 

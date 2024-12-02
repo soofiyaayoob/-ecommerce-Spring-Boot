@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
@@ -65,6 +66,15 @@ public class AdminServices {
 		productEntity.setImageName(imageFile.getOriginalFilename());
 		productEntity.setImageData(imageFile.getBytes());
 		productRepo.save(productEntity);
+	}
+	public void AddRestaurant(UserEntity userEntity) {
+	userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+	 for (AddressEntity address : userEntity.getAddresses()) {
+         address.setUser(userEntity);
+     }
+	userEntity.setRole(Role.RESTAURANT);
+	userRepo.save(userEntity);
+		
 	}
 	
 	

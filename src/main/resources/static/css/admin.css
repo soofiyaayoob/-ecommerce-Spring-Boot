@@ -14,18 +14,18 @@ body {
 
 /* Navbar */
 .navbar {
-    background-color:orange;
+    background-color: orange;
     color: white;
     width: 100%;
-    padding: 0.5rem 1rem; /* Reduced padding for smaller height */
+    padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.3s ease; /* Smooth animation effect */
+    transition: all 0.3s ease;
 }
 
 .navbar-brand {
-    font-size: 1.5rem; /* Adjusted font size */
+    font-size: 1.5rem;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -36,6 +36,7 @@ body {
     display: flex;
     list-style: none;
 }
+
 .nav-item {
     margin-left: 20px;
 }
@@ -49,234 +50,148 @@ body {
     text-decoration: underline;
 }
 
-.navbar-brand {
-    font-size: 1.5rem;
-}
 .navbar:hover {
-    background-color: darkorange; 
-    padding: 0.8rem 1rem; 
+    background-color: darkorange;
+    padding: 0.8rem 1rem;
 }
 
-
-
+/* Main Container */
 .main-container {
     display: flex;
     flex-grow: 1;
     height: 100%;
 }
 
-
-/* Main Content */
 .main-content {
     flex-grow: 1;
     padding: 2rem;
     background-color: #ffffff;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     margin-top: 20px;
     font-size: 1.5rem;
-    
 }
-
-
-.main-container > .sidebar, 
-.main-container > .main-content {
-    height: 100%;
-}
-
 
 .welcome-note {
-    margin-bottom: 3rem; 
+    margin-bottom: 3rem;
     text-align: center;
 }
-
 
 .options-container {
     display: flex;
     gap: 2rem;
     justify-content: center;
     flex-wrap: wrap;
-    max-width: 900px; 
+    max-width: 900px;
     margin: 50px auto;
 }
-    
-    .option-box {
-        display: flex; /* Align icon and text */
-        flex-direction: column; /* Stack icon and text */
-        align-items: center; /* Center icon and text */
-        padding: 1rem;
-        border: 1px solid #ccc; /* Optional: Add border for visibility */
-        border-radius: 8px; /* Optional: Rounded corners */
-        width: 170px; /* Optional: Fixed width for boxes */
-        transition: box-shadow 0.3s; /* Optional: Smooth shadow transition */
-    }
-    
-    .option-box:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Shadow on hover */
-    }
 
-/* Option Icon */
+.option-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 170px;
+    transition: box-shadow 0.3s;
+}
+
+.option-box:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .option-icon {
-    width: 50px; /* Adjust the icon size */
+    width: 50px;
     height: 50px;
-    margin-right: 1rem; /* Space between icon and text */
+    margin-right: 1rem;
 }
 
-/* Ensure two rows of four boxes */
+/* Ensure Four Boxes Per Row */
 .options-container .option-box {
-    flex: 1 1 calc(20% - 2rem); /* Five boxes per row */
-    max-width: 150px; /* Fixed width for boxes */
+    flex: 1 1 calc(25% - 2rem); /* Four boxes per row */
+    max-width: 200px;
 }
-.product-form {
+
+/* Forms */
+.product-form, .admin-form, .category-form, .offer-form {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #ffffff;
-    padding: 2rem;
+    padding: 1.5rem; /* Reduced padding */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     z-index: 1000;
     width: 600px;
- 
-    height: auto; /* Set to auto for dynamic height or specify a fixed height like 400px */
- 
+    max-height: 80%; /* Maintain responsiveness */
+    overflow-y: auto; /* Scroll if content overflows */
 }
 
-.product-form h2 {
+.product-form h2, 
+.admin-form h2, 
+.category-form h2, 
+.offer-form h2 {
     text-align: center;
     margin-bottom: 1rem;
 }
 
-.product-form label {
+.product-form label, 
+.admin-form label, 
+.category-form label, 
+.offer-form label {
     display: block;
     margin-top: 1rem;
 }
 
-.product-form input, .product-form textarea, .product-form select, .product-form button {
+.product-form input, 
+.admin-form input, 
+.category-form input, 
+.offer-form input,
+.product-form textarea, 
+.admin-form select, 
+.category-form select, 
+.offer-form button {
     width: 100%;
     margin-top: 0.5rem;
-  
+    height: 36px; /* Reduced height for inputs */
 }
 
-.product-form button {
+.product-form textarea {
+    height: 70px; /* Adjusted height for textareas */
+}
+
+.product-form button, 
+.admin-form button, 
+.category-form button, 
+.offer-form button {
     margin-top: 1rem;
+    height: 40px; /* Consistent button height */
 }
-.product-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-.product-form input, 
-.product-form textarea, 
-.product-form select, 
-.product-form button {
-    width: 100%;
-    margin-top: 0.5rem; 
-    height: 40px;
-    
 
-    
-}
-.add-product-button {
-    background-color: black; 
-    color: white;           
-    border: none;            
+.add-product-button, 
+.add-admin-button, 
+.add-category-button {
+    background-color: black;
+    color: white;
+    border: none;
     padding: 0.5rem;
-    cursor: pointer;       
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.add-product-button:hover {
-    background-color: #444;  
-}
-.admin-form {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    z-index: 1000;
-    width: 600px; 
-}
-
-.admin-form h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.admin-form label {
-    display: block;
-    margin-top: 1rem;
-}
-
-.admin-form input, .admin-form select, .admin-form button {
-    width: 100%;
-    margin-top: 0.5rem;
-    height: 27px; 
-}
-
-.add-admin-button {
-    background-color: black; 
-    color: white;           
-    border: none;             
-    padding: 0.5rem;         
-    cursor: pointer;       
-    transition: background-color 0.3s; 
-}
-
-.add-admin-button:hover {
-    background-color: #444;   /* Slightly lighter on hover */
-}
-
-.admin-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-.product-form div {
-    display: flex; 
-    align-items: center; 
-    margin-bottom: 5px; 
-
-}
-.product-form input[type="checkbox"] {
-    width: 15px; 
-    height: 15px; 
-    transform: scale(0.8); /* Scale down the checkbox */
-    margin-right: 5px; 
-    cursor: pointer; 
-}
-.add-category-button {
-    background-color: black; 
-    color: white;           
-    border: none;            
-    padding: 0.5rem;          
-    cursor: pointer;        
-    transition: background-color 0.3s; 
-}
-
+.add-product-button:hover, 
+.add-admin-button:hover, 
 .add-category-button:hover {
-    background-color: #444;  
+    background-color: #444;
 }
-.category-overlay {
+
+/* Overlays */
+.product-overlay, 
+.admin-overlay, 
+.category-overlay, 
+.offer-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -288,58 +203,91 @@ body {
     justify-content: center;
     z-index: 1000;
 }
-.category-form {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    z-index: 1000;
-    width: 600px; 
+
+/* Notifications */
+.success {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
-.offer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); 
+
+.error {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* Checkboxes */
+.product-form div {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    margin-bottom: 5px;
 }
-.offer-form {
+
+.product-form input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    transform: scale(0.8);
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+
+.alert {
     position: fixed;
-    top: 50%;
+    top: 20px;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    z-index: 1000;
-    width: 600px;  /* Increased width */
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    animation: fadeInOut 5s forwards;
 }
 
- .success {
-	      background-color: green;
-	      color: white;
-		  
-	      padding: 10px;
-		  margin-bottom: 20px;
-		 border-radius: 5px;
-	  }
+/* Success alert styling */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
 
- .error {
-	      background-color: red;
-	      color: white;
-		 
-		 padding: 10px;
-		 margin-bottom: 20px;
-		  border-radius: 5px;
-	  }
-	  
+/* Error alert styling */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Animation to fade in and out the message */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    10% {
+        opacity: 1;
+        visibility: visible;
+    }
+    90% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Optional: To prevent the message from showing until it's assigned */
+.alert.show {
+    opacity: 1;
+    visibility: visible;
+}

@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -148,12 +149,34 @@ public class UserService{
 		}
 
 		public void updateUser(UserEntity user) {
-			user.setPassword(user.getPassword());
+			
 			userRepo.save(user);
 			
 		}
-			
+
+		public void changePassword(String currentPassword, String newPassword) {
+		    
+	        UserEntity user = userRepo.findById(this.getCurrentUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+
+	        
+	        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+	            throw new RuntimeException("Current password is incorrect");
+	        }
+
+	     
+	        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+	            throw new RuntimeException("New password cannot be the same as the current password");
+	        }
+
+	       
+	        user.setPassword(passwordEncoder.encode(newPassword));
+	        userRepo.save(user);
+	    }
+		
 		}
+		
+			
+		
 
 
 		

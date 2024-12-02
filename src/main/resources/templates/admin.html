@@ -33,10 +33,7 @@
         <div class="welcome-note">Welcome to the Admin Dashboard!</div>
 		
         <div class="options-container">
-            <div class="option-box" onclick="showAddProductForm()">
-                <i class="fas fa-box option-icon"></i>
-                <span>Add Product</span>
-            </div>
+            
             <div class="option-box"  th:onclick="|window.location.href='@{/admin/products}'|">
                 <i class="fas fa-box-open option-icon"></i>
                 <span>View Products</span>
@@ -57,61 +54,31 @@
                 <i class="fas fa-user-shield option-icon"></i>
                 <span>Add Admin</span>
             </div>
-            <div class="option-box" onclick="showAddCategoryForm()">
-                <i class="fas fa-folder-plus option-icon"></i>
-                <span>Add Categories</span>
-            </div>
+            
             <div class="option-box">
                 <i class="fas fa-chart-line option-icon"></i>
                 <span>Analytical Chart</span>
             </div>
-            <div class="option-box" onclick="showAddOfferForm()">
-                <i class="fas fa-gift option-icon"></i>
-                <span>Add Offers</span>
-            </div>
+            
             <div class="option-box">
                 <i class="fas fa-tag option-icon"></i>
                 <span>View Offers</span>
             </div>
+            <div class="option-box" th:onclick="showAddRestaurantForm()">
+                <i class="fas fa-utensils option-icon"></i>
+                <span>Add Restaurant</span>
+            </div>
+            
         </div>
     </div>
 </div>
-<div th:if="${message}" class="alert" th:class="${messageType}">
-    <span th:text="${message}"></span>
+<div th:if="${message}" class="alert alert-success">
+    <p th:text="${message}"></p>
+</div>
+<div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}"></p>
 </div>
 
-
-<div id="add-product-overlay" class="product-overlay" style="display: none;">
-    <div id="add-product-form" class="product-form" style="display: none;">
-        <h2>Add New Product</h2>
-        <form th:action="@{/admin/Addproduct}" method="post" enctype="multipart/form-data">
-            <label for="productName">Name:</label>
-            <input type="text" id="productName" name="productName" required>
-
-            <label for="productPrice">Price:</label>
-            <input type="number" id="productPrice" name="productPrice" required>
-
-            <label for="productDescription">Description:</label>
-            <textarea id="productDescription" name="productDescription" required></textarea>
-
-            <label for="productImage">Image:</label>
-            <input type="file" id="productImage" name="productImage" accept="image/*" required>
-
-            <!-- Sizes - displayed horizontally -->
-            
-
-            <!-- Dynamic Category Selection -->
-            <label for="categorySelect">Category:</label>
-            <select id="categorySelect" name="category" required>
-                <option value="">Select a Category</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-            </select>
-
-            <button type="submit" class="add-product-button">Add Product</button>
-            <button type="button" onclick="hideAddProductForm()">Cancel</button>
-        </form>
-    </div>
-</div>
 
 <div id="add-admin-overlay" class="admin-overlay" style="display: none;">
     <div id="add-admin-form" class="admin-form" style="display: none;">
@@ -150,55 +117,54 @@
 		        <option value="other">Other</option>
 		    </select>
 
-		    <button type="submit">Add Admin</button>
+		    <button type="submit" class="w-100 btn-primary">Add Admin</button>
 		</form>
 
     </div>
 </div>
+<div id="add-restaurant-overlay" class="admin-overlay" style="display: none;">
+    <div id="add-restaurant-form" class="admin-form" style="display: none;">
+        <h2>Add New Restaurant</h2>
+        <form th:action="@{/admin/addRestaurant}" method="post" th:object="${restuarntForm}">
+            <!-- Restaurant Details -->
+            <label for="restaurantName">Restaurant Name:</label>
+            <input type="text" th:field="*{username}" id="restaurantName" name="restaurantName" required>
 
+           
+            <label for="contactNumber">Contact Number:</label>
+            <input type="tel" th:field="*{mobileNo}" id="contactNumber" name="contactNumber" required>
 
-<div id="add-category-overlay" class="category-overlay" style="display: none;">
-    <div id="add-category-form" class="product-form" style="display: none;">
-		
-        <h2>Add New Category</h2>
-		
-        <form id="categoryForm" th:action="@{/admin/Addcategories}" method="post" enctype="multipart/form-data">
-            <label for="categoryName">Category Name:</label>
-            <input type="text" id="categoryName" name="categoryName" required>
-			
-			<label for="categoryImage">Category Image:</label>
-			  <input type="file" id="categoryImage" name="categoryImage" accept="image/*" required>
+            <label for="email">Email:</label>
+            <input type="email" th:field="*{email}" id="email" name="email" required>
 
-            <button type="submit" class="add-category-button">Submit</button>
-            <button type="button" onclick="hideAddCategoryForm()">Cancel</button>
+            <!-- Address Section -->
+            <label for="state">State:</label>
+		    <input type="text" th:field="*{addresses[0].state}" id="state" name="state" required>
+
+		    <label for="city">City:</label>
+		    <input type="text" th:field="*{addresses[0].city}" id="city" name="city" required>
+
+		    <label for="pincode">Pincode:</label>
+		    <input type="text" th:field="*{addresses[0].pincode}" id="pincode" name="pincode" required>
+
+		    <!-- Password Section -->
+		    <label for="password">Password:</label>
+		    <input type="password" th:field="*{password}" id="password" name="password" required>
+
+            
+
+            <!-- Additional Details -->
+            
+            
+
+            <button type="submit">Add Restaurant</button>
         </form>
     </div>
 </div>
 
-<div id="add-offer-overlay" class="offer-overlay" style="display: none;"   >
-	
-    <div id="add-offer-form" class="admin-form" style="display: none;">
-        <h2>Add Offer</h2>
-        <form id="offerForm" th:action="@{/admin/Addoffer}" method="post">
-            <label for="productId">Product ID:</label>
-            <input type="text" id="productId" name="productId" required >
 
-           
-           
 
-            <label for="discountPercentage">Discount Percentage:</label>
-            <input type="number" id="discountPercentage" name="discountPercentage" min="0" max="100" required>
 
-            <label for="offerEndDate">Offer End Date:</label>
-            <input type="date" id="offerEndDate" name="offerEndDate" required>
-		
-            <button type="submit" class="add-offer-button">Add Offer</button>
-			
-			
-            <button type="button" onclick="hideAddOfferForm()">Cancel</button>
-        </form>
-    </div>
-</div>
 
 
 

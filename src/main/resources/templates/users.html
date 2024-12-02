@@ -22,6 +22,7 @@
             <tr>
                 <th>Full Name</th>
                 <th>Username</th>
+                <th>Role</th>
                 <th>Gender</th>
                 <th>Email</th>
                 <th>Phone No</th>
@@ -33,6 +34,7 @@
             <tr th:each="user : ${users}">
                 <td th:text="${user.fullName}">Full Name</td>
                 <td th:text="${user.username}">Username</td>
+                <td class="font-weight-bold" th:text="${user.role}"></td>
                 <td th:text="${user.gender}">Gender</td>
                 <td th:text="${user.email}">Email</td>
                 <td th:text="${user.mobileNo}">Phone No</td>

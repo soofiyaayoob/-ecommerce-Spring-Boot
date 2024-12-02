@@ -56,7 +56,9 @@ public class ProductEntity {
 	    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
 	    private OfferEntity offer;
 
-	    // One-to-many relationship with Size
+	    @ManyToOne
+	    @JoinColumn(name = "user_id")  // Foreign key to link product to a restaurant owner (user)
+	    private UserEntity userEntity; 
 	  
 	    
 	    @ManyToOne
@@ -73,6 +75,6 @@ public class ProductEntity {
 	    
 
 
-	    // Getters and setters
+	    
 	    
 }

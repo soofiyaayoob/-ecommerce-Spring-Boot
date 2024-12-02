@@ -1,21 +1,15 @@
 package com.example.demo.Principle;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
-import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repositry.UserRepo;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserDetailsServiceTaamsmaak implements UserDetailsService{
@@ -34,15 +28,15 @@ public class UserDetailsServiceTaamsmaak implements UserDetailsService{
 			throw new UsernameNotFoundException("oh ithink you are not existed");
 			
 		}
-		  if (!user.isActive()) {
-	            
-	            HttpSession session = request.getSession();
-	            session.setAttribute("error", "User account is disabled");
-	            System.out.println("isss activate ");
-
-	          
-	            throw new DisabledException("User account is disabled");
-	        }
+//		  if (!user.isActive()) {
+//	            // Set the error message in the session
+//	            HttpSession session = request.getSession();
+//	            session.setAttribute("error", "User account is disabled");
+//	            System.out.println("isss activate ");
+//
+//	          
+//	            throw new DisabledException("User account is disabled");
+//	        }
 	return new UserPrincipleTaamsmaak(user);
 	}
 	

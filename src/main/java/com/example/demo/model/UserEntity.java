@@ -47,7 +47,7 @@ public class UserEntity {
 	    @Column
 	    private String password;
 	    
-	    @Column
+	    @Column( unique = true)
 	    private String email;
 	    
 	    @Column
@@ -67,7 +67,10 @@ public class UserEntity {
 	        RESTAURANT
 	    }
 	    
-	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    private List<ProductEntity> products; 
+	    
+	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	    private List<AddressEntity> addresses=new ArrayList<>();
 	    
 	    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -77,7 +80,7 @@ public class UserEntity {
 	    private List<OrderEntity> orderProducts;
 	    
 	    
-	    @OneToMany(mappedBy = "user",  orphanRemoval = true)
+	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	    private List<WishlistEntity> wishlists;
 
 	    
