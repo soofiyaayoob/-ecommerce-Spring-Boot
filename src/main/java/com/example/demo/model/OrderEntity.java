@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.EnumMap;
+import java.util.EnumSet;
+
 
 import org.apache.catalina.User;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
@@ -40,16 +43,35 @@ public class OrderEntity {
 	private CurrentDateTimeProvider orderAt;
 	
 	private LocalDateTime orderedAt;
-	public enum OrderStatus {
-	    PENDING,    
-	    PROCESSING,  
-	    SHIPPED,     
-	    DELIVERED,   
-	    CANCELED,    
-	    RETURNED     
-	}
+
 @Enumerated(EnumType.STRING)
 	private OrderStatus status=OrderStatus.PENDING;
+
+// Enum for Order Status
+public enum OrderStatus {
+    PENDING,
+    PROCESSING,
+    SHIPPED,
+    CANCELED,
+    DELIVERED,
+    RETURNED;
+	private static final EnumMap<OrderStatus, EnumSet<OrderStatus>> validTransitions = new EnumMap<>(OrderStatus.class);
+
+    static {
+        validTransitions.put(PENDING, EnumSet.of(PROCESSING, CANCELED));
+        validTransitions.put(PROCESSING, EnumSet.of(SHIPPED, CANCELED));
+        validTransitions.put(SHIPPED, EnumSet.of(DELIVERED, CANCELED));
+        validTransitions.put(DELIVERED, EnumSet.of(RETURNED));
+        validTransitions.put(RETURNED, EnumSet.noneOf(OrderStatus.class)); // No transitions allowed from RETURNED
+        validTransitions.put(CANCELED, EnumSet.noneOf(OrderStatus.class)); // No transitions allowed from CANCELED
+    }
+
+    public boolean canTransitionTo(OrderStatus targetStatus) {
+        return validTransitions.get(this).contains(targetStatus);
+    }
+
+    
+}
 	
 	 @ManyToOne
      @JoinColumn(name = "address_id")
@@ -61,6 +83,17 @@ public class OrderEntity {
 	 @PrePersist
 	    protected void onCreate() {
 	        this.orderedAt = LocalDateTime.now();
+	    }
+	 
+
+	    public boolean updateStatus(OrderStatus newStatus) {
+	        if (this.status.canTransitionTo(newStatus)) {
+	            this.status = newStatus;
+	            return true;
+	        } else {
+	            System.out.println("Invalid status transition: " + this.status + " -> " + newStatus);
+	            return false;
+	        }
 	    }
 
 

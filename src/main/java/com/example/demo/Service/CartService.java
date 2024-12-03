@@ -9,6 +9,7 @@ import javax.management.AttributeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.CartEntity;
 import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.ProductEntity;
@@ -38,10 +39,13 @@ public class CartService {
 	@Autowired
 	UserRepo userRepo;
 	
+	@Autowired
+	Commonutil commonutil;
+	
 	
 	
 	public boolean addProductToCart(Long productId) throws AttributeNotFoundException {
-	    Long userId = userService.getCurrentUserId(); 
+	    Long userId = commonutil.getCurrentUserId(); 
 	    CartEntity cart = cartRepo.findByUserId(userId);
 
 	    
@@ -74,7 +78,7 @@ public class CartService {
 
 @Transactional
 	public List<CartItemEntity> getbyUserId() {
-		Long id= userService.getCurrentUserId();
+		Long id= commonutil.getCurrentUserId();
 		
 		
 		 CartEntity cart = cartRepo.findByUserId(id);

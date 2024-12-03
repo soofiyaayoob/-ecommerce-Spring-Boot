@@ -35,6 +35,7 @@ import com.example.demo.Aspect.OtpService;
 import com.example.demo.CustomHandler.SucessHandler;
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.CartService;
+import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
@@ -87,6 +88,8 @@ public class Homecontroller {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	CategoryService categoryService;
 	
 	 @GetMapping("/")
 	    public String home(Model model,HttpSession session) {
@@ -94,7 +97,7 @@ public class Homecontroller {
 		
 		List<ProductEntity>latestproducts=productservices.LatestProduct();
 		List<ProductEntity>Allproducts=productservices.getAllProducts();
-		List<CategoryEntity>Allcategory=productservices.getAllCategories();
+		List<CategoryEntity>Allcategory=categoryService.getAllcategries();
 		
 		   model.addAttribute("greatOffers", offers);
 		   model.addAttribute("latestProducts",latestproducts);

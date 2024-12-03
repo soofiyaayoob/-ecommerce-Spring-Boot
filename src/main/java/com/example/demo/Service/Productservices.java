@@ -31,8 +31,10 @@ public class Productservices {
 	@Autowired
 	CategoryRepo categoryRepo;
 
-	public ProductEntity addProduct(ProductEntity product) {
+	public ProductEntity addProduct(ProductEntity product, MultipartFile imageFile) throws IOException {
 		
+		  product.setImageName(imageFile.getOriginalFilename());
+           product.setImageData(imageFile.getBytes());
 		return productRepo.save(product);
 	}
 
@@ -76,19 +78,19 @@ public class Productservices {
 
 }
 
-	@Transactional
-	public List<CategoryEntity> getAllCategories() {
-	    List<CategoryEntity> categories = categoryRepo.findAll();
-	    categories.forEach(category -> {
-	       
-	        
-	        
-	        String base64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(category.getImageData());
-	        category.setImageBase64(base64);
-	        
-	    });
-	    return categories;
-	}
+//	@Transactional
+//	public List<CategoryEntity> getAllCategories() {
+//	    List<CategoryEntity> categories = categoryRepo.findAll();
+//	    categories.forEach(category -> {
+//	       
+//	        
+//	        
+//	        String base64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(category.getImageData());
+//	        category.setImageBase64(base64);
+//	        
+//	    });
+//	    return categories;
+//	}
 
 
 	@Transactional
@@ -111,7 +113,7 @@ public class Productservices {
 
 	public void updateproduct(ProductEntity productEntity, MultipartFile image, Long categoryId) throws IOException {
 		String productImage=image.getOriginalFilename();
-		CategoryEntity categoryEntity=categoryService.findCayegory(categoryId);
+		CategoryEntity categoryEntity=categoryService.getCategoryById(categoryId);
 		  ProductEntity product = new ProductEntity();
 		    
 		     product.setCategory(categoryEntity); 
@@ -125,6 +127,16 @@ public class Productservices {
 	public void imageBase64(ProductEntity product) {
 		String base64="data:image/png;base64,"+Base64.getEncoder().encodeToString(product.getImageData());
 		product.setImageBase64(base64);
+	}
+
+
+	public void updateProduct(ProductEntity product, MultipartFile imageFile) throws IOException {
+		 if (!imageFile.isEmpty()) {
+		        product.setImageData(imageFile.getBytes());
+		        product.setImageName(imageFile.getOriginalFilename());
+		    }
+		productRepo.save(product);
+		
 	}
 
 

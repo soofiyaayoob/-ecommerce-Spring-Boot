@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.WishlistEntity;
@@ -34,6 +35,9 @@ productRepo productRepo;
 
 @Autowired
 UserService userService;
+
+@Autowired
+Commonutil commonutil;
 
 
 public boolean addProductToWishlist(Long id, String username) {
@@ -67,7 +71,7 @@ public List<WishlistEntity> getbyuserId() {
 	
 	
 	
-		Long id= userService.getCurrentUserId();
+		Long id= commonutil.getCurrentUserId();
 		
 		  List<WishlistEntity> wishlistEntities = wishlistRepo.findByUserId(id);
 

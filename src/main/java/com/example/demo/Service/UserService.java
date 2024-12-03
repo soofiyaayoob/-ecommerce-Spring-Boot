@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
-
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repositry.AddressRepo;
@@ -51,6 +51,9 @@ public class UserService{
 	
 	@Autowired
 	private jwtServiceTaamsmaak jwtservicetaamsmaak;
+	
+	@Autowired
+	private Commonutil commonutil;
 
 	
 	
@@ -83,24 +86,12 @@ public class UserService{
 			return userRepo.findAll();
 		}
 		
-		public Long getCurrentUserId() {
-	        
-	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	        
-	        
-	        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipleTaamsmaak) {
-	           
-	            UserPrincipleTaamsmaak userPrinciple = (UserPrincipleTaamsmaak) authentication.getPrincipal();
-	            return userPrinciple.getUserid();  
-	        }
-	        
-	        return null;  
-	    }
+	
 
 
 		public List<AddressEntity> getAddressesByUserId() {
 			
-		Long userId=this.getCurrentUserId();
+		Long userId=commonutil.getCurrentUserId();
 		List<AddressEntity> addressEntities = addressRepo.findByUserId(userId);
 			return addressEntities;
 		}
@@ -143,7 +134,7 @@ public class UserService{
 }
 
 		public UserEntity findUser() {
-			long id=this.getCurrentUserId();
+			long id=commonutil.getCurrentUserId();
 			UserEntity user=userRepo.findById(id).orElseThrow();
 			return user;
 		}
@@ -156,7 +147,7 @@ public class UserService{
 
 		public void changePassword(String currentPassword, String newPassword) {
 		    
-	        UserEntity user = userRepo.findById(this.getCurrentUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+	        UserEntity user = userRepo.findById(commonutil.getCurrentUserId()).orElseThrow(() -> new RuntimeException("User not found"));
 
 	        
 	        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {

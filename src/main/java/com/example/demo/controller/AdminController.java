@@ -66,36 +66,6 @@ public class AdminController {
 	}
 	
 	
-	 @PostMapping("/Addcategories")
-	    public String createCategory(@RequestParam String categoryName, 
-                @RequestParam("categoryImage") MultipartFile file,RedirectAttributes redirectAttributes) throws IOException {
-		 
-		 CategoryEntity categoryEntity=new CategoryEntity();
-		 
-		 if(!file.isEmpty()) {
-			 String image=file.getOriginalFilename();
-			byte[] data= file.getBytes();
-			 categoryEntity.setImageName(image);
-			 categoryEntity.setImageData(data);
-		 }
-	       boolean existCategory=categoryService.existCategory(categoryName);
-	       
-	       if(existCategory) {
-	    	   redirectAttributes.addFlashAttribute("message", "Category already exist!");
-	    	   redirectAttributes.addFlashAttribute("messageType", "error");  
-	       }else {
-	    	   categoryEntity.setName(categoryName);
-	    	   categoryService.SaveCategory(categoryEntity);
-	    	   redirectAttributes.addFlashAttribute("message","category added successfulyy!");
-	    	   redirectAttributes.addFlashAttribute("messageType", "sucess");  
-	    	   
-	       }
-	      
-	       return "redirect:/admin/dash";
-	        
-	    }
-
-	 
 	 
 	 
   
@@ -179,9 +149,80 @@ public class AdminController {
 	    	         return "redirect:/admin/dash"; 
 	    	     }
 	    	 }
-	  
 	     
-	    	} 	
+	     @GetMapping("/categories")
+	     public String getMethodName(Model model) {
+	    	 List<CategoryEntity> category=categoryService.getAllcategries();
+	    	 model.addAttribute("categories",category);
+	     	return "categoryAdmin";
+	     }
+	     
+
+		 @PostMapping("/category/add")
+		    public String createCategory(@RequestParam String categoryName, 
+	                @RequestParam("categoryImage") MultipartFile file,RedirectAttributes redirectAttributes) throws IOException {
+			 
+			 CategoryEntity categoryEntity=new CategoryEntity();
+			 
+			 if(!file.isEmpty()) {
+				 String image=file.getOriginalFilename();
+				byte[] data= file.getBytes();
+				 categoryEntity.setImageName(image);
+				 categoryEntity.setImageData(data);
+			 }
+		       boolean existCategory=categoryService.existCategoryByname(categoryName);
+		       
+		       if(existCategory) {
+		    	   redirectAttributes.addFlashAttribute("message", "Category already exist!");
+		    	 
+		       }else {
+		    	   categoryEntity.setName(categoryName);
+		    	   categoryService.SaveCategory(categoryEntity);
+		    	   redirectAttributes.addFlashAttribute("message","category added successfulyy!");
+		    	  
+		    	   
+		       }
+		      
+		       return "redirect:/admin/categories";
+		        
+		    }
+
+		 @PostMapping ("/category/delete/{id}")
+		 public String deleteCategory(@PathVariable Long id) {
+		    
+		     categoryService.deleteCategoryById(id);
+		     return "redirect:/admin/categories"; 
+		 }
+
+		 
+		 @PostMapping("/category/edit/{id}")
+		 public String editCategory(@PathVariable("id") Long id,
+		                             @RequestParam("categoryName") String categoryName,
+		                             @RequestParam(value = "categoryImage") MultipartFile file,
+		                             RedirectAttributes redirectAttributes) throws IOException {
+			 
+
+			 
+			 try {
+			        boolean isUpdated = categoryService.updateCategory(id, categoryName, file);
+			        if (isUpdated) {
+			            redirectAttributes.addFlashAttribute("message", "Category updated successfully!");
+			        } else {
+			            redirectAttributes.addFlashAttribute("message", "Category already exists!");
+			        }
+			    } catch (Exception e) {
+			        redirectAttributes.addFlashAttribute("message", "An error occurred while updating the category.");
+			    }
+			 
+			 return "redirect:/admin/categories";  
+		   
+		 }
+
+
+	     
+	    	}
+
+
 	    	 
 	     
 
