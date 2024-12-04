@@ -41,7 +41,7 @@ public class Productservices {
 	
 	public ProductEntity GetById(Long productId) {
 		
-		return productRepo.findById(productId).orElseThrow(() -> new IllegalArgumentException("invalid prodict id"));
+		return productRepo.findById(productId).orElseThrow(() -> new IllegalArgumentException("invalid prodict id"+productId));
 	}
 
 	@Transactional
@@ -131,12 +131,26 @@ public class Productservices {
 
 
 	public void updateProduct(ProductEntity product, MultipartFile imageFile) throws IOException {
+		
+		  ProductEntity existingProduct = productRepo.findById(product.getId())
+		            .orElseThrow(() -> new RuntimeException("Product not found with ID: " + product.getId()));
 		 if (!imageFile.isEmpty()) {
 		        product.setImageData(imageFile.getBytes());
 		        product.setImageName(imageFile.getOriginalFilename());
+		    }else {
+		        // Retain the old image if no new image is uploaded
+		        product.setImageData(existingProduct.getImageData());
+		        product.setImageName(existingProduct.getImageName());
 		    }
+		
 		productRepo.save(product);
 		
+	}
+
+
+	public boolean deleteById(Long id) {
+		productRepo.deleteById(id);
+		return false;
 	}
 
 

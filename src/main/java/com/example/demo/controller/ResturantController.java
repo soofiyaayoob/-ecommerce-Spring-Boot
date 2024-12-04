@@ -2,19 +2,26 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Service.CategoryService;
+import com.example.demo.Service.OfferServicea;
 import com.example.demo.Service.Productservices;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
@@ -32,6 +39,9 @@ public class ResturantController {
 	@Autowired
 	Productservices productservices;
 	
+	@Autowired
+	OfferServicea offerServicea;
+	
 	@GetMapping("/main")
 	public String getMainpage() {
 		return "resturant";
@@ -44,67 +54,8 @@ public String getMenu(Model model) {
 	model.addAttribute("products",productservices.getAllProducts());
     return"menu";
 }
-//@PostMapping("/Addproduct")
-//public String addProduct(
-//        @RequestParam("productName") String name,
-//        @RequestParam("productPrice") Double price,
-//        @RequestParam("productDescription") String description,
-//        @RequestParam("productImage") MultipartFile image,
-//       
-//        @RequestParam("category") Long categoryId,RedirectAttributes redirectAttributes) throws IOException {  
-//	 CategoryEntity categoryEntity=categoryService.findCayegory(categoryId);
-//	  String productImage=image.getOriginalFilename();
-//	  
-//	  ProductEntity product = new ProductEntity();
-//	     product.setName(name);
-//	     product.setPrice(price);
-//	     product.setDescription(description);
-//	     product.setCategory(categoryEntity); 
-//	     product.setImageName(productImage);
-//	     product.setImageData(image.getBytes());
-//
-//    ProductEntity savedProduct =productservices.addProduct(product);
-//
-//    // Step 3: Save each size entry with a reference to the product
-//  
-//    redirectAttributes.addFlashAttribute("message","nw produced added succesfully!");
-//    redirectAttributes.addFlashAttribute("messageType","success");  
-//
-//    return "redirect:/admin/dash";
-//}
-//@PostMapping("Addoffer")
-//public String addOffer(@RequestParam ("productId") Long productId,
-//        @RequestParam("discountPercentage") Double discountPercentage,
-//        @RequestParam("offerEndDate") String offerEndDate,Model
-//        model,RedirectAttributes 
-//        redirectAttributes) {
-//	 
-//
-//	 
-//	    try {
-//	        ProductEntity product = productservices.GetById(productId);
-//	        OfferEntity offerEntity = new OfferEntity();
-//	        
-//	        LocalDate endDate = LocalDate.parse(offerEndDate);
-//	        offerEntity.setProduct(product);
-//	        offerEntity.setDiscountPercentage(discountPercentage);
-//	        offerEntity.setOfferPrice(product.getPrice() * (1 - discountPercentage / 100));
-//	        offerEntity.setOfferEndDate(endDate);
-//	        
-//	        offerServicea.addNewOffer(offerEntity);
-//	        
-//	        redirectAttributes.addFlashAttribute("message", "Offer added successfully!");
-//	        redirectAttributes.addFlashAttribute("messageType", "success");
-//	    } catch (Exception e) {
-//	    	
-//	    	 redirectAttributes.addFlashAttribute("message", "An error occurred while adding the offer.");
-//	    	 redirectAttributes.addFlashAttribute("messageType", "error");  
-//	    }
-//	    
-//	    return "redirect:/admin/dash";  
-//	}
 
-@PostMapping("/Addproduct")
+@PostMapping("product/add")
 public String addProduct(@ModelAttribute("product") ProductEntity product,
                          @RequestParam("productImage") MultipartFile imageFile) {
     try {
@@ -115,23 +66,62 @@ public String addProduct(@ModelAttribute("product") ProductEntity product,
     }
     return "redirect:/restaurant/menu-management"; 
 }
-@PostMapping("/updateProduct")
-public String updateProduct(@ModelAttribute("product") ProductEntity product,
-		 @RequestParam(value = "productImage", required = false) MultipartFile productImage,
-                            RedirectAttributes redirectAttributes) {
-System.out.println("gotten heere ");
-System.out.println(product.getName());
-    try {
-        
-    	 productservices.updateProduct(product, productImage);
-    	 System.out.println("adedded");
-        redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
-        return "redirect:/restaurant/menu-management"; // Redirect to the product list or any other page
 
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-        redirectAttributes.addFlashAttribute("error", "Failed to update product!");
-        return "redirect:/restaurant/menu-management";
-    }
+@PostMapping("product/Updtae")
+public String updateProduct(@ModelAttribute("product") ProductEntity product,
+                             @RequestParam(value = "productImage", required = false) MultipartFile productImage,RedirectAttributes attributes) throws IOException {
+	
+	
+
+    productservices.updateProduct(product,productImage);
+attributes.addFlashAttribute("message","produxt updated successfuly");
+    return "redirect:/restaurant/menu-management"; 
 }
+
+@PostMapping("product/delete/{id}")
+public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    boolean deleted = productservices.deleteById(id);
+    if (deleted) {
+       redirectAttributes.addFlashAttribute("message","deleted suucessfulyy");
+    } else {
+    	 redirectAttributes.addFlashAttribute("error", "Item not found");
+    }
+    return "redirect:/restaurant/menu-management"; 
+}
+
+
+@GetMapping("/offer-management")
+public String getOfferManagementPage(Model model) {
+ List<OfferEntity> offers= offerServicea.getAllOffers();
+  model.addAttribute("offers",offers);
+    return "offer"; 
+}
+
+@PostMapping("/offer/add")
+public String addOffer(
+        @RequestParam("productId") Long productId,
+        @RequestParam("discountPercentage") Double discountPercentage,
+        @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        RedirectAttributes redirectAttributes) {
+    try {
+        offerServicea.addOffer(productId, discountPercentage, endDate);
+       redirectAttributes.addFlashAttribute("message", "Offer added successfully!");
+    } catch (IllegalArgumentException e) {
+    	redirectAttributes.addFlashAttribute ("error", "Error: " + e.getMessage());
+    } catch (Exception e) {
+    	redirectAttributes.addFlashAttribute("error", "Unexpected error: " + e.getMessage());
+    }
+    return "redirect:/restaurant/offer-management"; 
+  }
+
+@PostMapping("/delete/{id}")
+public String deleteOffer(@PathVariable("id") Long id) {
+  
+        offerServicea.deleteOffer(id);  
+        return "redirect:/restaurant/offer-management"; 
+   
+}
+
+
+
 }

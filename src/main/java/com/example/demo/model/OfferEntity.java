@@ -30,7 +30,7 @@ public class OfferEntity {
 	
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long offerId;
+	    private Long id;
 
 	    @OneToOne
 	    @JoinColumn(name = "product_id", nullable = false)
@@ -40,7 +40,7 @@ public class OfferEntity {
 	    private Double discountPercentage;
 	    
 	    @Column(nullable = false)
-	    private Double OfferPrice;
+	    private Double offerPrice;
 
 	    @Column(nullable = false)
 	    private LocalDate offerStartDate;
@@ -50,7 +50,9 @@ public class OfferEntity {
 	    @Column(nullable = false)
 	    private LocalDate offerEndDate;
 	    
+	    private transient boolean isActive=false;
 	    
+	     
 	    @PrePersist
 	    private void setDefaultOfferStartDate() {
 	        

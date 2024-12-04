@@ -28,9 +28,70 @@
                 font-size: 0.75rem;
             }
         }
+        .alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    animation: fadeInOut 5s forwards;
+}
+
+/* Success alert styling */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Error alert styling */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Animation to fade in and out the message */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    10% {
+        opacity: 1;
+        visibility: visible;
+    }
+    90% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Optional: To prevent the message from showing until it's assigned */
+.alert.show {
+    opacity: 1;
+    visibility: visible;
+}
+
     </style>
 </head>
 <body>
+    <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
     <div class="container-fluid p-4">
         <h1 class="text-center mb-4">Offer Management</h1>
 
@@ -61,28 +122,29 @@
                 <tbody>
                     
                     <tr th:each="offer : ${offers}">
-                        <td th:text="${product.id}">
+                        <td th:text="${offer.product.id}">
 
                         </td>
                         <td>
-                            <img th:src="${offer.productImage}" 
+                            <img th:src="${offer.product.imageBase64}" 
                                  alt="Product Image" 
                                  class="product-image img-thumbnail">
                         </td>
-                        <td th:text="${offer.productName}"></td>
-                        <td th:text="${offer.price} + ' $'"></td>
+                        <td th:text="${offer.product.name}"></td>
+                        <td th:text="${offer.product.price} + ' $'"></td>
                         <td th:text="${offer.offerPrice} + ' $'"></td>
-                        <td th:text="${offer.offerPercentage} + '%'"></td>
-                        <td th:text="${offer.startDate}"></td>
-                        <td th:text="${offer.endDate}"></td>
+                        <td th:text="${offer.discountPercentage} + '%'"></td>
+                        <td th:text="${offer.offerStartDate}"></td>
+                        <td th:text="${offer.offerEndDate}"></td>
                         <td>
-                            <span th:class="${offer.active} ? 'badge bg-success' : 'badge bg-secondary'" 
-                                  th:text="${offer.active} ? 'Active' : 'Inactive'"></span>
+                            <span th:classappend="${offer.active} ? 'badge bg-success' : 'badge bg-danger'" 
+                            th:text="${offer.active} ? 'Active' : 'Not Active'"></span>
+                      
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
                                 
-                                <form th:action="@{/offer-management/delete/{id}(id=${offer.id})}" method="post" class="d-inline">
+                                <form th:action="@{/restaurant/offer/delete/{id}(id=${offer.id})}" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </div>
@@ -101,7 +163,7 @@
                     <h5 class="modal-title">Add New Offer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form th:action="@{/offer-management/add}" method="post">
+                <form th:action="@{/restaurant/offer/add}" method="post">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="productId" class="form-label">Product ID</label>

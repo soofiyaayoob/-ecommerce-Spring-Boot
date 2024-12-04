@@ -74,9 +74,70 @@
                 font-size: 0.75rem;
             }
         }
+        .alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    animation: fadeInOut 5s forwards;
+}
+
+/* Success alert styling */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Error alert styling */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Animation to fade in and out the message */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    10% {
+        opacity: 1;
+        visibility: visible;
+    }
+    90% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Optional: To prevent the message from showing until it's assigned */
+.alert.show {
+    opacity: 1;
+    visibility: visible;
+}
+
     </style>
 </head>
 <body>
+    <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -139,45 +200,45 @@
                         <td th:text="${product.category.name}">Category</td>
                         <td>
                             <button class="btn btn-warning btn-sm" 
-                            th:onclick="'showUpdateProductForm(' + ${product.id} + ')'">
+                            th:onclick="'showUpdateProductForm()'">
                                 Update
                             </button>
                             <div id="update-product-overlay" class="product-overlay">
                                 <div class="product-form">
                                     <span class="close-btn" onclick="closeUpdateProductForm()">&times;</span>
                                     <h2 class="mb-4">Update Product</h2>
-                                    <form th:action="@{/restaurant/updateProduct}" method="post" enctype="multipart/form-data" th:object="${product}">
+                                    <form th:action="@{/restaurant/product/Update}" method="post" enctype="multipart/form-data" >
                                         <!-- Hidden Field for Product ID -->
-                                        <input type="hidden" th:value="${product.id}">
+                                        <input type="hidden" th:value="${product.id}" name="id">
                                         
                                         <!-- Product Name -->
                                         <div class="mb-3">
                                             <label for="updateProductName" class="form-label">Name:</label>
-                                            <input type="text" class="form-control" id="updateProductName" th:value="${product.name}"  required>
+                                            <input type="text" class="form-control" id="updateProductName"  th:value="${product.name}" name="name" required>
                                         </div>
 
                                         <!-- Product Price -->
                                         <div class="mb-3">
                                             <label for="updateProductPrice" class="form-label">Price:</label>
-                                            <input type="number" class="form-control" id="updateProductPrice" th:value="${product.price}"  step="0.01" required>
+                                            <input type="number" class="form-control" id="updateProductPrice" name="price" th:value="${product.price}"  step="0.01" required>
                                         </div>
 
                                         <!-- Product Description -->
                                         <div class="mb-3">
                                             <label for="updateProductDescription" class="form-label">Description:</label>
-                                            <input type="text" class="form-control" id="updateProductDescription"  th:value="${product.description}"  rows="3" required>
+                                            <input type="text" class="form-control" id="updateProductDescription"  th:value="${product.description}" name="description"  rows="3" required>
                                         </div>
 
                                         <!-- Product Image -->
                                         <div class="mb-3">
                                             <label for="updateProductImage" class="form-label">Update Image:</label>
-                                            <input type="file" class="form-control" id="updateProductImage" name="productImage" accept="image/*">
+                                            <input type="file" class="form-control" id="updateProductImage" name="productImage"  accept="image/*">
                                         </div>
 
                                         <!-- Category Select -->
                                         <div class="mb-3">
                                             <label for="updateCategorySelect" class="form-label">Category:</label>
-                                            <select class="form-select" id="updateCategorySelect"  th:value="${product.category.id}"  required>
+                                            <select class="form-select" id="updateCategorySelect"  th:value="${product.category.id}" name="category.id" required>
                                                 <option value="">Select a Category</option>
                                                 <option th:each="category : ${categories}" 
                                                         th:value="${category.id}" 
@@ -189,9 +250,15 @@
 
                                         <button type="submit" class="btn btn-primary w-100">Update Product</button>
                                     </form>
+                                    
                                 </div>
                             </div>
-                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <form th:action="@{/restaurant/product/delete{id}(id=${product.id})}" method="post">
+                                
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -204,7 +271,7 @@
         <div class="product-form">
             <span class="close-btn" onclick="closeAddProductForm()">&times;</span>
             <h2 class="mb-4">Add New Product</h2>
-            <form th:action="@{/restaurant/Addproduct}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/restaurant/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="productName" class="form-label">Name:</label>
                     <input type="text" class="form-control" id="productName" th:field="*{name}" required>
@@ -236,44 +303,7 @@
         </div>
     </div>
 
-    <!-- Update Product Overlay -->
-    <!-- <div id="update-product-overlay" class="product-overlay">
-        <div class="product-form">
-            <span class="close-btn" onclick="closeUpdateProductForm()">&times;</span>
-            <h2 class="mb-4">Update Product</h2>
-            <form th:action="@{/admin/updateProduct}" method="post" enctype="multipart/form-data">
-                <input type="hidden" id="updateProductId" name="productId">
-                <div class="mb-3">
-                    <label for="updateProductName" class="form-label">Name:</label>
-                    <input type="text" class="form-control" id="updateProductName" name="productName" required>
-                </div>
-                <div class="mb-3">
-                    <label for="updateProductPrice" class="form-label">Price:</label>
-                    <input type="number" class="form-control" id="updateProductPrice" name="productPrice" step="0.01" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="updateProductDescription" class="form-label">Description:</label>
-                    <textarea class="form-control" id="updateProductDescription" name="productDescription" rows="3" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="updateProductImage" class="form-label">Update Image:</label>
-                    <input type="file" class="form-control" id="updateProductImage" name="productImage" accept="image/*">
-                </div>
-                <div class="mb-3">
-                    <label for="updateCategorySelect" class="form-label">Category:</label>
-                    <select class="form-select" id="updateCategorySelect" name="category" required>
-                        <option value="">Select a Category</option>
-                        <option th:each="category : ${categories}" 
-                                th:value="${category.id}" 
-                                th:text="${category.name}"></option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Update Product</button>
-            </form>
-        </div>
-    </div> -->
-
+    
     <script>
         // Function to show the 'Add Product' form
         function showAddProductForm() {
@@ -290,23 +320,14 @@
             const updateOverlay = document.getElementById('update-product-overlay');
             updateOverlay.style.display = 'flex';
 
-            // // Fetch product details via AJAX (you'll need to implement this server-side)
-            // fetch(`/admin/product/${productId}`)
-            //     .then(response => response.json())
-            //     .then(product => {
-            //         document.getElementById('updateProductId').value = product.id;
-            //         document.getElementById('updateProductName').value = product.name;
-            //         document.getElementById('updateProductPrice').value = product.price;
-            //         // document.getElementById('updateOfferPrice').value = product.offerPrice || '';
-            //         document.getElementById('updateProductDescription').value = product.description;
-            //         document.getElementById('updateCategorySelect').value = product.categoryId;
-            //     });
+         
         }
-
-        // Function to close the 'Update Product' form
-        function closeUpdateProductForm() {
+          // Function to close the 'Update Product' form
+          function closeUpdateProductForm() {
             document.getElementById('update-product-overlay').style.display = 'none';
         }
+
+
 
         // Close forms when clicking outside
         window.onclick = function(event) {
