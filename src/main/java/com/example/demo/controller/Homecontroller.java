@@ -216,40 +216,66 @@ public class Homecontroller {
 	  
 	  
 	  @GetMapping("/cart")
-	  public String getCart(Principal principal,Model model) {
+	  public String getCart(Principal principal,Model model,RedirectAttributes redirectAttributes) {
 		  
 	System.out.println("gootten in cart get mapping");
-		 if(principal==null) {
-			 return"login";
-		 }
-		 List<CartItemEntity> cart=cartService.getbyUserId();
+//		 if(principal==null||!((UserEntity) principal).getRole().equals("USER")) {
+//			 System.out.println(((UserEntity) principal).getRole());
+//			 redirectAttributes.addFlashAttribute("message","you need to craete a account frst");
+//			 return"login";
+//		 }
+	 if (principal == null) {
+	       
+	        return "redirect:/login";
+	    }
 		 
-		double totalPrice= cartService.calculateTotalprice(cart);
-		 double Mrp = cartService.calculateExactPrice(cart);
-//		 double totalPrice = cart.stream()
-//				    .mapToDouble(item -> {
-//				        ProductEntity product = item.getProduct();
-//				        double price = (product.getOffer() != null)
-//				                ? product.getOffer().getOfferPrice()
-//				                : product.getPrice();
-//				        return item.getQuantity() * price;
-//				    })
-//				    .sum();
-		 
-	      double saved=Mrp - totalPrice;
-		 String formattedMrp = String.format("%.2f", saved);
-		 
-		  List<AddressEntity> addresses = userService.getAddressesByUserId();
-		
-		
-		 model.addAttribute("totalPrice",totalPrice);
-		 model.addAttribute("totalSaved",formattedMrp);
-         model.addAttribute("cartItems",cart);
-         model.addAttribute("addresses",addresses);
-	    
+	
+		  
+		 List<CartItemEntity> cart;
+		try {
+			cart = cartService.getbyUserId();
+			double totalPrice= cartService.calculateTotalprice(cart);
+			 double Mrp = cartService.calculateExactPrice(cart);
+
+			 
+		      double saved=Mrp - totalPrice;
+			 String formattedMrp = String.format("%.2f", saved);
+			 
+			  List<AddressEntity> addresses = userService.getAddressesByUserId();
+			
+			
+			 model.addAttribute("totalPrice",totalPrice);
+			 model.addAttribute("totalSaved",formattedMrp);
+	         model.addAttribute("cartItems",cart);
+	         model.addAttribute("addresses",addresses);
+		    
+				 return"cart";
+		} catch (Exception e) {
+			
+			redirectAttributes.addFlashAttribute("message",e.getMessage());
 			 return"cart";
+		}
+		 
+		
+			
 		 }
 	  
+	  @PostMapping("/cart/delete/{id}")
+	  public String deleteProduct(@PathVariable Long id) {
+	      try {
+	        
+	          cartService.deleteProductById(id);
+	          System.out.println("deleted");
+	      } catch (Exception e) {
+	       
+	          System.out.println("Error deleting product with ID " + id + ": " + e.getMessage());
+	        
+	          return "redirect:/cart?error=true";
+	      }
+	    
+	      return "redirect:/cart";
+	  }
+
 	  
 	  
 	  @PostMapping("/cart/updateQuantity")
@@ -259,7 +285,7 @@ public class Homecontroller {
 	  	
 	  	return "redirect:/cart";
 	  }
-	  @PostMapping("/cart/addressform")
+	  @PostMapping("/cart/address/add")
 	    public String submitForm(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak userpriniciple) {
 	      System.out.println("getting in acrt address form");
 	      if (userpriniciple == null ||userpriniciple .getUser() == null) {
@@ -321,7 +347,6 @@ public class Homecontroller {
 	          return "redirect:/profile"; 
 	       
 	      }
-	  
 
 
 	  

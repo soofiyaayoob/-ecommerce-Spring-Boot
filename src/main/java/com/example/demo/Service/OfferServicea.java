@@ -36,7 +36,7 @@ public class OfferServicea {
 	 
     for (OfferEntity offer : offers) {
       
-        offer.setActive(offer.getOfferEndDate().isAfter(LocalDate.now()));
+        offer.setActive(offer.getEndDate().isAfter(LocalDate.now()));
 
        
         ProductEntity product = offer.getProduct();
@@ -55,7 +55,7 @@ public class OfferServicea {
 @Transactional
 	public List<OfferEntity> get4Greatoffers() {
 	
-		List<OfferEntity> offers= offerRepository.findTop4ByOfferEndDateAfterOrderByDiscountPercentageDesc(LocalDate.now());
+		List<OfferEntity> offers= offerRepository.findTop4ByEndDateAfterOrderByPercentageDesc(LocalDate.now());
 		
 		offers.forEach(offer -> {
 	        // Assuming the product's image is stored in bytes in the database
@@ -87,9 +87,9 @@ public void addOffer(Long productId, double discountPercentage, LocalDate endDat
     
     OfferEntity offer = new OfferEntity();
     offer.setProduct(product);
-    offer.setDiscountPercentage(discountPercentage);
+    offer.setPercentage(discountPercentage);
     offer.setOfferPrice(discountPrice);
-    offer.setOfferEndDate(endDate);
+    offer.setEndDate(endDate);
 
     offerRepository.save(offer);
 }

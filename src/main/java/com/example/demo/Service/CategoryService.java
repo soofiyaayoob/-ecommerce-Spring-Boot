@@ -11,6 +11,7 @@ import com.example.demo.model.CategoryEntity;
 import com.example.demo.repositry.CategoryRepo;
 
 import io.jsonwebtoken.io.IOException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryService {
@@ -30,7 +31,7 @@ public class CategoryService {
 		return;
 		
 	}
-
+@Transactional
 	public List<CategoryEntity> getAllcategries() {
 		  List<CategoryEntity> categories = categoryRepo.findAll();
 		 for (CategoryEntity category : categories) {

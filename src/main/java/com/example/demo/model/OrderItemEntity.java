@@ -1,8 +1,12 @@
 package com.example.demo.model;
 
 import java.math.BigDecimal;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +37,35 @@ public class OrderItemEntity {
 	    private ProductEntity product;  
 	    
 	    private Integer Quantity;
+	    
+	    private double price;
 
-	 
+
+@Enumerated(EnumType.STRING)
+	private OrderStatus status=OrderStatus.PENDING;
+
+// Enum for Order Status
+public enum OrderStatus {
+    PENDING,
+    SHIPPED,
+    CANCELED,
+    DELIVERED,
+    RETURNED;
+	private static final EnumMap<OrderStatus, EnumSet<OrderStatus>> validTransitions = new EnumMap<>(OrderStatus.class);
+
+    static {
+        validTransitions.put(PENDING, EnumSet.of(SHIPPED, CANCELED));
+        validTransitions.put(SHIPPED, EnumSet.of(DELIVERED, CANCELED));
+        validTransitions.put(DELIVERED, EnumSet.of(RETURNED));
+        validTransitions.put(RETURNED, EnumSet.noneOf(OrderStatus.class)); 
+        validTransitions.put(CANCELED, EnumSet.noneOf(OrderStatus.class)); 
+    }
+
+    public boolean canTransitionTo(OrderStatus targetStatus) {
+        return validTransitions.get(this).contains(targetStatus);
+    }
+
+    
+}
+
 }

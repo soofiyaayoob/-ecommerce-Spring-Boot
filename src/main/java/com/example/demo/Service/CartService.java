@@ -77,11 +77,14 @@ public class CartService {
 
 
 @Transactional
-	public List<CartItemEntity> getbyUserId() {
+	public List<CartItemEntity> getbyUserId() throws Exception {
 		Long id= commonutil.getCurrentUserId();
 		
 		
 		 CartEntity cart = cartRepo.findByUserId(id);
+		 if (cart == null) {
+	            throw new Exception("Cart not found for user with ID: " + id);
+	        }
 		        
 		 for (CartItemEntity cartItem : cart.getCartItems()) {
 		
@@ -130,5 +133,20 @@ public class CartService {
                 .sum();
 
 	}
+
+@Transactional
+	public void deleteProductById(Long id) {
+	long userid= commonutil.getCurrentUserId();
+	cartItemRepo.deleteCartItemByUserIdAndProductId(userid, id);
+		
+	}
+
+
+public void clearCart() {
+	cartItemRepo.deleteByUserId(commonutil.getCurrentUserId());
+	
+}
+
+
 }
 

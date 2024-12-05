@@ -23,8 +23,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "product_offers")
-@Check(constraints = "offer_end_date > offer_start_date")
+@Table(name = "offers")
+@Check(constraints = "end_date > start_date")
 
 public class OfferEntity {
 	
@@ -37,18 +37,18 @@ public class OfferEntity {
 	    private ProductEntity product;
 
 	    @Column(nullable = false)
-	    private Double discountPercentage;
+	    private Double percentage;
 	    
 	    @Column(nullable = false)
 	    private Double offerPrice;
 
 	    @Column(nullable = false)
-	    private LocalDate offerStartDate;
+	    private LocalDate startDate;
 
 	  
 
 	    @Column(nullable = false)
-	    private LocalDate offerEndDate;
+	    private LocalDate endDate;
 	    
 	    private transient boolean isActive=false;
 	    
@@ -56,7 +56,7 @@ public class OfferEntity {
 	    @PrePersist
 	    private void setDefaultOfferStartDate() {
 	        
-	        offerStartDate = LocalDate.now();
+	        startDate = LocalDate.now();
 	        
 	    }
 

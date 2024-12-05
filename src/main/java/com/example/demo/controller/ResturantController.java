@@ -59,7 +59,7 @@ public String getMenu(Model model) {
 public String addProduct(@ModelAttribute("product") ProductEntity product,
                          @RequestParam("productImage") MultipartFile imageFile) {
     try {
-        productservices.updateProduct(product, imageFile);
+        productservices.addProduct(product, imageFile);
     } catch (Exception e) {
         e.printStackTrace();
       

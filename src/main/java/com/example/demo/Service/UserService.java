@@ -164,7 +164,12 @@ public class UserService{
 	        userRepo.save(user);
 	    }
 		
+		public AddressEntity getAddressById(Long id) {
+	     AddressEntity address = addressRepo.findById(id).orElseThrow(() -> new RuntimeException("address not found"));
+	       return address;
+		
 		}
+}
 		
 			
 		

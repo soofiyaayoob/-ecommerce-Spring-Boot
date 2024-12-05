@@ -10,6 +10,8 @@ import com.example.demo.model.OfferEntity;
 
 @Repository
 public interface OfferRepository extends JpaRepository<OfferEntity, Long>{
-	List<OfferEntity>findTop4ByOfferEndDateAfterOrderByDiscountPercentageDesc(LocalDate currentDate);
+
+
+	List<OfferEntity> findTop4ByEndDateAfterOrderByPercentageDesc(LocalDate now);
 	
 }

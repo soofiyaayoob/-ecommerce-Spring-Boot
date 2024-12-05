@@ -6,8 +6,14 @@ import java.util.Base64;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
+import com.example.demo.model.UserEntity;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 @Component
 public class Commonutil {
 
@@ -55,4 +61,25 @@ public class Commonutil {
         return null;  
     }
     
+ public UserEntity getCurrentUser() {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        
+        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipleTaamsmaak) {
+           
+            UserPrincipleTaamsmaak userPrinciple = (UserPrincipleTaamsmaak) authentication.getPrincipal();
+            return userPrinciple.getUser();  
+        }
+        
+        return null;  
+    }
+ 
+ public void removeSessionMessage() {
+		HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes()))
+				.getRequest();
+		HttpSession session = request.getSession();
+		session.removeAttribute("OrderId");
+	
+	}
 }

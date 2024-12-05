@@ -16,7 +16,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Cart")
 public class CartEntity {
@@ -36,52 +43,6 @@ public class CartEntity {
 	    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
 	    private List<CartItemEntity> cartItems;
 
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public UserEntity getUser() {
-			return user;
-		}
-
-		public void setUser(UserEntity user) {
-			this.user = user;
-		}
-
-		public LocalDateTime getCreatedAt() {
-			return createdAt;
-		}
-
-		public void setCreatedAt(LocalDateTime createdAt) {
-			this.createdAt = createdAt;
-		}
-
-		public List<CartItemEntity> getCartItems() {
-			return cartItems;
-		}
-
-		public void setCartItems(List<CartItemEntity> cartItems) {
-			this.cartItems = cartItems;
-		}
-
-		public CartEntity(Long id, UserEntity user, LocalDateTime createdAt, List<CartItemEntity> cartItems) {
-			super();
-			this.id = id;
-			this.user = user;
-			this.createdAt = createdAt;
-			this.cartItems = cartItems;
-		}
-
-		public CartEntity() {
-			super();
-		}
-
-		
-	    
 	
 
 }

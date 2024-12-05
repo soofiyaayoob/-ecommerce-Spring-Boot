@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.ProductEntity;
 
@@ -26,6 +27,9 @@ public class Productservices {
 	@Autowired
 	CategoryService categoryService;
 	
+	@Autowired
+	Commonutil commonutil;
+	
 
 	
 	@Autowired
@@ -35,6 +39,7 @@ public class Productservices {
 		
 		  product.setImageName(imageFile.getOriginalFilename());
            product.setImageData(imageFile.getBytes());
+           product.setUserEntity(commonutil.getCurrentUser());
 		return productRepo.save(product);
 	}
 
@@ -111,18 +116,18 @@ public class Productservices {
 	}
 
 
-	public void updateproduct(ProductEntity productEntity, MultipartFile image, Long categoryId) throws IOException {
-		String productImage=image.getOriginalFilename();
-		CategoryEntity categoryEntity=categoryService.getCategoryById(categoryId);
-		  ProductEntity product = new ProductEntity();
-		    
-		     product.setCategory(categoryEntity); 
-		     product.setImageName(productImage);
-		     product.setImageData(image.getBytes());
-		     productRepo.save(product);
-		
-	}
-
+//	public void updateproduct(ProductEntity productEntity, MultipartFile image, Long categoryId) throws IOException {
+//		String productImage=image.getOriginalFilename();
+//		CategoryEntity categoryEntity=categoryService.getCategoryById(categoryId);
+//		  ProductEntity product = new ProductEntity();
+//		    
+//		     product.setCategory(categoryEntity); 
+//		     product.setImageName(productImage);
+//		     product.setImageData(image.getBytes());
+//		     productRepo.save(product);
+//		
+//	}
+//
 
 	public void imageBase64(ProductEntity product) {
 		String base64="data:image/png;base64,"+Base64.getEncoder().encodeToString(product.getImageData());

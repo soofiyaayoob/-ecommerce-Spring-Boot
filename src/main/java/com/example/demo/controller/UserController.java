@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
 import com.example.demo.Service.CategoryService;
+import com.example.demo.Service.OrderService;
 import com.example.demo.Service.UserService;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
@@ -52,6 +53,9 @@ public class UserController {
 	
 	@Autowired
 	OtpService otpService;
+	
+	@Autowired
+	OrderService orderService;
 	
 	@Value("${app.resetPasswordUrl}")
     private String resetPasswordUrl;
@@ -248,6 +252,28 @@ public class UserController {
 			}
 
 		}
+		@PostMapping("/checkout")
+		public String processCheckout(
+		        @RequestParam("addressId") Long addressId,
+		        @RequestParam("paymentMethod") String paymentMethod) throws Exception {
+
+		    // Process the order with the provided address and payment method
+		    System.out.println("Selected Address ID: " + addressId);
+		    System.out.println("Selected Payment Method: " + paymentMethod);
+		    
+		    orderService.saveOrder(addressId,paymentMethod);
+
+		 
+
+		    return "redirect:/order-confirmation";
+		}
+		
+		@GetMapping("/order-confirmation")
+		public String orderconform() {
+			return "orderConfirm";
+		}
+		
+
 	  
 
 	    }

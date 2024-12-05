@@ -1,13 +1,15 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-
+import java.util.List;
 
 import org.apache.catalina.User;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,42 +38,17 @@ public class OrderEntity {
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String orderId;
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id",nullable = false)
 	private UserEntity user;
 	
-	private CurrentDateTimeProvider orderAt;
 	
 	private LocalDateTime orderedAt;
 
-@Enumerated(EnumType.STRING)
-	private OrderStatus status=OrderStatus.PENDING;
-
-// Enum for Order Status
-public enum OrderStatus {
-    PENDING,
-    PROCESSING,
-    SHIPPED,
-    CANCELED,
-    DELIVERED,
-    RETURNED;
-	private static final EnumMap<OrderStatus, EnumSet<OrderStatus>> validTransitions = new EnumMap<>(OrderStatus.class);
-
-    static {
-        validTransitions.put(PENDING, EnumSet.of(PROCESSING, CANCELED));
-        validTransitions.put(PROCESSING, EnumSet.of(SHIPPED, CANCELED));
-        validTransitions.put(SHIPPED, EnumSet.of(DELIVERED, CANCELED));
-        validTransitions.put(DELIVERED, EnumSet.of(RETURNED));
-        validTransitions.put(RETURNED, EnumSet.noneOf(OrderStatus.class)); // No transitions allowed from RETURNED
-        validTransitions.put(CANCELED, EnumSet.noneOf(OrderStatus.class)); // No transitions allowed from CANCELED
-    }
-
-    public boolean canTransitionTo(OrderStatus targetStatus) {
-        return validTransitions.get(this).contains(targetStatus);
-    }
-
-    
-}
+	 @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	    private List<OrderItemEntity> items =new ArrayList<>();
 	
 	 @ManyToOne
      @JoinColumn(name = "address_id")
@@ -86,15 +63,7 @@ public enum OrderStatus {
 	    }
 	 
 
-	    public boolean updateStatus(OrderStatus newStatus) {
-	        if (this.status.canTransitionTo(newStatus)) {
-	            this.status = newStatus;
-	            return true;
-	        } else {
-	            System.out.println("Invalid status transition: " + this.status + " -> " + newStatus);
-	            return false;
-	        }
-	    }
+	   
 
 
 
