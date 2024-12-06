@@ -22,9 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OfferServicea;
+import com.example.demo.Service.OrderService;
 import com.example.demo.Service.Productservices;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
+import com.example.demo.model.OrderItemEntity.OrderStatus;
 import com.example.demo.model.ProductEntity;
 
 
@@ -41,6 +43,9 @@ public class ResturantController {
 	
 	@Autowired
 	OfferServicea offerServicea;
+	
+	@Autowired
+	OrderService orderService;
 	
 	@GetMapping("/main")
 	public String getMainpage() {
@@ -120,6 +125,30 @@ public String deleteOffer(@PathVariable("id") Long id) {
         offerServicea.deleteOffer(id);  
         return "redirect:/restaurant/offer-management"; 
    
+}
+
+@GetMapping("/order-management")
+public String getorders(Model model) {
+	
+	//model.addAttribute("orders",orderService.getAllOrders());
+	model.addAttribute("orderItems",orderService.getAllOrderItems());
+  return"order";
+}
+@PostMapping("/updateStatus/{id}")
+public String updateOrderStatus(@PathVariable("id") Long itemId, 
+                                @RequestParam("status") OrderStatus status, 
+                                Model model, RedirectAttributes redirectAttributes) {
+    System.out.println("Attempting to update status for item: " + itemId + " to " + status);
+   
+    try {
+        
+        orderService.updateStatus(status, itemId); 
+        redirectAttributes.addFlashAttribute("message", "Order status updated successfully!");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("message", "Error: " + e.getMessage());
+    }
+
+    return "redirect:/restaurant/order-management"; 
 }
 
 

@@ -42,7 +42,7 @@
                 <i class="fas fa-user option-icon"></i>
                 <span>View Users</span>
             </div>
-            <div class="option-box">
+            <div class="option-box" th:onclick="|window.location.href='@{/admin/orders}'|">
                 <i class="fas fa-clipboard-list option-icon"></i>
                 <span>View Orders</span>
             </div>
@@ -60,7 +60,7 @@
                 <span>Analytical Chart</span>
             </div>
             
-            <div class="option-box">
+            <div class="option-box" th:onclick="|window.location.href='@{/admin/offers}'|" >
                 <i class="fas fa-tag option-icon"></i>
                 <span>View Offers</span>
             </div>

@@ -26,6 +26,7 @@ import com.example.demo.Aspect.OtpService;
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OrderService;
 import com.example.demo.Service.UserService;
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.UserEntity;
@@ -56,6 +57,9 @@ public class UserController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	Commonutil commonutil;
 	
 	@Value("${app.resetPasswordUrl}")
     private String resetPasswordUrl;
@@ -255,13 +259,13 @@ public class UserController {
 		@PostMapping("/checkout")
 		public String processCheckout(
 		        @RequestParam("addressId") Long addressId,
-		        @RequestParam("paymentMethod") String paymentMethod) throws Exception {
+		        @RequestParam("paymentMethod") String paymentMethod,HttpSession session) throws Exception {
 
 		    // Process the order with the provided address and payment method
 		    System.out.println("Selected Address ID: " + addressId);
 		    System.out.println("Selected Payment Method: " + paymentMethod);
 		    
-		    orderService.saveOrder(addressId,paymentMethod);
+		    orderService.saveOrder(addressId,paymentMethod,session);
 
 		 
 
@@ -269,7 +273,12 @@ public class UserController {
 		}
 		
 		@GetMapping("/order-confirmation")
-		public String orderconform() {
+		public String orderconform(HttpSession session,Model model) {
+			  String orderId = (String) session.getAttribute("OrderId");
+			 
+		        model.addAttribute("orderId", orderId); // Add it to the model
+			  commonutil.removeSessionMessage();
+			 
 			return "orderConfirm";
 		}
 		

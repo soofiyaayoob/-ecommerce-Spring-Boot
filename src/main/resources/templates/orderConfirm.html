@@ -121,11 +121,12 @@
 </head>
 <body>
     <div class="confirmation-container">
-        <img src="/src/main/resources/static/img/orderconform.png" alt="Order Confirmed">
+        <img src="/img/orderconform.png" alt="Order Confirmed">
         <h1>Your order is confirmed</h1>
         <p>Thank you for shopping with us, <span th:text="${#authentication.name}"></span>!</p> <!-- Displaying username -->
-        <p>OrderId: <span th:text="${#session.getAttribute('OrderId')}"></span></p>
-        <th:block th:text="${@Commonutil.removeSessionMessage()}"></th:block>
+        <!-- <p>OrderId: <span th:text="${#session.getAttribute('OrderId')}"></span></p>
+        <th:block th:text="${@Commonutil.removeSessionMessage()}"></th:block> -->
+        <p>OrderId: <span th:text="${orderId}"></span></p>
 
         <div class="confirmation-buttons">
             <button onclick="window.location.href='home.html'">Home</button>

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.Service.AdminServices;
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OfferServicea;
+import com.example.demo.Service.OrderService;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.model.AddressEntity;
@@ -52,6 +53,9 @@ public class AdminController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	OrderService orderService;
 	
 	
 	@GetMapping("/dash")
@@ -216,6 +220,19 @@ public class AdminController {
 			 
 			 return "redirect:/admin/categories";  
 		   
+		 }
+		 
+		 @GetMapping("/orders")
+		 public String getorders(Model model) {
+			
+			 model.addAttribute("orders",orderService.getAllOrders());
+		 	return "orderAdmin";
+		 }
+		 @GetMapping("/offers")
+		 public String getoffers(Model model) {
+			
+			 model.addAttribute("offers",offerServicea.getAllOffers());
+		 	return "offerAdmin";
 		 }
 
 

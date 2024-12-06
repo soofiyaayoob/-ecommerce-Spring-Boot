@@ -143,7 +143,9 @@ public class CartService {
 
 
 public void clearCart() {
-	cartItemRepo.deleteByUserId(commonutil.getCurrentUserId());
+	
+	//cartItemRepo.deleteBycartId();
+	cartRepo.deleteByUserId(commonutil.getCurrentUserId());
 	
 }
 

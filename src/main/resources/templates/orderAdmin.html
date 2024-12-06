@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Order Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 0 auto; /* Centers the table horizontally */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        select {
+            padding: 4px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Table Order Management</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>Payment</th>
+                <th>Order Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over orders -->
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderId}"></td>
+                <!-- Iterate over items in the order -->
+                <td>
+                    <ul>
+                        <li th:each="item : ${order.items}" th:text="${item.product.name}"></li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li th:each="item : ${order.items}" th:text="${item.price}"></li>
+                    </ul>
+                </td>
+                <td th:text="${order.user.username}"></td>
+                <td th:text="${order.shippingAddress.city}"></td>
+                <td th:text="${order.paymentType}"></td>
+                <td>
+                    <!-- Display item statuses with dropdowns -->
+                    <ul>
+                        <li th:each="item : ${order.items}" th:text="${item.status}">
+                             
+                            
+                        </li>
+                    </ul>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+    
+    
+</body>
+</html>

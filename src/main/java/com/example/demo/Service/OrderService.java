@@ -12,9 +12,12 @@ import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.OrderEntity;
 import com.example.demo.model.OrderItemEntity;
+import com.example.demo.model.OrderItemEntity.OrderStatus;
+import com.example.demo.repositry.OrderItemRepo;
 import com.example.demo.repositry.OrderRepo;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 
 
@@ -32,6 +35,9 @@ public class OrderService {
 	
 	@Autowired
 	OrderRepo orderRepo;
+	
+	@Autowired
+	OrderItemRepo orderItemRepo;
 
 	public void saveOrder(Long addressId, String paymentMethod,HttpSession session) throws Exception {
 		
@@ -57,8 +63,9 @@ public class OrderService {
 	       
 	        item.setProduct(cart.getProduct());
 	        
-	       
-	        item.setPrice(cart.getProduct().getOffer().getOfferPrice());
+	      
+	        item.setPrice(cart.getProduct().getOffer() != null ? cart.getProduct().getOffer().getOfferPrice() : cart.getProduct().getPrice());
+
 
 	       
 	        item.setQuantity(cart.getQuantity());
@@ -66,6 +73,7 @@ public class OrderService {
 
 
 	        order.getItems().add(item);
+	        
 	        
 	        
 	        
@@ -80,20 +88,39 @@ public class OrderService {
 	  orderRepo.save(order);
 	  session.setAttribute("OrderId", order.getOrderId()); 
 
-	    cartService.clearCart(); 
+	  //  cartService.clearCart(); 
 			
 	}
-	
-	
-
-//	
-//	 public boolean updateStatus(OrderStatus newStatus) {
-//	        if (this.status.canTransitionTo(newStatus)) {
-//	            this.status = newStatus;
-//	            return true;
-//	        } else {
-//	            System.out.println("Invalid status transition: " + this.status + " -> " + newStatus);
-//	            return false;
-//	        }
-//	    }
+@Transactional
+	public List<OrderEntity> getAllOrders() {
+		return orderRepo.findAll();
+		
+	}
+@Transactional
+public List<OrderItemEntity> getAllOrderItems() {
+	return orderItemRepo.findAll();
+}
+public OrderItemEntity OrderItemfindById(Long itemId) {
+  
+    return orderItemRepo.findById(itemId)
+            .orElseThrow(() -> new RuntimeException("Item not found for id: " + itemId));
+}
+@Transactional
+public void updateStatus(OrderStatus newStatus, Long itemId) {
+    
+    OrderItemEntity orderItem = OrderItemfindById(itemId);
+    System.out.println(orderItem.getStatus().name());
+    System.out.println(orderItem.getStatus());
+    System.out.println(newStatus);
+   
+    if (orderItem.getStatus().canTransitionTo(newStatus)) {
+        orderItem.setStatus(newStatus);
+        orderItemRepo.save(orderItem); 
+       System.out.println(orderItem.getStatus().name());
+       System.out.println(orderItem.getStatus());
+    } else {
+        
+        throw new RuntimeException("Invalid status transition: " + orderItem.getStatus() + " -> " + newStatus);
+    }
+}
 }

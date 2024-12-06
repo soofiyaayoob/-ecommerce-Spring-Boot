@@ -39,9 +39,9 @@ public class ProductEntity {
 	    @Column(length = 500)
 	    private String description;
 
-	    @Column@Lob
-//	    @Basic(fetch = FetchType.EAGER)
-	    private byte[] imageData;
+	    @Lob
+	    @Column
+        private byte[] imageData;
 	    
 	    @Column
 	    private String imageName;

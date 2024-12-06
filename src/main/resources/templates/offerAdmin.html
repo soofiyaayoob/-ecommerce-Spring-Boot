@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+         body {
+            background-color: #f4f4f4;
+        }
+        .table-responsive {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div  class="container-fluid p-4">
+       
+  <h1 class="text-center mb-4">Offer Management</h1>
+    
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>product id</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Offer Price</th>
+                    <th>Offer %</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr th:each="offer : ${offers}">
+                    <td th:text="${offer.product.id}">
+
+                    </td>
+                    <td>
+                        <img th:src="${offer.product.imageBase64}" 
+                             alt="Product Image" 
+                             class="product-image img-thumbnail">
+                    </td>
+                    <td th:text="${offer.product.name}"></td>
+                    <td th:text="${offer.product.price} + ' $'"></td>
+                    <td th:text="${offer.offerPrice} + ' $'"></td>
+                    <td th:text="${offer.discountPercentage} + '%'"></td>
+                    <td th:text="${offer.offerStartDate}"></td>
+                    <td th:text="${offer.offerEndDate}"></td>
+                    <td>
+                        <span th:classappend="${offer.active} ? 'badge bg-success' : 'badge bg-danger'" 
+                        th:text="${offer.active} ? 'Active' : 'Not Active'"></span>
+                  
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+</div>
+
+</body>
+</html>l
