@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
@@ -281,7 +281,13 @@ public class UserController {
 			 
 			return "orderConfirm";
 		}
-		
+		@PostMapping("/order/cancel")
+		public String cancelOrder(@RequestParam Long itemId, Model model,RedirectAttributes redirectAttributes) {
+		    System.out.println("gott");
+		    orderService.canelOrder(itemId);
+ redirectAttributes.addFlashAttribute("error","order canceled");
+		    return "redirect:/home/profile";
+		}
 
 	  
 

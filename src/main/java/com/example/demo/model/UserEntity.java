@@ -53,6 +53,8 @@ public class UserEntity {
 	    @Column
 	    private boolean isActive=true;
 	    
+	    private double wallet;
+	    
 	    @Column
 	    private String token;
 	    

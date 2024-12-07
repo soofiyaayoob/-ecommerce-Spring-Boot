@@ -2,9 +2,9 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
-
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +30,7 @@ import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
+import com.example.demo.model.ChartData;
 import com.example.demo.model.OfferEntity;
 import com.example.demo.model.ProductEntity;
 
@@ -234,9 +235,27 @@ public class AdminController {
 			 model.addAttribute("offers",offerServicea.getAllOffers());
 		 	return "offerAdmin";
 		 }
+		 @GetMapping("/chart")
+		 public String getchart() {
+		 	return"chart";
+		 }
+		 
 
+		 @GetMapping("/delivered-chart-data")
+		 @ResponseBody
+		    public List<ChartData> getDeliveredOrderData() {
+		       System.out.println("gotten here chart ");
+		        return orderService.getDeliveredOrdersChartData();
+		    }
+		 
+		 
 
-	     
+//		 
+//		   @GetMapping("/delivered-chart-data")
+//		    public List<Map<String, Object>> getDeliveredChartData() {
+//		        return orderService.getDeliveredOrdersForChart();
+//		    }
+//
 	    	}
 
 

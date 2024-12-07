@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -42,7 +43,7 @@ public class OrderEntity {
 	private UserEntity user;
 	
 	
-	private LocalDateTime orderedAt;
+	private LocalDate orderedAt;
 
 	 @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	    private List<OrderItemEntity> items =new ArrayList<>();
@@ -56,7 +57,7 @@ public class OrderEntity {
 	
 	 @PrePersist
 	    protected void onCreate() {
-	        this.orderedAt = LocalDateTime.now();
+	        this.orderedAt = LocalDate.now();
 	    }
 	 
 

@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +158,26 @@ public class Productservices {
 		productRepo.deleteById(id);
 		return false;
 	}
+
+@Transactional
+	public List<ProductEntity> searchFoods(String query) {
+		
+	
+    List<ProductEntity> products = productRepo.findByNameContainingIgnoreCase(query);
+
+    if (products.isEmpty()) {
+    	 System.out.println("No products found for query: " + query);
+        throw new RuntimeException("No products found for query: " + query);
+       
+    }
+
+   
+    for (ProductEntity product : products) {
+        commonutil.convertImageDataToBase64(product); 
+    }
+
+    return products;
+}
 
 
 

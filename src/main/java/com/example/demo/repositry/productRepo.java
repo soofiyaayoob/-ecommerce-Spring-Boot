@@ -12,6 +12,8 @@ public interface productRepo extends JpaRepository<ProductEntity, Long>{
 	List<ProductEntity> findTop5ByOrderByIdDesc();
 
 	List<ProductEntity> findByCategoryId(Long id);
+
+	List<ProductEntity> findByNameContainingIgnoreCase(String query);
 	
 	
 }

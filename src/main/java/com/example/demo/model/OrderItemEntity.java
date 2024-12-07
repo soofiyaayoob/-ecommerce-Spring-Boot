@@ -49,15 +49,15 @@ public enum OrderStatus {
     PENDING,
     SHIPPED,
     CANCELED,
-    DELIVERED,
-    RETURNED;
+    DELIVERED;
+   
 	private static final EnumMap<OrderStatus, EnumSet<OrderStatus>> validTransitions = new EnumMap<>(OrderStatus.class);
 
     static {
         validTransitions.put(PENDING, EnumSet.of(SHIPPED, CANCELED));
         validTransitions.put(SHIPPED, EnumSet.of(DELIVERED, CANCELED));
-        validTransitions.put(DELIVERED, EnumSet.of(RETURNED));
-        validTransitions.put(RETURNED, EnumSet.noneOf(OrderStatus.class)); 
+        validTransitions.put(DELIVERED, EnumSet.noneOf(OrderStatus.class));
+     
         validTransitions.put(CANCELED, EnumSet.noneOf(OrderStatus.class)); 
     }
 
@@ -67,5 +67,6 @@ public enum OrderStatus {
 
     
 }
-
 }
+
+

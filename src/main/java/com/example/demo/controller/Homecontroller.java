@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,6 +38,7 @@ import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.CartService;
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OfferServicea;
+import com.example.demo.Service.OrderService;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.wishlistService;
@@ -45,6 +47,7 @@ import com.example.demo.model.CartEntity;
 import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
+import com.example.demo.model.OrderItemEntity;
 import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.WishlistEntity;
@@ -69,6 +72,7 @@ import org.slf4j.LoggerFactory;
 
 
 @Controller
+
 public class Homecontroller {
 	
 	private static final Logger logger=LoggerFactory.getLogger(Homecontroller.class);
@@ -90,6 +94,9 @@ public class Homecontroller {
 	
 	@Autowired
 	CategoryService categoryService;
+	
+	@Autowired
+	OrderService orderService;
 	
 	 @GetMapping("/")
 	    public String home(Model model,HttpSession session) {
@@ -116,7 +123,7 @@ public class Homecontroller {
     
 		    return "home";
 }
-	  @GetMapping("/categories/{id}")
+	  @GetMapping("/home/categories/{id}")
 	    public String getProductsByCategory(@PathVariable Long id, Model model) {
 	     
 	        List<ProductEntity> products = productservices.getProductsByCategory(id);
@@ -138,7 +145,7 @@ public class Homecontroller {
 //		    }
 //		  return "home"; 
 //	  }
-	  @PostMapping("/Addwishlist/{id}")
+	  @PostMapping("/home/Addwishlist/{id}")
 	  public String addToWishlist(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
 		  try {
 		        if (principal == null) {
@@ -173,7 +180,7 @@ public class Homecontroller {
 	  }
 	  
 	  
-	  @PostMapping("/Addcart/{id}")
+	  @PostMapping("/home/Addcart/{id}")
 	  public String addTocart(@PathVariable Long id,RedirectAttributes redirectAttributes,Principal principal) {
 	     System.out.println("in add to cart");
 		  try {
@@ -201,7 +208,7 @@ public class Homecontroller {
 		    }
 		}
 	  
-	  @GetMapping("/wishlist")
+	  @GetMapping("/home/wishlist")
 	  public String getWishist(Principal principal,Model model) {
 		  if (principal == null) {
 		       
@@ -215,7 +222,7 @@ public class Homecontroller {
 	  
 	  
 	  
-	  @GetMapping("/cart")
+	  @GetMapping("/home/cart")
 	  public String getCart(Principal principal,Model model,RedirectAttributes redirectAttributes) {
 		  
 	System.out.println("gootten in cart get mapping");
@@ -260,7 +267,7 @@ public class Homecontroller {
 			
 		 }
 	  
-	  @PostMapping("/cart/delete/{id}")
+	  @PostMapping("/home/cart/delete/{id}")
 	  public String deleteProduct(@PathVariable Long id) {
 	      try {
 	        
@@ -285,7 +292,7 @@ public class Homecontroller {
 	  	
 	  	return "redirect:/cart";
 	  }
-	  @PostMapping("/cart/address/add")
+	  @PostMapping("/home/cart/address/add")
 	    public String submitForm(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak userpriniciple) {
 	      System.out.println("getting in acrt address form");
 	      if (userpriniciple == null ||userpriniciple .getUser() == null) {
@@ -296,16 +303,18 @@ public class Homecontroller {
 			return "redirect:/cart";
 	    }
 	  
-	  @GetMapping("/profile")
+	  @GetMapping("/home/profile")
 		public String getprofile(Model model) {
 		UserEntity user= userService.findUser();
 		model.addAttribute("newAddress",new AddressEntity());
 		  model.addAttribute("user",user);
+		  List<OrderItemEntity> items=orderService.orderByUser(user.getId());
+		  model.addAttribute("items",items);
 		  
 			return "profile";
 		}
 	  
-	  @PostMapping("profile/updateUser")
+	  @PostMapping("/home/profile/updateUser")
 	  public String updateUser(@ModelAttribute("user") UserEntity user,@AuthenticationPrincipal UserPrincipleTaamsmaak principleTaamsmaak) {
 		  System.out.println(user.getId());
 		  user.setPassword(principleTaamsmaak.getPassword());
@@ -324,7 +333,7 @@ public class Homecontroller {
 	  
 	
 
-	  @PostMapping("profile/resetPassword")
+	  @PostMapping("/home/profile/resetPassword")
 	    public String resetPassword(
 	            @RequestParam("currentPassword") String currentPassword,
 	            @RequestParam("newPassword") String newPassword,RedirectAttributes redirectAttributes) {
@@ -350,7 +359,40 @@ public class Homecontroller {
 
 
 	  
+	  @GetMapping("/home/search")
+	    public String listFoods(@RequestParam(value = "query", required = false) String query, Model model,RedirectAttributes redirectAttributes) {
+		  System.out.println("hey gooten in serach");
+		  System.out.println(query);
+	      try {  List<ProductEntity> foods;
+	        
+          foods = productservices.searchFoods(query);
+      
+      model.addAttribute("products", foods);
+			
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error",e.getMessage());
+			return("redirect:/");
+		}
+	        
+	        return "productBySearch";
+	    }
+	  
+	  @PostMapping("/home/search/Addcart")
+	    public String addToCart(@RequestParam("productId") Long productId, RedirectAttributes redirectAttributes) {
+	       
+	   
+	        try {
+				cartService.addProductToCart(productId);
+				  redirectAttributes.addFlashAttribute("success", "Product added to cart successfully!");
+			} catch (AttributeNotFoundException e) {
+				redirectAttributes.addFlashAttribute("error",e.getMessage());
+				e.printStackTrace();
+			}
 
+	      
+	        return "redirect:/home/search"; 
+	    }
+	
 	
 }	
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivered Orders Chart</title>
+    <p>total users total product total categries </p>
+
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <!-- Chart Container -->
+    <div id="deliveredOrdersChart" style="width: 100%; height: 400px;"></div>
+
+    <!-- JavaScript to Fetch Data and Render Chart -->
+    <script>
+        // Fetch data from the backend API
+        fetch('/admin/delivered-chart-data')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Transform data into Highcharts format
+                const chartData = data.map(item => ({
+                    name: item.date,
+                    y: item.totalAmount
+                }));
+
+                // Render the chart
+                Highcharts.chart('deliveredOrdersChart', {
+                    chart: {
+                        type: 'column' // Change to 'line', 'pie', etc., if needed
+                    },
+                    title: {
+                        text: 'Delivered Orders Analytics'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        title: {
+                            text: 'Dates'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Total Amount (₹)'
+                        }
+                    },
+                    series: [{
+                        name: 'Delivered Orders',
+                        data: chartData,
+                        color: '#4caf50' // Custom color for the columns
+                    }],
+                    tooltip: {
+                        pointFormat: 'Total Amount: <b>₹{point.y:.2f}</b>'
+                    },
+                    legend: {
+                        enabled: false
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('deliveredOrdersChart').innerHTML = 
+                    '<p style="color:red;">Error loading chart data.</p>';
+            });
+    </script>
+</body>
+</html>

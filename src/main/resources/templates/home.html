@@ -82,22 +82,28 @@
                   <!-- Search and Actions Container -->
                   <div class="ms-auto d-flex flex-column flex-lg-row align-items-center gap-3">
                       <!-- Search Bar -->
-                      <div class="input-group-icon pe-lg-2" style="min-width: 250px;">
-                          <i class="fas fa-search input-box-icon text-primary position-absolute" 
-                             style="left: 1rem; top: 50%; transform: translateY(-50%);"></i>
-                          <input class="form-control border-0 input-box bg-100 ps-5" type="search" 
-                                 placeholder="Search Food" aria-label="Search"/>
-                      </div>
+                      
+                      <div class="input-group-icon pe-lg-2" style="min-width: 250px;" 
+                     >
+                     <i class="fas fa-search input-box-icon text-primary position-absolute" 
+                        style="left: 1rem; top: 50%; transform: translateY(-50%);"></i>
+                     <input class="form-control border-0 input-box bg-100 ps-5" type="search" 
+                            placeholder="Search Food" aria-label="Search" name="query" 
+                            th:value="${query}"  oninput="this.parentElement.setAttribute('onclick', this.value ? `window.location.href='/home/search?query=${this.value}'` : null)"/>
+                 </div>
+                 
+                       
+                    
       
                       <!-- Action Buttons -->
                       <div class="d-flex align-items-center gap-2">
                           <!-- Wishlist -->
-                          <a th:href="@{/wishlist}" class="btn btn-white shadow-warning text-warning">
+                          <a th:href="@{/home/wishlist}" class="btn btn-white shadow-warning text-warning">
                               <i class="fas fa-heart"></i>
                           </a>
       
                           <!-- Cart -->
-                          <a th:href="@{/cart}" class="btn btn-white shadow-warning text-warning">
+                          <a th:href="@{/home/cart}" class="btn btn-white shadow-warning text-warning">
                               <i class="fas fa-shopping-cart"></i>
                           </a>
       
@@ -112,7 +118,7 @@
                         </a>
       
                           <!-- User Menu -->
-                          <a th:href="@{/profile}" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
+                          <a th:href="@{/home/profile}" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
                              class="btn btn-white shadow-warning text-warning">
                               <i class="fas fa-user me-1"></i>
                               <span class="d-none d-lg-inline" th:text="${#authentication.principal.username}"></span>
@@ -325,12 +331,12 @@
                                 </span>
                             </div>
                             <div class="button-container d-flex gap-2">
-                                <form th:action="@{/Addwishlist/{id}(id=${product.id})}" method="post" class="d-inline">
+                                <form th:action="@{/home/Addwishlist/{id}(id=${product.id})}" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-outline-danger btn-sm wishlist">
                                         <i class="fas fa-heart"></i>
                                     </button>
                                 </form>
-                                <form th:action="@{/Addcart/{id}(id=${product.id})}" method="post" class="d-inline flex-grow-1">
+                                <form th:action="@{/home/Addcart/{id}(id=${product.id})}" method="post" class="d-inline flex-grow-1">
                                     <button type="submit" class="btn btn-primary btn-sm w-100">
                                         <i class="fas fa-cart-plus me-1"></i>
                                         <span class="d-none d-sm-inline">Add to Cart</span>
@@ -377,7 +383,7 @@
                                     <i class="fas fa-heart"></i>
                                 </button>
                                 <button class="btn btn-primary btn-sm flex-grow-1" 
-                                        th:onclick="|window.location.href='@{/addtoCart/{id}(id=${product.id})}'|">
+                                        th:onclick="|window.location.href='@{/home/addtoCart/{id}(id=${product.id})}'|">
                                     <i class="fas fa-cart-plus me-1"></i>
                                     <span class="d-none d-sm-inline">Add to Cart</span>
                                 </button>

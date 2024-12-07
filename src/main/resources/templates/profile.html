@@ -162,6 +162,7 @@
                                 <p class="mb-1"><i class="bi bi-telephone me-2"></i><span th:text="${user.mobileNo}">+1 (234) 567-890</span></p>
                                 <p class="mb-1"><i class="bi bi-person-badge me-2"></i><span th:text="${user.fullName}">John Doe</span></p>
                                 <p class="mb-1"><i class="bi bi-person-badge me-2"></i><span th:text="${user.role}">John Doe</span></p>
+                                <p class="mb-1"><i class="bi bi-person-badge me-2"></i><span th:text="${user.id}">John Doe</span></p>
                             </div>
                             <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal" 
                             data-bs-target="#updateInfoModal">
@@ -401,7 +402,7 @@
 
     <!-- View Orders Modal -->
     <div class="modal fade" id="viewOrdersModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg w-90">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Your Orders</h5>
@@ -413,25 +414,35 @@
                             <tr>
                                 <th>Order ID</th>
                                 <th>Date</th>
-                                <th>Total</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#12345</td>
-                                <td>2023-11-15</td>
-                                <td>$99.99</td>
-                                <td><span class="badge bg-success">Delivered</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
-                            </tr>
-                            <tr>
-                                <td>#12344</td>
-                                <td>2023-10-22</td>
-                                <td>$149.50</td>
-                                <td><span class="badge bg-warning">Processing</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">View Details</button></td>
+                            
+                            <tr th:each="item : ${items}">
+                                <td th:text="${item.order.orderId}"></td>
+                                <td th:text="${item.order.orderedAt}"></td>
+                                <td th:text="${item.product.name}"></td>
+                                <td th:text="${item.price}"></td>
+                                <td>
+                                  
+                                    <span th:class="'badge ' + (${item.status.name() == 'DELIVERED'} ? 'bg-success' : 'bg-warning')" 
+                                          th:text="${item.status}">
+                                    </span>
+                                </td>
+                                <td>
+                                    <form th:action="@{/order/cancel}" method="post" >
+                                        <input type="hidden" th:name="itemId" th:value="${item.id}" />
+                                        <button 
+                                            class="btn btn-sm btn-outline-primary"
+                                            th:disabled="${item.status.name() == 'DELIVERED'}"
+                                            th:text="${item.status.name() == 'DELIVERED' ? 'Cancel' : 'Cancel'}">
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
