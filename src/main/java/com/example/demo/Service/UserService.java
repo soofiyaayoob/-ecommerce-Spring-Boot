@@ -24,6 +24,7 @@ import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.UserEntity.Role;
 import com.example.demo.repositry.AddressRepo;
 import com.example.demo.repositry.UserRepo;
 
@@ -168,6 +169,15 @@ public class UserService{
 	     AddressEntity address = addressRepo.findById(id).orElseThrow(() -> new RuntimeException("address not found"));
 	       return address;
 		
+		}
+
+		public Long countOfuser() {
+			return userRepo.countByRole(Role.USER);
+			
+		}
+		public Long countOfResturant() {
+			return userRepo.countByRole(Role.RESTAURANT);
+			
 		}
 }
 		

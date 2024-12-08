@@ -66,7 +66,7 @@ public class AdminController {
 		 model.addAttribute("adminForm", new UserEntity()); 
 		 
 		 model.addAttribute("restuarntForm" ,new UserEntity());
-		 
+		 System.out.println("gtten at admin dash ");
 		return("admin");
 	}
 	
@@ -236,7 +236,13 @@ public class AdminController {
 		 	return "offerAdmin";
 		 }
 		 @GetMapping("/chart")
-		 public String getchart() {
+		 public String getchart(Model model) {
+			 model.addAttribute("countUser",userService.countOfuser());
+			 model.addAttribute("countResturant",userService.countOfResturant());
+			 model.addAttribute("countproducts",productservices.getTotalProducts());
+			 model.addAttribute("countcategories",productservices.getTotalCategories());
+			 model.addAttribute("totalOrders",orderService.getTotalOrders());
+			 model.addAttribute("totalRevenue",orderService.getTotalRevenue());
 		 	return"chart";
 		 }
 		 
@@ -250,12 +256,13 @@ public class AdminController {
 		 
 		 
 
-//		 
+		 
 //		   @GetMapping("/delivered-chart-data")
+//		   @ResponseBody
 //		    public List<Map<String, Object>> getDeliveredChartData() {
 //		        return orderService.getDeliveredOrdersForChart();
 //		    }
-//
+
 	    	}
 
 

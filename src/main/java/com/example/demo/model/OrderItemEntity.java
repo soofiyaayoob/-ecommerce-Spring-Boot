@@ -36,7 +36,7 @@ public class OrderItemEntity {
 	    @JoinColumn(name = "product_id", nullable = false)
 	    private ProductEntity product;  
 	    
-	    private Integer Quantity;
+	    private Integer quantity;
 	    
 	    private double price;
 

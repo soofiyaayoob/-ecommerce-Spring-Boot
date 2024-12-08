@@ -52,11 +52,16 @@ public class confi {
 	public UserDetailsService detailsService() {
 		return new UserDetailsServiceTaamsmaak();
 	}
+//	@Bean
+//	public AuthenticationSuccessHandler authenticationSuccessHandler() {
+//		return new SimpleUrlAuthenticationSuccessHandler("/");
+//	
+//		
+//	}
+//	
 	@Bean
-	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		return new SimpleUrlAuthenticationSuccessHandler("/");
-	
-		
+	public AuthenticationSuccessHandler successHandler() {
+		return new SucessHandler();
 	}
 	
 	
@@ -65,13 +70,17 @@ public class confi {
 		  httpSecurity.cors().and()
 	        .csrf(csrf -> csrf.disable()); 
 
-		  httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
+		  httpSecurity.authorizeHttpRequests(req -> req.requestMatchers("/admin").hasRole("ADMIN").
+				  requestMatchers("/restaurant").hasRole("RESTAURANT")
+				  .requestMatchers("/","/css/**","/js/**","/img/**").permitAll().anyRequest().authenticated());
+	//	 httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
+		  
 	     
 	       httpSecurity .formLogin()
 	            .loginPage("/login")
 	            .loginProcessingUrl("/perform")
-	            .successHandler(authenticationSuccessHandler())
-	           
+	            .successHandler(successHandler())
+	         //  .defaultSuccessUrl("/")
 	            .failureUrl("/login?error=true")
 	            .permitAll();
 	       httpSecurity .logout(logout -> logout

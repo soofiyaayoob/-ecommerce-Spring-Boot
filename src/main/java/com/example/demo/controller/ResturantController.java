@@ -56,7 +56,7 @@ public class ResturantController {
 public String getMenu(Model model) {
 	model.addAttribute("product", new ProductEntity());
 	model.addAttribute("categories",categoryService.getAllcategries());
-	model.addAttribute("products",productservices.getAllProducts());
+	model.addAttribute("products",productservices.getproductbyuserid());
     return"menu";
 }
 
@@ -86,18 +86,18 @@ attributes.addFlashAttribute("message","produxt updated successfuly");
 @PostMapping("product/delete/{id}")
 public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttributes) {
     boolean deleted = productservices.deleteById(id);
-    if (deleted) {
+   
        redirectAttributes.addFlashAttribute("message","deleted suucessfulyy");
-    } else {
+  
     	 redirectAttributes.addFlashAttribute("error", "Item not found");
-    }
+    
     return "redirect:/restaurant/menu-management"; 
 }
 
 
 @GetMapping("/offer-management")
 public String getOfferManagementPage(Model model) {
- List<OfferEntity> offers= offerServicea.getAllOffers();
+ List<OfferEntity> offers= offerServicea.getofferbyuserid();
   model.addAttribute("offers",offers);
     return "offer"; 
 }
@@ -131,7 +131,7 @@ public String deleteOffer(@PathVariable("id") Long id) {
 public String getorders(Model model) {
 	
 	//model.addAttribute("orders",orderService.getAllOrders());
-	model.addAttribute("orderItems",orderService.getAllOrderItems());
+	model.addAttribute("orderItems",orderService.getOrderForResturamt());
   return"order";
 }
 @PostMapping("/updateStatus/{id}")

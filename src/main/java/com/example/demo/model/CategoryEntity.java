@@ -42,7 +42,7 @@ public class CategoryEntity {
 	   
 	   private transient String imageBase64;
 
-	    @OneToMany(mappedBy = "category")  
+	    @OneToMany(mappedBy = "category",fetch = FetchType.EAGER)  
 	    private List<ProductEntity> products; 
 
 	    

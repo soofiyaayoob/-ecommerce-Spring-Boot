@@ -53,7 +53,7 @@ public class UserEntity {
 	    @Column
 	    private boolean isActive=true;
 	    
-	    private double wallet;
+	    private double wallet =0.0;
 	    
 	    @Column
 	    private String token;
@@ -64,12 +64,12 @@ public class UserEntity {
 	    
 	    
 	    public enum Role {
-	        USER,    // Default role for regular users
-	        ADMIN,   // Role for admin users with elevated permissions
+	        USER,   
+	        ADMIN, 
 	        RESTAURANT
 	    }
 	    
-	    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    private List<ProductEntity> products; 
 	    
 	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

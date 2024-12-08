@@ -66,9 +66,9 @@
                     <td th:text="${offer.product.name}"></td>
                     <td th:text="${offer.product.price} + ' $'"></td>
                     <td th:text="${offer.offerPrice} + ' $'"></td>
-                    <td th:text="${offer.discountPercentage} + '%'"></td>
-                    <td th:text="${offer.offerStartDate}"></td>
-                    <td th:text="${offer.offerEndDate}"></td>
+                    <td th:text="${offer.percentage} + '%'"></td>
+                    <td th:text="${offer.startDate}"></td>
+                    <td th:text="${offer.endDate}"></td>
                     <td>
                         <span th:classappend="${offer.active} ? 'badge bg-success' : 'badge bg-danger'" 
                         th:text="${offer.active} ? 'Active' : 'Not Active'"></span>

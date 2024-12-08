@@ -51,12 +51,14 @@ public class SucessHandler implements AuthenticationSuccessHandler{
 	       
 	        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
 	        	
-	            redirectUrl = "/admin";
+	            redirectUrl = "/admin/dash";
 	        } else if (authorities.contains(new SimpleGrantedAuthority("USER"))) {
 	            redirectUrl = "/";
-	        } else {
+	        }else if (authorities.contains(new SimpleGrantedAuthority("RESTAURANT"))) {
+	            redirectUrl = "/restaurant/main";
+	        }else {
 	        	System.out.println("no user role");
-	            redirectUrl = "/login?error=UsernotFound"; 
+	            redirectUrl = "/login?error"; 
 	        }
 
 	       

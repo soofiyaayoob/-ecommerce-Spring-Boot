@@ -40,7 +40,7 @@ public class Productservices {
 		
 		  product.setImageName(imageFile.getOriginalFilename());
            product.setImageData(imageFile.getBytes());
-           product.setUserEntity(commonutil.getCurrentUser());
+           product.setUser(commonutil.getCurrentUser());
 		return productRepo.save(product);
 	}
 
@@ -177,6 +177,24 @@ public class Productservices {
     }
 
     return products;
+}
+public long getTotalCategories() {
+    return categoryRepo.count(); 
+}
+public long getTotalProducts() {
+    return productRepo.count();  
+}
+
+@Transactional
+public List<ProductEntity> getproductbyuserid() {
+	
+	List<ProductEntity> products= productRepo.findByUserId(commonutil.getCurrentUserId());
+	 for (ProductEntity product : products) {
+	        commonutil.convertImageDataToBase64(product); 
+	    }
+	 return products;
+	
+	
 }
 
 

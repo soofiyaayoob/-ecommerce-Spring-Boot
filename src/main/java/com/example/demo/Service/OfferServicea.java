@@ -93,9 +93,31 @@ public void addOffer(Long productId, double discountPercentage, LocalDate endDat
 
     offerRepository.save(offer);
 }
+
+
 public void deleteOffer(Long id) {
 	offerRepository.deleteById(id);
 	
+}
+@Transactional
+public List<OfferEntity> getofferbyuserid() {
+	// TODO Auto-generated method stub
+	 List<OfferEntity> offers= offerRepository.findByProductUserId(commonutil.getCurrentUserId());
+	 for (OfferEntity offer : offers) {
+	      
+	        offer.setActive(offer.getEndDate().isAfter(LocalDate.now()));
+
+	       
+	        ProductEntity product = offer.getProduct();
+
+	       
+	       Object productEntity = commonutil.convertImageDataToBase64(product);
+
+	        
+
+	       
+	    }
+	 return offers;
 }
 
 

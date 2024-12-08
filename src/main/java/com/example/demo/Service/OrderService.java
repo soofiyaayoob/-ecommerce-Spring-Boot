@@ -174,19 +174,34 @@ orderItemRepo.save(item);
 //}
 
 
-// Method to get delivered orders chart data
+ 
 public List<ChartData> getDeliveredOrdersChartData() {
-    // Fetching the data from OrderItemRepository
+   
     List<Object[]> results = orderItemRepo.findDeliveredOrdersGroupedByDate();
 
-    // Transforming results into ChartData objects
+   
     List<ChartData> chartDataList = new ArrayList<>();
     for (Object[] result : results) {
-        Date date = (Date) result[0];  // The date from the OrderEntity
-        double totalAmount = (Double) result[1];  // The total amount for the date
+        Date date = (Date) result[0];  
+        double totalAmount = (Double) result[1]; 
         chartDataList.add(new ChartData(date, totalAmount));
     }
 
     return chartDataList;
 }
+
+public Long getTotalOrders() {
+	
+	return orderItemRepo.count();
+	
+}
+public Long getTotalRevenue() {
+    return orderItemRepo.sumPriceByStatus(OrderStatus.DELIVERED);
+}
+public List<OrderItemEntity> getOrderForResturamt() {
+	
+	return orderItemRepo.findOrderItemsByProductUserId(commonutil.getCurrentUserId());
+}
+
+
 }

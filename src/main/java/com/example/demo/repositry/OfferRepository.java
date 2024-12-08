@@ -13,5 +13,7 @@ public interface OfferRepository extends JpaRepository<OfferEntity, Long>{
 
 
 	List<OfferEntity> findTop4ByEndDateAfterOrderByPercentageDesc(LocalDate now);
+
+	List<OfferEntity> findByProductUserId(Long currentUserId);
 	
 }

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en-US" dir="ltr">
+<!DOCTYPE html >
+<html lang="en-US" dir="ltr" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"xmlns:th="http://www.thymeleaf.org" >
 
   <head>
     <meta charset="utf-8">
@@ -45,13 +45,7 @@
       <p th:text="${error}"></p>
   </div>
 
-  <!-- <div th:if="${session.message}" class="alert alert-success">
-    <p th:text="${session.message}"></p>
-</div>
-
-<div th:if="${session.error}" class="alert alert-danger">
-    <p th:text="${session.error}"></p>
-</div> -->
+  
 
    
 
@@ -90,7 +84,7 @@
                      <input class="form-control border-0 input-box bg-100 ps-5" type="search" 
                             placeholder="Search Food" aria-label="Search" name="query" 
                             th:value="${query}"  oninput="this.parentElement.setAttribute('onclick', this.value ? `window.location.href='/home/search?query=${this.value}'` : null)"/>
-                 </div>
+                                </div>
                  
                        
                     
@@ -106,17 +100,24 @@
                           <a th:href="@{/home/cart}" class="btn btn-white shadow-warning text-warning">
                               <i class="fas fa-shopping-cart"></i>
                           </a>
-      
-                          <!-- Admin Panel -->
-                          <a href="/admin/dash" class="btn btn-white shadow-warning text-warning">
-                              <i class="fas fa-user me-1"></i>
-                              <span class="d-none d-lg-inline">Adminpanel</span>
+                         
+
+                         <a href="/restaurant/main" class="btn btn-white shadow-warning text-warning" 
+                         th:if="${#authentication.authorities.?[authority == 'RESTAURANT'].size() > 0}">
+                          <i class="fas fa-utensils"></i>
+                             <span class="d-none d-lg-inline">Restaurant</span>
                           </a>
-                          <a href="/restaurant/main" class="btn btn-white shadow-warning text-warning">
-                            <i class="fas fa-user me-1"></i>
-                            <span class="d-none d-lg-inline">restaurant</span>
-                        </a>
-      
+                          <a href="/admin/dash" class="btn btn-white shadow-warning text-warning"
+                               th:if="${#authentication.authorities.?[authority == 'ADMIN'].size() > 0}">
+                                   <i class="fas fa-user-shield"></i>
+                           <span class="d-none d-lg-inline">AdminPanel</span>
+                                </a>
+     
+
+
+
+
+                    
                           <!-- User Menu -->
                           <a th:href="@{/home/profile}" th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}" 
                              class="btn btn-white shadow-warning text-warning">
@@ -135,29 +136,7 @@
               </div>
           </div>
       </nav>
-<!--       
-      <div class="custom-sidebar" id="sidebar">
-        <div class="sidebar-header">
-          <h5 class="text-white"
-              th:if="${#authentication.authenticated and #authentication.principal != 'anonymousUser'}"
-              th:text="${#authentication.principal.username}">
-              User Menu
-          </h5>
-          <button class="close-btn" id="closeSidebar">&times;</button>
-      </div>
-      
-        <ul class="sidebar-content">
-          <li><a href="profile">Profile</a></li>
-          <li><a href="order">Orders</a></li>
-          <li>
-            <a href="#" id="resetPasswordLink">Reset Password</a>
-          </li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-        
-      </div> -->
-      
-      <!-- Overlay -->
+
       <div class="sidebar-overlay" id="overlay"></div>
       
       
@@ -184,24 +163,7 @@
         </div>
     </section>
 
-    <!-- Hidden Reset Password Modal -->
-<div id="resetPasswordModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <div class="card">
-      <div class="card-header">Password Change</div>
-      <div class="card-body">
-        <form id="user-reset-password-form">
-          <input type="password" name="current_password" id="current_password" class="form-control mb-3" placeholder="Current password">
-          <input type="password" name="new_password" id="new_password" class="form-control mb-3" placeholder="New password">
-          <input type="password" name="confirm_new_password" id="confirm_new_password" class="form-control mb-3" placeholder="Confirm new password">
-          <div class="text-center">
-            <button id="user-reset-password" class="btn btn-info btn-md">Reset Password</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
       <!-- ============================================-->
@@ -222,7 +184,7 @@
 		                        <div class="card-actions position-absolute top-0 start-0 p-2">
 		                            <div class="badge badge-foodwagon bg-primary p-4">
 		                                <div class="d-flex flex-between-center">
-		                                    <div class="text-white fs-6" th:text="${offer.discountPercentage}"></div>
+		                                    <div class="text-white fs-6" th:text="${offer.percentage}"></div>
 		                                    <div class="d-block text-white fs-4">% <br />
 		                                        <div class="fw-normal fs-1 mt-2">Off</div>
 		                                    </div>
@@ -234,7 +196,7 @@
 		                        <h5 class="fw-bold text-1000 text-truncate" th:text="${offer.product.name}"></h5>
 		                        <span class="badge bg-soft-danger py-2 px-3">
 		                            <!-- Displaying offer end date correctly -->
-		                            <span class="fs-1 text-danger" th:text="'Until ' + ${offer.offerEndDate}"></span>
+		                            <span class="fs-1 text-danger" th:text="'Until ' + ${offer.endDate}"></span>
 		                        </span>
 		                    </div>
 		                    <!-- Corrected th:href syntax -->
@@ -318,7 +280,7 @@
                             <div class="position-absolute top-0 start-0 m-2">
                                 <span class="badge bg-danger" th:if="${product.offer != null}">
                                     <i class="fas fa-tag me-1"></i>
-                                    <span th:text="${product.offer.discountPercentage}">20% off</span>
+                                    <span th:text="${product.offer.percentage}">20% off</span>
                                 </span>
                             </div>
                         </div>
@@ -339,7 +301,7 @@
                                 <form th:action="@{/home/Addcart/{id}(id=${product.id})}" method="post" class="d-inline flex-grow-1">
                                     <button type="submit" class="btn btn-primary btn-sm w-100">
                                         <i class="fas fa-cart-plus me-1"></i>
-                                        <span class="d-none d-sm-inline">Add to Cart</span>
+                                        <span class="d-none d-sm-inline">to Cart</span>
                                     </button>
                                 </form>
                             </div>
@@ -366,7 +328,7 @@
                             <div class="position-absolute top-0 start-0 m-2">
                                 <span class="badge bg-danger" th:if="${product.offer != null}">
                                     <i class="fas fa-tag me-1"></i>
-                                    <span th:text="${product.offer.discountPercentage}">20% off</span>
+                                    <span th:text="${product.offer.percentage}">20% off</span>
                                 </span>
                             </div>
                         </div>
@@ -385,7 +347,7 @@
                                 <button class="btn btn-primary btn-sm flex-grow-1" 
                                         th:onclick="|window.location.href='@{/home/addtoCart/{id}(id=${product.id})}'|">
                                     <i class="fas fa-cart-plus me-1"></i>
-                                    <span class="d-none d-sm-inline">Add to Cart</span>
+                                    <span class="d-none d-sm-inline">to Cart</span>
                                 </button>
                             </div>
                         </div>
@@ -409,7 +371,7 @@
               <div class="scroll-container">
                   <div class="category-wrapper">
                       <div class="category-item" th:each="category : ${categories}">
-                          <a th:href="@{/categories/{id}(id=${category.id})}" class="text-decoration-none">
+                          <a th:href="@{home/categories/{id}(id=${category.id})}" class="text-decoration-none">
                               <div class="category-card">
                                   <div class="img-wrapper">
                                       <img class="img-fluid" th:src="${category.imageBase64}" alt="category image" />
@@ -599,54 +561,30 @@
             <div class="col-6 col-md-4 col-lg-3 col-xxl-2 col-lg-3 mb-3">
               <h5 class="lh-lg fw-bold text-white">CONTACT</h5>
               <ul class="list-unstyled mb-md-4 mb-lg-0">
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Help &amp; Support</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Partner with us </a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Ride with us</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Ride with us</a></li>
+                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#soofiyaayoob@gmail.com">Help &amp; Support</a></li>
+               
               </ul>
             </div>
             <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3">
               <h5 class="lh-lg fw-bold text-white">LEGAL</h5>
               <ul class="list-unstyled mb-md-4 mb-lg-0">
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Terms &amp; Conditions</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Refund &amp; Cancellation</a></li>
+                
                 <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Privacy Policy</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Cookie Policy</a></li>
+               
               </ul>
             </div>
-            <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3">
-              <h5 class="lh-lg fw-bold text-white">LEGAL</h5>
-              <ul class="list-unstyled mb-md-4 mb-lg-0">
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Terms &amp; Conditions</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Refund &amp; Cancellation</a></li>
-                <li class="lh-lg"><a class="text-200 text-decoration-none" href="#!">Privacy Policy</a></li>
-              </ul>
-            </div>
-            <div class="col-12 col-md-8 col-lg-6 col-xxl-4">
-              <h5 class="lh-lg fw-bold text-500">FOLLOW US</h5>
-              <div class="text-start my-3"> <a href="#!">
-                 <!-- add instagram facebook and twitter  -->
-              <h3 class="text-500 my-4">Receive exclusive offers and <br />discounts in your mailbox</h3>
-              <div class="row input-group-icon mb-5">
-                <div class="col-auto"><i class="fas fa-envelope input-box-icon text-500 ms-3"></i>
-                  <input class="form-control input-box bg-800 border-0" type="email" placeholder="Enter Email" aria-label="email" />
-                </div>
-                <div class="col-auto">
-                  <button class="btn btn-primary" type="submit">Subscribe</button>
-                </div>
-              </div>
-            </div>
-          </div>
+            
+            
           <hr class="border border-800" />
           <div class="row flex-center pb-3">
             <div class="col-md-6 order-0">
-              <p class="text-200 text-center text-md-start">All rights Reserved &copy; Your Company, 2021</p>
+              <p class="text-200 text-center text-md-start">All rights Reserved &copy; Your Company, 2024</p>
             </div>
             <div class="col-md-6 order-1">
               <p class="text-200 text-center text-md-end"> Made with&nbsp;
                 <svg class="bi bi-suit-heart-fill" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFB30E" viewBox="0 0 16 16">
                   <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>
-                </svg>&nbsp;by&nbsp;<a class="text-200 fw-bold" href="https://themewagon.com/" target="_blank">ThemeWagon </a>
+                </svg>&nbsp;by&nbsp;<a class="text-200 fw-bold" href="https://themewagon.com/" target="_blank">Soofiya </a>
               </p>
             </div>
           </div>

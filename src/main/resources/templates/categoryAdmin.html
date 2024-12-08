@@ -501,7 +501,7 @@ Copy
 
     <!-- Container for Add Product Button and Table -->
     <div class="container">
-        <a href="#add-product-form" class="add-product-btn">Add Product</a>
+        <a href="#add-product-form" class="add-product-btn">Add category</a>
         <div th:if="${!categories.isEmpty()}">
             <table>
                 <thead>
@@ -578,7 +578,7 @@ Copy
             <label for="product-image">Upload Image</label>
             <input type="file" id="product-image" name="categoryImage" accept="image/*" required>
     
-            <button type="submit">Save Product</button>
+            <button type="submit">Save category</button>
             <a href="#" class="cancel-btn">Cancel</a>
         </form>
     </div>

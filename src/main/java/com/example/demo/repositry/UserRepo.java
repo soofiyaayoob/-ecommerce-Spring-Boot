@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.UserEntity.Role;
 @Repository
 public interface UserRepo extends JpaRepository<UserEntity,Long>{
 	
@@ -18,6 +19,8 @@ public Optional<UserEntity> findByUsername(String username);
 //Optional<UserEntity> findByUsername(@Param("username") String username);
 
 UserEntity findByToken(String token);
+
+Long countByRole(Role user);
 
 
 }
