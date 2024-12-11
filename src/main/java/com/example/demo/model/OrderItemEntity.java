@@ -44,7 +44,7 @@ public class OrderItemEntity {
 @Enumerated(EnumType.STRING)
 	private OrderStatus status=OrderStatus.PENDING;
 
-// Enum for Order Status
+
 public enum OrderStatus {
     PENDING,
     SHIPPED,
@@ -65,6 +65,9 @@ public enum OrderStatus {
         return validTransitions.get(this).contains(targetStatus);
     }
 
+
+	
+	
     
 }
 }

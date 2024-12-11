@@ -72,7 +72,7 @@ public class confi {
 
 		  httpSecurity.authorizeHttpRequests(req -> req.requestMatchers("/admin").hasRole("ADMIN").
 				  requestMatchers("/restaurant").hasRole("RESTAURANT")
-				  .requestMatchers("/","/css/**","/js/**","/img/**").permitAll().anyRequest().authenticated());
+				  .requestMatchers("/","/css/**","/js/**","/img/**","/register","/Otp","/verify","/reset-password","/forgot-password","/resetOtp","/home/search","/home/categories/*").permitAll().anyRequest().authenticated());
 	//	 httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
 		  
 	     

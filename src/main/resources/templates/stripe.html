@@ -1,0 +1,102 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stripe Payment</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css?family=Arial:400,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+#card-element {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+    </style>
+</head>
+<body>
+    <div id="card-element"> <!-- Stripe Element will be inserted here --> </div>
+    <!-- <button id="checkout-button">Pay</button>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+  const stripe = Stripe('pk_test_51QUpVVFWZFwTZulhPy9tnW27Z5YMEgWK0r1FzoejBWhtZpjUKj3y8rZX8tlB6HY93M7jcTmLUBlzFweVITISFR6G00vxa7XFoX');
+  const elements = stripe.elements();
+  const card = elements.create('card');
+  card.mount('#card-element');
+  
+  document.getElementById('checkout-button').addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/stripe/create-payment-intent', { method: 'POST' });
+      const data = await response.json();
+      
+      if (data.error) {
+        console.error('Error creating PaymentIntent:', data.error);
+      } else {
+        const clientSecret = data.clientSecret;
+        const { error } = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: card, // Ensure the card element is used here
+            billing_details: { name: 'Customer Name' }
+          }
+        });
+        
+        if (error) {
+          console.error('Payment failed:', error);
+        } else {
+          console.log('Payment successful!');
+          // Call your controller on payment success
+           const successResponse = await fetch('/api/payment/success',
+           { method: 'POST' });
+           const successData = await successResponse.text(); console.log(successData);
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+});
+
+    </script>
+</body>
+</html> --> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <button id="checkout-button">Checkout</button>
+
+    <script>
+        document.getElementById('checkout-button').addEventListener('click', async () => {
+            const response = await fetch('/create-checkout-session', { method: 'POST' });
+            const sessionId = (await response.json()).id;
+            
+            const stripe = Stripe('pk_test_51QUpVVFWZFwTZulhPy9tnW27Z5YMEgWK0r1FzoejBWhtZpjUKj3y8rZX8tlB6HY93M7jcTmLUBlzFweVITISFR6G00vxa7XFoX');
+            stripe.redirectToCheckout({ sessionId: sessionId });
+        });
+    </script>
+</body>
+</html>

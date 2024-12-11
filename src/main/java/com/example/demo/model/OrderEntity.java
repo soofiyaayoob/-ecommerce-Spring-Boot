@@ -38,7 +38,7 @@ public class OrderEntity {
 	
 	private String orderId;
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "user_id",nullable = false)
 	private UserEntity user;
 	
@@ -46,9 +46,9 @@ public class OrderEntity {
 	private LocalDate orderedAt;
 
 	 @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	    private List<OrderItemEntity> items =new ArrayList<>();
+	  private List<OrderItemEntity> items =new ArrayList<>();
 	
-	 @ManyToOne
+	 @ManyToOne()
      @JoinColumn(name = "address_id")
 	 private AddressEntity shippingAddress; 
 	 

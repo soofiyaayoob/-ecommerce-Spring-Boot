@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -25,10 +26,12 @@ import com.example.demo.Aspect.EmailService;
 import com.example.demo.Aspect.OtpService;
 import com.example.demo.Service.CategoryService;
 import com.example.demo.Service.OrderService;
+import com.example.demo.Service.PaymentService;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CategoryEntity;
+import com.example.demo.model.OrderEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repositry.UserRepo;
 
@@ -60,6 +63,8 @@ public class UserController {
 	
 	@Autowired
 	Commonutil commonutil;
+	@Autowired
+	PaymentService paymentService;
 	
 	@Value("${app.resetPasswordUrl}")
     private String resetPasswordUrl;
@@ -79,7 +84,7 @@ public class UserController {
 
 		    model.addAttribute("user", user);
 		   // System.out.println("User addresses initialized with size: " + user.getAddresses().size());
-	        return "register"; // Returns the register.ht
+	        return "register"; 
 	        
 	    }
 	 
@@ -256,27 +261,43 @@ public class UserController {
 			}
 
 		}
-		@PostMapping("/checkout")
-		public String processCheckout(
-		        @RequestParam("addressId") Long addressId,
-		        @RequestParam("paymentMethod") String paymentMethod,HttpSession session) throws Exception {
-
-		    // Process the order with the provided address and payment method
-		    System.out.println("Selected Address ID: " + addressId);
-		    System.out.println("Selected Payment Method: " + paymentMethod);
-		    
-		    orderService.saveOrder(addressId,paymentMethod,session);
-
-		 
-
-		    return "redirect:/order-confirmation";
-		}
-		
+//		@PostMapping("/checkout")
+//		public String processCheckout(
+//		        @RequestParam("addressId") Long addressId,
+//		        @RequestParam("paymentMethod") String paymentMethod,HttpSession session) throws Exception {
+//
+//		   
+//		    System.out.println("Selected Address ID: " + addressId);
+//		    System.out.println("Selected Payment Method: " + paymentMethod);
+//
+//		 try {
+//			   
+//			 if (orderService.saveOrder(addressId, paymentMethod, session)) {
+//				    return "redirect:/order-confirmation";
+//				}
+//			   
+//			    return "stripe";
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//			return null;
+//		}
+//
+//		 
+//
+//		   
+//		}
+//		
 		@GetMapping("/order-confirmation")
 		public String orderconform(HttpSession session,Model model) {
 			  String orderId = (String) session.getAttribute("OrderId");
 			 
-		        model.addAttribute("orderId", orderId); // Add it to the model
+		        model.addAttribute("orderId", orderId);
+		        
+		        OrderEntity order = (OrderEntity) session.getAttribute("order");
+
+		        if (order != null) {
+		            orderService.saveBankPaymnetOrder(order,session);
+		        }
 			  commonutil.removeSessionMessage();
 			 
 			return "orderConfirm";
@@ -290,6 +311,39 @@ public class UserController {
 		}
 
 	  
+		@PostMapping("/checkout")
+		public ResponseEntity<Map<String, Object>> processCheckout(
+		        @RequestParam("addressId") Long addressId,
+		        @RequestParam("paymentMethod") String paymentMethod,
+		        HttpSession session) throws Exception {
+
+		    Map<String, Object> response = new HashMap<>();
+		    
+		    // Process the order
+		    try {
+		        // Example: Save order details
+		        orderService.saveOrder(addressId, paymentMethod, session);
+
+		       System.out.println("saved");
+		        if ("Card Payment".equals(paymentMethod)) {
+		            // Create Stripe session for payment
+		            String sessionId = paymentService.createCheckoutSession();
+		            response.put("status", "success");
+		            response.put("redirect", "stripe");
+		            response.put("sessionId", sessionId);
+		        } else {
+		            // Handle Cash on Delivery
+		            response.put("status", "success");
+		            response.put("redirect", "orderConfirmation");
+		        }
+
+		    } catch (Exception e) {
+		        response.put("status", "error");
+		        response.put("message", e.getMessage());
+		    }
+
+		    return ResponseEntity.ok(response);
+		}
 
 	    }
 	

@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class Commonutil {
 
-	 public static Object convertImageDataToBase64(Object entity) {
+	 public static <T> T convertImageDataToBase64(T entity) {
 	        try {
 	           
 	            Class<?> clazz = entity.getClass();
@@ -29,8 +29,8 @@ public class Commonutil {
 	          
 	            Field imageBase64Field = clazz.getDeclaredField("imageBase64");
 	            imageBase64Field.setAccessible(true);
-
-	            // Check if the imageData field is not null
+	          
+	          
 	            byte[] imageData = (byte[]) imageDataField.get(entity);
 	            if (imageData != null) {
 	              
@@ -80,6 +80,10 @@ public class Commonutil {
 				.getRequest();
 		HttpSession session = request.getSession();
 		session.removeAttribute("OrderId");
+		session.removeAttribute("error");
+		session.removeAttribute("order");
+		
 	
 	}
+
 }

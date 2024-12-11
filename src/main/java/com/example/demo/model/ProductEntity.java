@@ -62,7 +62,7 @@ public class ProductEntity {
 	  
 	    
 	    @ManyToOne
-	    @JoinColumn(name = "category_id", nullable = false)  // Foreign key in product table
+	    @JoinColumn(name = "category_id", nullable = false)  
 	    private CategoryEntity category;
 	    
 	    @OneToMany(mappedBy = "product")
@@ -72,7 +72,8 @@ public class ProductEntity {
 	    private List<WishlistEntity> wishlistItem;
 
 	  
-	    
+	    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	    private List<CartItemEntity> cartItems;
 
 
 	    

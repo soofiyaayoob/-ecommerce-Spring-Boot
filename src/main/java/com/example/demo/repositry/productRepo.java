@@ -9,7 +9,7 @@ import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.ProductEntity;
 
 public interface productRepo extends JpaRepository<ProductEntity, Long>{
-	List<ProductEntity> findTop5ByOrderByIdDesc();
+	List<ProductEntity> findTop6ByOrderByIdDesc();
 
 	List<ProductEntity> findByCategoryId(Long id);
 

@@ -43,7 +43,7 @@ public class CartService {
 	Commonutil commonutil;
 	
 	
-	
+	@Transactional
 	public boolean addProductToCart(Long productId) throws AttributeNotFoundException {
 	    Long userId = commonutil.getCurrentUserId(); 
 	    CartEntity cart = cartRepo.findByUserId(userId);

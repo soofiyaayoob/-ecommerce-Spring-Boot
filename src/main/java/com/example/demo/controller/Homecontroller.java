@@ -42,6 +42,7 @@ import com.example.demo.Service.OrderService;
 import com.example.demo.Service.Productservices;
 import com.example.demo.Service.UserService;
 import com.example.demo.Service.wishlistService;
+import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
 import com.example.demo.model.CartEntity;
 import com.example.demo.model.CartItemEntity;
@@ -98,8 +99,12 @@ public class Homecontroller {
 	@Autowired
 	OrderService orderService;
 	
+	@Autowired
+	Commonutil commonutil;
+	
 	 @GetMapping("/")
 	    public String home(Model model,HttpSession session) {
+		 commonutil.removeSessionMessage();
 		 List<OfferEntity>offers=offerService.get4Greatoffers();
 		
 		List<ProductEntity>latestproducts=productservices.LatestProduct();
@@ -223,7 +228,7 @@ public class Homecontroller {
 	  
 	  
 	  @GetMapping("/home/cart")
-	  public String getCart(Principal principal,Model model,RedirectAttributes redirectAttributes) {
+	  public String getCart(Principal principal,Model model,RedirectAttributes redirectAttributes,HttpSession session) {
 		  
 	System.out.println("gootten in cart get mapping");
 //		 if(principal==null||!((UserEntity) principal).getRole().equals("USER")) {
@@ -242,6 +247,9 @@ public class Homecontroller {
 		try {
 			cart = cartService.getbyUserId();
 			double totalPrice= cartService.calculateTotalprice(cart);
+			
+			session.setAttribute("total", totalPrice);
+			
 			 double Mrp = cartService.calculateExactPrice(cart);
 
 			 
@@ -280,17 +288,17 @@ public class Homecontroller {
 	          return "redirect:/cart?error=true";
 	      }
 	    
-	      return "redirect:/cart";
+	      return "redirect:/home/cart";
 	  }
 
 	  
 	  
-	  @PostMapping("/cart/updateQuantity")
+	  @PostMapping("home/cart/updateQuantity")
 	  public String updateQuantity(@RequestParam Long productId,@RequestParam Integer quantity) {
 	  
 	  	cartService.updateQuantity(productId,quantity);
 	  	
-	  	return "redirect:/cart";
+	  	return "redirect:/home/cart";
 	  }
 	  @PostMapping("/home/cart/address/add")
 	    public String submitForm(@ModelAttribute AddressEntity address,@AuthenticationPrincipal UserPrincipleTaamsmaak userpriniciple) {
@@ -300,7 +308,7 @@ public class Homecontroller {
 	      }
 	      address.setUser(userpriniciple.getUser());
 		  userService.saveAddress(address);
-			return "redirect:/cart";
+			return "redirect:/home/cart";
 	    }
 	  
 	  @GetMapping("/home/profile")
@@ -320,7 +328,7 @@ public class Homecontroller {
 		  user.setPassword(principleTaamsmaak.getPassword());
 	      userService.updateUser(user); 
 	      
-	      return "redirect:/profile"; 
+	      return "redirect:/home/profile"; 
 	  }
 	  
 	  @PostMapping("/profile/addaddress")
@@ -328,7 +336,7 @@ public class Homecontroller {
 		  System.out.println("got end adda adress");
 		  address.setUser(principleTaamsmaak.getUser());
 	      userService.saveAddress(address); 
-	      return "redirect:/profile";
+	      return "redirect:/home/profile";
 	  }
 	  
 	
@@ -353,7 +361,7 @@ public class Homecontroller {
 	             
 	          }
 	          System.out.println("Flash message: " + redirectAttributes.getFlashAttributes());
-	          return "redirect:/profile"; 
+	          return "redirect:/home/profile"; 
 	       
 	      }
 

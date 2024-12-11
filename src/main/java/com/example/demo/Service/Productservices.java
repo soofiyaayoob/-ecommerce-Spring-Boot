@@ -69,7 +69,7 @@ public class Productservices {
 	}
 	@Transactional
 	public List<ProductEntity>LatestProduct(){
-	List<ProductEntity> products=productRepo.findTop5ByOrderByIdDesc();
+	List<ProductEntity> products=productRepo.findTop6ByOrderByIdDesc();
 	products.forEach(product ->{
 		byte[] imgebyte= product.getImageData();
 		   System.out.println("Image size: " + imgebyte.length);

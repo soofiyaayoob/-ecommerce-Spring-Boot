@@ -262,6 +262,12 @@ public class AdminController {
 //		    public List<Map<String, Object>> getDeliveredChartData() {
 //		        return orderService.getDeliveredOrdersForChart();
 //		    }
+		 @PostMapping("/user/delete/{id}")
+		    public String deleteUser(@PathVariable Long id, Model model) {
+		        userService.deleteUserById(id);
+		        
+		        return "redirect:/admin/users";  
+		    }
 
 	    	}
 

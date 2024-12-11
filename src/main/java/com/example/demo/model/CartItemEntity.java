@@ -28,7 +28,7 @@ public class CartItemEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)  
     @JoinColumn(name = "cart_id")
-    private CartEntity cart;  // Each item belongs to a cart
+    private CartEntity cart; 
 
     @ManyToOne(cascade = CascadeType.ALL)  
     @JoinColumn(name = "product_id")

@@ -287,7 +287,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card address-card h-100 border-0" >
                     <div class="card-header d-flex justify-content-center align-items-center" data-bs-toggle="modal" 
-                    data-bs-target="#viewOrdersModal" style="min-height: 100px;">
+                    data-bs-target="#viewWalletModal" style="min-height: 100px;">
                         <span class="fw-bold">wallet</span>
                     </div>
                 </div>
@@ -310,58 +310,26 @@
             
         </div>
     </div>
-
-  <!-- <div class="btn btn-warning red colur px-4 py-2" >
-    <a href="/logout">signout </a>
-  </div>
-
- 
-    <div class="">
-        <div 
-            class="btn btn-warning px-4 py-2" 
-            style="cursor: pointer; display: inline-block;" 
-            data-bs-toggle="modal" 
-            data-bs-target="#resetPasswordModal"
-        >
-            Reset Password
+    <div class="modal fade" id="viewWalletModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">
+                        <i class="bi bi-wallet me-2"></i> 
+                        <span th:text="${user.wallet}">+1 (234) 567-890</span>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class=" my-4">
-        <div 
-            class="btn btn-warning px-4 py-2" 
-            style="cursor: pointer; display: inline-block;" 
-            data-bs-toggle="modal" 
-            data-bs-target="#viewOrdersModal"
-        >
-           view order
-        </div>
-    </div> -->
-    <!-- <div class="text-center my-3">
-        <button 
-            class="btn btn-warning px-4 py-2 rounded-pill fw-bold"
-            data-bs-toggle="modal" 
-            data-bs-target="#resetPasswordModal">
-            <i class="bi bi-key me-2"></i>Reset Password
-        </button>
-    </div>
+    
+    
 
-    <!-- View Orders Button -->
-    <!-- <div class="text-center my-3">
-        <button 
-            class="btn btn-warning px-4 py-2 rounded-pill fw-bold"
-            data-bs-toggle="modal" 
-            data-bs-target="#viewOrdersModal">
-            <i class="bi bi-cart-check me-2"></i>View Orders
-        </button>
-    </div> -->
-
-    <!-- Sign Out Button -->
-    <!-- <div class="text-center my-3">
-        <a href="/logout" class="btn btn-danger px-4 py-2 rounded-pill fw-bold text-white">
-            <i class="bi bi-box-arrow-right me-2"></i>Sign Out
-        </a>
-    </div> --> -->
-
+  
 
     <!-- Reset Password Modal -->
     <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">

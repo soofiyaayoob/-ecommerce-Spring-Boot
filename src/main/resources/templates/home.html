@@ -341,14 +341,17 @@
                                 </span>
                             </div>
                             <div class="button-container d-flex gap-2">
-                                <button class="btn btn-outline-danger btn-sm wishlist">
+                              <form th:action="@{/home/Addwishlist/{id}(id=${product.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-danger btn-sm wishlist">
                                     <i class="fas fa-heart"></i>
                                 </button>
-                                <button class="btn btn-primary btn-sm flex-grow-1" 
-                                        th:onclick="|window.location.href='@{/home/addtoCart/{id}(id=${product.id})}'|">
+                            </form>
+                            <form th:action="@{/home/Addcart/{id}(id=${product.id})}" method="post" class="d-inline flex-grow-1">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">
                                     <i class="fas fa-cart-plus me-1"></i>
                                     <span class="d-none d-sm-inline">to Cart</span>
                                 </button>
+                            </form>
                             </div>
                         </div>
                     </div>

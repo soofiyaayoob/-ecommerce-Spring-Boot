@@ -47,8 +47,8 @@ public class OrderService {
 	
 	@Autowired
 	OrderItemRepo orderItemRepo;
-
-	public void saveOrder(Long addressId, String paymentMethod,HttpSession session) throws Exception {
+@Transactional
+	public boolean saveOrder(Long addressId, String paymentMethod,HttpSession session) throws Exception {
 		
 		// Create a new order entity
 	    OrderEntity order = new OrderEntity();
@@ -83,23 +83,35 @@ public class OrderService {
 
 	        order.getItems().add(item);
 	        
-	        
-	        
-	        
-
-
-
-
+	 
 	        
 	    }
+	    
+	    if (!"Cash on Delivery".equals(paymentMethod)) { 
+	        session.setAttribute("order", order); 
+	        return false;
+	    }else {
+	    	session.setAttribute("OrderId", order.getOrderId()); 
+	    	  orderRepo.save(order);
+	    	  return true;
+	    }
+
 
 	  
-	  orderRepo.save(order);
-	  session.setAttribute("OrderId", order.getOrderId()); 
+	 
+	
 
 	  //  cartService.clearCart(); 
 			
 	}
+
+public void saveBankPaymnetOrder(OrderEntity order,HttpSession session) {
+	session.setAttribute("OrderId", order.getOrderId()); 
+	orderRepo.save(order);
+	
+}
+
+
 @Transactional
 	public List<OrderEntity> getAllOrders() {
 		return orderRepo.findAll();
@@ -198,10 +210,12 @@ public Long getTotalOrders() {
 public Long getTotalRevenue() {
     return orderItemRepo.sumPriceByStatus(OrderStatus.DELIVERED);
 }
+@Transactional
 public List<OrderItemEntity> getOrderForResturamt() {
 	
 	return orderItemRepo.findOrderItemsByProductUserId(commonutil.getCurrentUserId());
 }
+
 
 
 }

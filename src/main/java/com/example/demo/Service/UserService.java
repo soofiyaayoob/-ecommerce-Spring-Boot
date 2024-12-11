@@ -179,6 +179,11 @@ public class UserService{
 			return userRepo.countByRole(Role.RESTAURANT);
 			
 		}
+@Transactional
+		public void deleteUserById(Long id) {
+		
+			userRepo.deleteById(id);
+		}
 }
 		
 			
