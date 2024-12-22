@@ -55,14 +55,14 @@ public class PaymentController {
 
 	            .addLineItem(
 	                SessionCreateParams.LineItem.builder()
-	                    .setQuantity(1L) // Quantity is mandatory
+	                    .setQuantity(1L)
 	                    .setPriceData(
 	                        SessionCreateParams.LineItem.PriceData.builder()
-	                            .setCurrency("usd") // Currency for the payment
-	                            .setUnitAmount((Long) sessions.getAttribute("total")*100) // Amount in cents (e.g., 2000 = $20)
+	                            .setCurrency("usd") 
+	                            .setUnitAmount((Long) sessions.getAttribute("total")*100) 
 	                            .setProductData(
 	                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
-	                                    .setName("Generic Product") // Placeholder name
+	                                    .setName("Generic Product") 
 	                                    .build()
 	                            )
 	                            .build()
@@ -71,13 +71,13 @@ public class PaymentController {
 	            )
 	            .build();
 
-	        // Create session on Stripe
+	     
 	        Session session = Session.create(params);
 
-	        // Return the session ID
+	    
 	        responseData.put("id", session.getId());
 	    } catch (StripeException e) {
-	    	  // Handle error and return it
+	    
 	        responseData.put("error", e.getMessage());
 	    }
 

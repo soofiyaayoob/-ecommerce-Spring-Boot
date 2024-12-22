@@ -184,6 +184,11 @@ public class UserService{
 		
 			userRepo.deleteById(id);
 		}
+@Transactional
+public void deleteAddress(Long addressid) {
+	addressRepo.deleteById(addressid);
+	
+}
 }
 		
 			

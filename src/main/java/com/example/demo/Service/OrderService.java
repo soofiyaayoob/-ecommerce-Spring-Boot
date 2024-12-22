@@ -168,7 +168,7 @@ public void canelOrder(Long itemId) {
 OrderItemEntity item= orderItemRepo.findById(itemId).orElseThrow();
 
 if (!"cash On Delivery".equalsIgnoreCase(item.getOrder().getPaymentType())) {
-   
+   System.out.println("gotten it is bank paymnet");
     UserEntity user = item.getOrder().getUser();
     user.setWallet(user.getWallet() + item.getPrice());
     userRepo.save(user);

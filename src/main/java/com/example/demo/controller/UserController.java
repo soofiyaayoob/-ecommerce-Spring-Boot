@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -145,7 +146,7 @@ public class UserController {
 	 
 	 @GetMapping("/Otp")
 	 public String getMethodName() {
-	 	return "/otp";
+	 	return "otp";
 	 }
 	 
 	  @PostMapping("/verify")
@@ -319,20 +320,20 @@ public class UserController {
 
 		    Map<String, Object> response = new HashMap<>();
 		    
-		    // Process the order
+		
 		    try {
-		        // Example: Save order details
+		     
 		        orderService.saveOrder(addressId, paymentMethod, session);
 
 		       System.out.println("saved");
 		        if ("Card Payment".equals(paymentMethod)) {
-		            // Create Stripe session for payment
+		          
 		            String sessionId = paymentService.createCheckoutSession();
 		            response.put("status", "success");
 		            response.put("redirect", "stripe");
 		            response.put("sessionId", sessionId);
 		        } else {
-		            // Handle Cash on Delivery
+		          
 		            response.put("status", "success");
 		            response.put("redirect", "orderConfirmation");
 		        }
@@ -344,6 +345,13 @@ public class UserController {
 
 		    return ResponseEntity.ok(response);
 		}
+		
+		 @PostMapping("/user/delete/{id}")
+		    public String deleteUser(@PathVariable Long id, Model model) {
+		        userService.deleteUserById(id);
+		        
+		        return "redirect:/login";  
+		    }
 
 	    }
 	

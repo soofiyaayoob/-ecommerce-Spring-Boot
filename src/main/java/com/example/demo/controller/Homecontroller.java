@@ -31,9 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.Aspect.EmailService;
-import com.example.demo.Aspect.OtpService;
-import com.example.demo.CustomHandler.SucessHandler;
+
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.Service.CartService;
 import com.example.demo.Service.CategoryService;
@@ -44,7 +42,7 @@ import com.example.demo.Service.UserService;
 import com.example.demo.Service.wishlistService;
 import com.example.demo.Service.utilty.Commonutil;
 import com.example.demo.model.AddressEntity;
-import com.example.demo.model.CartEntity;
+
 import com.example.demo.model.CartItemEntity;
 import com.example.demo.model.CategoryEntity;
 import com.example.demo.model.OfferEntity;
@@ -53,20 +51,16 @@ import com.example.demo.model.ProductEntity;
 import com.example.demo.model.UserEntity;
 import com.example.demo.model.WishlistEntity;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
+
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
 import org.springframework.web.bind.annotation.RequestParam;
-import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
-import org.hibernate.internal.build.AllowSysOut;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -400,6 +394,13 @@ public class Homecontroller {
 	      
 	        return "redirect:/home/search"; 
 	    }
+	  @PostMapping("/deleteItem/{id}")
+	  public String deleteItem(@PathVariable("id") Long addressid) {
+	     userService.deleteAddress(addressid);
+	      return "redirect:/home/profile";
+	  }
+
+	  
 	
 	
 }	

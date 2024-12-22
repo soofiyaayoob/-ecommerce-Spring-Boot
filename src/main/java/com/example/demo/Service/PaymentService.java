@@ -28,7 +28,7 @@ public class PaymentService {
 		HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes()))
 				.getRequest();
 		HttpSession sessions=request.getSession();
-		Double total = (Double) sessions.getAttribute("total"); // Ensure it's a Double
+		Double total = (Double) sessions.getAttribute("total"); 
 		Long unitAmount = (long) (total * 100);
 		
 		  Stripe.apiKey = secretKey; 
@@ -36,18 +36,18 @@ public class PaymentService {
 		   SessionCreateParams params = SessionCreateParams.builder()
 		            .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
 		            .setMode(SessionCreateParams.Mode.PAYMENT)
-		            .setSuccessUrl("https://localhost:8080/order-confirmation")
-		            .setCancelUrl("https://localhost:8080/error")
+		            .setSuccessUrl("http://localhost:8080/order-confirmation")
+		            .setCancelUrl("http://localhost:8080/error")
 		            .addLineItem(
 		                SessionCreateParams.LineItem.builder()
-		                    .setQuantity(1L) // Quantity is mandatory
+		                    .setQuantity(1L) 
 		                    .setPriceData(
 		                        SessionCreateParams.LineItem.PriceData.builder()
-		                            .setCurrency("usd") // Currency for the payment
-		                            .setUnitAmount(unitAmount) // Amount in cents (e.g., 2000 = $20)
+		                            .setCurrency("INR") 
+		                            .setUnitAmount(unitAmount) 
 		                            .setProductData(
 		                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
-		                                    .setName("Generic Product") // Placeholder name
+		                                    .setName("Generic Product") 
 		                                    .build()
 		                            )
 		                            .build()
@@ -56,7 +56,7 @@ public class PaymentService {
 		            )
 		            .build();
 
-		        // Create session on Stripe
+		        
 		        Session session = Session.create(params);
 
 		return session.getId();

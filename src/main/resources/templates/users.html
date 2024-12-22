@@ -49,9 +49,9 @@
                     th:text="${user.active ? 'Deactivate' : 'Activate'}" 
                     th:onclick="'toggleUserStatus(' + ${user.id} + ', this)'">
             </button>
-            <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="POST">
+            <!-- <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="POST">
                 <button type="submit">Delete User</button>
-            </form>
+            </form> -->
             
             
                 </td>
