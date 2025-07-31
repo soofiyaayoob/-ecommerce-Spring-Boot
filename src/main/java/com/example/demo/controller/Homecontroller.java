@@ -394,12 +394,24 @@ public class Homecontroller {
 	      
 	        return "redirect:/home/search"; 
 	    }
-	  @PostMapping("/deleteItem/{id}")
+	  @PostMapping("/deleteAddress/{id}")
 	  public String deleteItem(@PathVariable("id") Long addressid) {
 	     userService.deleteAddress(addressid);
 	      return "redirect:/home/profile";
 	  }
 
+	  @GetMapping("/home/location")
+	  public String getproductsbylocation(@RequestParam(value = "query", required = false) String query,Model model,RedirectAttributes redirectAttributes) {
+	  	try {
+		List<ProductEntity> products =productservices.getProductByLocation(query);
+		model.addAttribute("products",products);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error",e.getMessage());
+			return("redirect:/");
+		}
+	  	
+		  return "productBySearch";
+	  }
 	  
 	
 	

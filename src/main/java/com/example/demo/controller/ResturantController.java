@@ -72,11 +72,11 @@ public String addProduct(@ModelAttribute("product") ProductEntity product,
     return "redirect:/restaurant/menu-management"; 
 }
 
-@PostMapping("product/Updtae")
+@PostMapping("product/Update")
 public String updateProduct(@ModelAttribute("product") ProductEntity product,
                              @RequestParam(value = "productImage", required = false) MultipartFile productImage,RedirectAttributes attributes) throws IOException {
 	
-	
+	System.out.println("gotten in product updae"+product.getName());
 
     productservices.updateProduct(product,productImage);
 attributes.addFlashAttribute("message","produxt updated successfuly");
@@ -89,7 +89,7 @@ public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttri
    
        redirectAttributes.addFlashAttribute("message","deleted suucessfulyy");
   
-    	 redirectAttributes.addFlashAttribute("error", "Item not found");
+    	
     
     return "redirect:/restaurant/menu-management"; 
 }

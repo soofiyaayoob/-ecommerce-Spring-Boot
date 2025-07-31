@@ -67,12 +67,15 @@ public class UserController {
 	@Autowired
 	PaymentService paymentService;
 	
-	@Value("${app.resetPasswordUrl}")
-    private String resetPasswordUrl;
+	@Value("${app.Url}")
+    private String rootUrl;
 	
 	
 	 @GetMapping("/login")
 	 public String loginPage() {
+		 
+	
+		
 	     return "login"; 
 	 }
 	 
@@ -165,6 +168,7 @@ public class UserController {
 	        try {
 	        	 UserEntity userDto = (UserEntity) session.getAttribute("user");
 	        	 String username=userDto.getUsername();
+	        	 String password=userDto.getPassword();
 	        	
 	         
 	            boolean isValid = otpService.validateOtp(username, otpCode);
@@ -173,9 +177,9 @@ public class UserController {
 	            if (isValid) {
 	            	
 	            	userService.registerUserEntity(userDto);
-	              
-	                model.addAttribute("message", "OTP Verified Successfully!");
-	                return"redirect:/login";
+	              System.out.println("registerd in db");
+	                
+	              return "redirect:/login";
 	            } else {
 	               
 	                model.addAttribute("message", "Invalid OTP Code.");
@@ -189,13 +193,15 @@ public class UserController {
 	        }
 	    }
 	  
-	  @GetMapping("/resentOtp")
+	  @GetMapping("/resent-otp")
 	  public String OtpReset(HttpSession session) {
+		  System.out.println("resentOtp");
 		  UserEntity user=(UserEntity) session.getAttribute("user");
          String username=user.getUsername();
          String email=user.getEmail();
          String otp=otpService.generateOtp(username);
          emailService.sendOtpEmail(email,otp);
+        ;
          return"otp";
 	  
 	  }
@@ -218,7 +224,7 @@ public class UserController {
 
 				//String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
 				
-				 String url = resetPasswordUrl + "?token=" + token;
+				 String url = rootUrl +"/reset-password"+ "?token=" + token;
 
 				Boolean sendMail = emailService.sendResetPasswordMail(url, email);
 
@@ -350,7 +356,7 @@ public class UserController {
 		    public String deleteUser(@PathVariable Long id, Model model) {
 		        userService.deleteUserById(id);
 		        
-		        return "redirect:/login";  
+		        return "redirect:/logout";  
 		    }
 
 	    }

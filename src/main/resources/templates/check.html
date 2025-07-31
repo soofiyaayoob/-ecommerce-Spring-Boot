@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search by Location</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .icon-button {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .search-bar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            transition: width 0.4s ease, background-color 0.3s ease;
+            font-size: 1.2rem;
+            color: #000;
+            opacity: 0;
+            z-index: 10;
+        }
+        .icon-button.open .search-bar {
+            width: 300px; /* Bigger width for search bar */
+            opacity: 1;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-light p-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Logo</a>
+        <div class="d-flex ms-auto">
+            <!-- Location Icon and Search Bar -->
+            <form th:action="@{/search}" method="get" class="d-flex">
+                <button type="button" class="icon-button" id="location-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" class="search-bar" id="location" name="location" placeholder="Enter location" required>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- Results Section -->
+<div class="container mt-5" th:if="${results != null}">
+    <h3>Search Results:</h3>
+    <ul class="list-group">
+        <li class="list-group-item" th:each="result : ${results}" th:text="${result}"></li>
+    </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const locationIcon = document.getElementById("location-icon");
+    const searchBar = document.getElementById("location");
+
+    locationIcon.addEventListener("click", function () {
+        this.classList.toggle("open");
+        if (this.classList.contains("open")) {
+            searchBar.focus();
+        } else {
+            searchBar.value = ""; // Clear input if closed
+        }
+    });
+
+    // Submit form on Enter
+    searchBar.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            this.form.submit(); // Submit the form
+        }
+    });
+</script>
+</body>
+</html>

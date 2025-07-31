@@ -71,3 +71,55 @@ function closeModal() {
   modal.style.display = 'none';
 }
 
+//search bar
+const foodSearchInput = document.getElementById("food-search");
+foodSearchInput.addEventListener("input", function () {
+    const query = this.value;
+    if (query) {
+        this.parentElement.setAttribute("onclick", `window.location.href='/home/search?query=${query}'`);
+    } else {
+        this.parentElement.removeAttribute("onclick");
+    }
+});
+
+foodSearchInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+      const query = this.value;
+      if (query) {
+          window.location.href = `/home/search?query=${query}`;
+      }
+  }
+});
+//locationBy search
+const foodSearchLocation = document.getElementById("food-searchLocation");
+foodSearchLocation.addEventListener("input", function () {
+    const query = this.value;
+    if (query) {
+        this.parentElement.setAttribute("onclick", `window.location.href='/home/location?query=${query}'`);
+    } else {
+        this.parentElement.removeAttribute("onclick");
+    }
+});
+
+foodSearchLocation.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+      const query = this.value;
+      if (query) {
+          window.location.href = `/home/location?query=${query}`;
+      }
+  }
+});
+
+// const locationIcon = document.getElementById("location-icon");
+//     const searchBar = document.getElementById("location");
+
+//     locationIcon.addEventListener("click", function () {
+//         this.classList.toggle("open");
+//         if (this.classList.contains("open")) {
+//             searchBar.focus();
+//         } else {
+//             searchBar.value = ""; // Clear input if closed
+//         }
+//     });
+
+//     function showInput() { document.getElementById('location').style.display = 'block'; }

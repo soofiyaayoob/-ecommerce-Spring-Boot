@@ -45,13 +45,16 @@
                 </td>
                 <td>
                     <button id="toggleButton" 
-                    th:class="${user.active ? 'btn-active' : 'btn-inactive'}" 
-                    th:text="${user.active ? 'Deactivate' : 'Activate'}" 
-                    th:onclick="'toggleUserStatus(' + ${user.id} + ', this)'">
-            </button>
-            <!-- <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="POST">
-                <button type="submit">Delete User</button>
-            </form> -->
+        th:class="${user.active ? 'btn-active' : 'btn-inactive'}" 
+        th:text="${user.active ? 'Deactivate' : 'Activate'}" 
+        th:onclick="'toggleUserStatus(' + ${user.id} + ', this)'"
+        th:disabled="${user.role == 'ADMIN'}">
+</button>
+
+            <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="POST">
+                <button type="submit" 
+                        th:disabled="${user.role == 'ADMIN'}">Delete User</button>
+            </form>
             
             
                 </td>

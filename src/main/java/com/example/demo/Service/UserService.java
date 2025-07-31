@@ -75,13 +75,13 @@ public class UserService{
 	        user.getAddresses().forEach(address -> address.setUser(user));
 	    }
 	    
-	    System.out.println("saving...");
+	  
 
 	   
 	    return userRepo.save(user);
 	}
 
-@Transactional
+       @Transactional
 		public List<UserEntity> getAllUsers() {
 			
 			return userRepo.findAll();
@@ -189,6 +189,17 @@ public void deleteAddress(Long addressid) {
 	addressRepo.deleteById(addressid);
 	
 }
+
+//public void addamin() {
+//	System.out.println("adding admin");
+//    UserEntity userEntity = new UserEntity();
+//    userEntity.setUsername("soofiya");
+//    userEntity.setPassword(passwordEncoder.encode("soofiya123"));
+//    userEntity.setRole(Role.ADMIN); // Set role if applicable
+//    userRepo.save(userEntity);
+//    System.out.println("Admin user 'soofiya' created.");
+//}
+
 }
 		
 			

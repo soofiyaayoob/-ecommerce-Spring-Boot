@@ -200,12 +200,12 @@
                         <td th:text="${product.category.name}">Category</td>
                         <td>
                             <button class="btn btn-warning btn-sm" 
-                            th:onclick="'showUpdateProductForm()'">
+                            th:onclick="'showUpdateProductForm(' + ${product.id} + ')'">
                                 Update
                             </button>
-                            <div id="update-product-overlay" class="product-overlay">
+                            <div th:id="'update-product-overlay-' + ${product.id}" class="product-overlay">
                                 <div class="product-form">
-                                    <span class="close-btn" onclick="closeUpdateProductForm()">&times;</span>
+                                    <span class="close-btn" th:onclick="'closeUpdateProductForm(' + ${product.id} + ')'">&times;</span>
                                     <h2 class="mb-4">Update Product</h2>
                                     <form th:action="@{/restaurant/product/Update}" method="post" enctype="multipart/form-data" >
                                         <!-- Hidden Field for Product ID -->
@@ -315,17 +315,14 @@
             document.getElementById('add-product-overlay').style.display = 'none';
         }
 
-        // Function to show the 'Update Product' form
+       
         function showUpdateProductForm(productId) {
-            const updateOverlay = document.getElementById('update-product-overlay');
-            updateOverlay.style.display = 'flex';
+    document.getElementById('update-product-overlay-' + productId).style.display = 'flex';
+}
 
-         
-        }
-          // Function to close the 'Update Product' form
-          function closeUpdateProductForm() {
-            document.getElementById('update-product-overlay').style.display = 'none';
-        }
+function closeUpdateProductForm(productId) {
+    document.getElementById('update-product-overlay-' + productId).style.display = 'none';
+}
 
 
 

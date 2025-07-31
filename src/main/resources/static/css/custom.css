@@ -640,3 +640,39 @@
    height: auto; } 
    @media (max-width: 576px) 
 { .modal-dialog { max-width: 100%; margin: 0; } }
+
+
+
+
+.icon-button {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.search-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  transition: width 0.4s ease, background-color 0.3s ease;
+  font-size: 1.2rem;
+  color: #000;
+  opacity: 0;
+  z-index: 10;
+}
+.icon-button.open .search-bar {
+  width: 300px; /* Bigger width for search bar */
+  opacity: 1;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 2px solid #007bff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

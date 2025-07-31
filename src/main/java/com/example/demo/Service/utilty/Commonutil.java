@@ -1,13 +1,19 @@
 package com.example.demo.Service.utilty;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Base64;
 
+import javax.imageio.ImageIO;
+
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Principle.UserPrincipleTaamsmaak;
 import com.example.demo.model.UserEntity;
@@ -85,5 +91,28 @@ public class Commonutil {
 		
 	
 	}
+
+
+public byte[] saveaspng(MultipartFile imageFile) throws IOException {
+   
+    BufferedImage image = ImageIO.read(imageFile.getInputStream());
+
+    if (image == null) {
+        throw new IOException("Invalid image file.");
+    }
+
+    
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    boolean success = ImageIO.write(image, "png", byteArrayOutputStream);
+
+   
+    if (!success) {
+        throw new IOException("Failed to convert image to PNG format.");
+    }
+
+   
+    return byteArrayOutputStream.toByteArray();
+}
+
 
 }

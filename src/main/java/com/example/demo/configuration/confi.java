@@ -72,7 +72,9 @@ public class confi {
 
 		  httpSecurity.authorizeHttpRequests(req -> req.requestMatchers("/admin").hasRole("ADMIN").
 				  requestMatchers("/restaurant").hasRole("RESTAURANT")
-				  .requestMatchers("/","/css/**","/js/**","/img/**","/register","/Otp","/verify","/reset-password","/forgot-password","/resetOtp","/home/search","/home/categories/*").permitAll().anyRequest().authenticated());
+				  .requestMatchers("/","/css/**","/js/**","/img/**","/register","/Otp","/verify",
+						  "/reset-password","/forgot-password","/resent-otp","/home/search","/home/categories/*",
+						  "/home/location").permitAll().anyRequest().authenticated());
 	//	 httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
 		  
 	     
@@ -83,13 +85,21 @@ public class confi {
 	         //  .defaultSuccessUrl("/")
 	            .failureUrl("/login?error=true")
 	            .permitAll();
-	       httpSecurity .logout(logout -> logout
-	            .logoutUrl("/logout")
-	            .invalidateHttpSession(true)
-	            .clearAuthentication(true)
-	            .deleteCookies("JSESSIONID", "jwt")
-	            .logoutSuccessUrl("/login?logout")
-	            .permitAll());
+
+	       httpSecurity.logout(logout -> logout
+	    		    .logoutUrl("/logout")
+	    		    .invalidateHttpSession(true)
+	    		    .clearAuthentication(true)
+	    		    .deleteCookies("JSESSIONID", "jwt")
+	    		    .logoutSuccessHandler((request, response, authentication) -> {
+	    		        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	    		        response.setHeader("Pragma", "no-cache");
+	    		        response.setDateHeader("Expires", 0);
+	    		        response.sendRedirect("/login?logout"); 
+	    		    })
+	    		    .permitAll()
+	    		);
+
 	
 
 	    httpSecurity

@@ -66,8 +66,8 @@
 </style>
 <body>
     <div class="verification-container">
-        <h2>Mobile Phone Verification</h2>
-        <p>Enter the 6-digit verification code that was sent to your phone number.</p>
+        <h2> Email Verification</h2>
+        <p>Enter the 6-digit verification code that was sent to your Email.</p>
         
         <!-- Form to submit OTP -->
         <form action="/verify" method="post">
@@ -83,7 +83,7 @@
         </form>
 
         <div class="resend">
-            <p>Didn't receive the code? <a th:href="@{/resentOtp}">Resend</a></p>
+            <p>Didn't receive the code? <a th:href="@{/resent-otp}">Resend</a></p>
         </div>
 
         <!-- Displaying success or error message -->

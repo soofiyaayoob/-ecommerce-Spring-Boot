@@ -25,6 +25,8 @@ public class PaymentController {
 	@Value("${stripe.secretKey}")
 	private String secretKey;
 	
+	@Value("${app.Url}")
+	private String url;
 
 //	@PostMapping("/api/stripe/create-payment-intent") 
 //	@ResponseBody
@@ -50,8 +52,8 @@ public class PaymentController {
 	        SessionCreateParams params = SessionCreateParams.builder()
 	            .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
 	            .setMode(SessionCreateParams.Mode.PAYMENT)
-	            .setSuccessUrl("https://localhost:8080/order-confirmation")
-	            .setCancelUrl("https://localhost:8080/error")
+	            .setSuccessUrl(url+"/order-confirmation")
+	            .setCancelUrl(url+"/error")
 
 	            .addLineItem(
 	                SessionCreateParams.LineItem.builder()

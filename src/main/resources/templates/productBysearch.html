@@ -180,6 +180,7 @@
 
 
 <body>
+   
     
     <div class="container mt-5 "  >
         <div class="d-flex justify-content-center mb-4">
@@ -196,48 +197,43 @@
             <th:block th:each="product : ${products}">
                 <div class="col">
                     <div class="card">
-						
                         <!-- Corrected 'product.imageData' to match the attribute name in the ProductEntity class -->
-                      <img th:src="${product.imageBase64}" 
+                        <img th:src="${product.imageBase64}" 
                              class="card-img-top" alt="Product Image" 
                              style="max-height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <!-- Corrected typo 'prodouct' to 'product' -->
-                            <h5 class="card-title"  th:text="${product.id} + '.' + ${product.name}">productName</h5>
+                            <h5 class="card-title" th:text="${product.id + '.' + product.name}">productName</h5>
                             <!-- Corrected typo 'prodouct.Price' to 'product.price' -->
                             <p class="card-text"><strong><span th:text="${product.price}">100</span></strong></p>
                             
-							<p class="card-text" th:if="${product.offer != null}">
-							 <strong>Offer Price:</strong>
-							 <span th:text="${product.offer.offerPrice}">90</span>
-							 </p>
-							<p class="card-text" th:if="${product.offer == null}">
-							        <strong>No Offers</strong>
-							 </p>
-                             <p class="card-text" th:text="${prodouct.description}">
-                               description
-                         </p>
+                            <p class="card-text" th:if="${product.offer != null}">
+                                <strong>Offer Price:</strong>
+                                <span th:text="${product.offer.offerPrice}">90</span>
+                            </p>
+                            <p class="card-text" th:if="${product.offer == null}">
+                                <strong>No Offers</strong>
+                            </p>
+                            <p class="card-text" th:text="${product.description}">description</p>
                             <!-- Display category name -->
                             <p class="card-text">
                                 <strong>Category:</strong>
                                 <span th:text="${product.category.name}">Category Name</span>
                             </p>
+                            <p class="card-text" th:text="${product.user.username} + ' ' + ${product.user.addresses[0].city} + ', ' + ${product.user.addresses[0].state}">Restaurant</p>
 
-                            <!-- Display available sizes -->
-                           
-                            
+        
                             <!-- Edit Button with dynamic ID -->
                             <form th:action="@{/home/search/Addcart}" method="post" class="w-100">
                                 <input type="hidden" name="productId" th:value="${product.id}" />
                                 <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
                             </form>
-                            
-
                         </div>
                     </div>
                 </div>
             </th:block>
         </div>
+        
     </div>
     
 </body>

@@ -16,6 +16,7 @@ import com.example.demo.repositry.OfferRepository;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class OfferServicea {
 	
 	@Autowired

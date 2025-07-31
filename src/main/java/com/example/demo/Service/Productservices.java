@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import com.example.demo.repositry.productRepo;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class Productservices {
 	
 	@Autowired
@@ -41,6 +43,8 @@ public class Productservices {
 		  product.setImageName(imageFile.getOriginalFilename());
            product.setImageData(imageFile.getBytes());
            product.setUser(commonutil.getCurrentUser());
+         
+     // product.setImageData( commonutil.saveaspng(imageFile));
 		return productRepo.save(product);
 	}
 
@@ -140,11 +144,13 @@ public class Productservices {
 		
 		  ProductEntity existingProduct = productRepo.findById(product.getId())
 		            .orElseThrow(() -> new RuntimeException("Product not found with ID: " + product.getId()));
+		  product.setCartItems(existingProduct.getCartItems());
 		 if (!imageFile.isEmpty()) {
 		        product.setImageData(imageFile.getBytes());
 		        product.setImageName(imageFile.getOriginalFilename());
 		    }else {
 		        // Retain the old image if no new image is uploaded
+		    	product.setUser(existingProduct.getUser());
 		        product.setImageData(existingProduct.getImageData());
 		        product.setImageName(existingProduct.getImageName());
 		    }
@@ -193,6 +199,26 @@ public List<ProductEntity> getproductbyuserid() {
 	        commonutil.convertImageDataToBase64(product); 
 	    }
 	 return products;
+	
+	
+}
+//List<ProductEntity> products=productRepo.findProductsByLocation(Location);
+
+
+public List<ProductEntity> getProductByLocation(String location) {
+	 List<ProductEntity> products = productRepo.findProductsByLocation(location);
+	    if (products == null || products.isEmpty()) {
+	        throw new RuntimeException("There is no restaurantProducts in this location");
+	    }
+
+	    for (ProductEntity product : products) {
+	     
+	       commonutil.convertImageDataToBase64(product);
+	        
+	    }
+
+	    System.out.println("Gotten product by location");
+	    return products;
 	
 	
 }

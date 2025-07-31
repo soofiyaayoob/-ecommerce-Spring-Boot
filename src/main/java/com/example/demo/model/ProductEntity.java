@@ -57,7 +57,7 @@ public class ProductEntity {
 	    private OfferEntity offer;
 
 	    @ManyToOne
-	    @JoinColumn(name = "user_id",nullable = false)  // Foreign key to link product to a restaurant owner (user)
+	    @JoinColumn(name = "user_id",nullable = false)  
 	    private UserEntity user; 
 	  
 	    
