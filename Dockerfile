@@ -1,14 +1,12 @@
-# Use a base image with Java
-FROM eclipse-temurin:21-jdk
-
-# Set working directory
+# Step 1: Build JAR using Maven
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy JAR file to container
-COPY target/TaamSmaak-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose port (make sure it matches your Spring Boot app port)
+# Step 2: Run JAR with minimal image
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /app/target/TaamSmaak-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Run the JAR file
 ENTRYPOINT ["java", "-jar", "app.jar"]
